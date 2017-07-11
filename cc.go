@@ -41,7 +41,7 @@ const 	CERTIFIER = "CERTIFIER"
 type SimpleChaincode struct {
 }
 
-type Parts struct {
+type Part struct {
 	PartId 				string 	`json:"partId"`
 	ProductCode 		string  `json:"productCode"`
 	DateOfManufacture	string  `json:"dateOfManufacture"`
@@ -54,8 +54,8 @@ type Parts struct {
 //				Used as an index when querying all parts.
 //==============================================================================================================================
 
-type Part_Holder struct {
-	Parts 	[]string `json:"parts"`
+type AllParts struct{
+	Parts []string `json:"parts"`
 }
 
 
@@ -66,7 +66,7 @@ func (t *SimpleChaincode) Init(stub  shim.ChaincodeStubInterface, function strin
 
 	var err error
 
-	var parts Part_Holder
+	var parts AllParts
 	jsonAsBytes, _ := json.Marshal(parts)
 	err = stub.PutState("parts", jsonAsBytes)
 	if err != nil {
@@ -144,18 +144,48 @@ func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []s
 	//var err error
 	fmt.Println("Running createPart")
 
-	if len(args) != 6 {
-		fmt.Println("Incorrect number of arguments. Expecting 6")
-		return nil, errors.New("Incorrect number of arguments. Expecting 6")
+	if len(args) != 3 {
+		fmt.Println("Incorrect number of arguments. Expecting 3")
+		return nil, errors.New("Incorrect number of arguments. Expecting 3")
 	}
 
 	
-	if (args[2] != PRODUCER1)&&(args[2] != PRODUCER2)  {
-		fmt.Println("You are not allowed to create a new Part")
-		return nil, errors.New("You are not allowed to create a new Part")
-	}
+	//if (args[2] != PRODUCER1)&&(args[2] != PRODUCER2)  {
+	//	fmt.Println("You are not allowed to create a new Part")
+	//	return nil, errors.New("You are not allowed to create a new Part")
+	//}
 
 	//////// TODO
+	var bt Part
+	bt.PartId 			= args[0]
+	bt.ProductCode			= args[1]
+	bt.DateOfManufacture		= args[2]
+
+	//Commit part to ledger
+	fmt.Println("createPart Commit Part To Ledger");
+	btAsBytes, _ := json.Marshal(bt)
+	err = stub.PutState(bt.PartId, btAsBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	//Update All Batches Array
+	allBAsBytes, err := stub.GetState("allParts")
+	if err != nil {
+		return nil, errors.New("Failed to get all Parts")
+	}
+	var allb AllParts
+	err = json.Unmarshal(allBAsBytes, &allb)
+	if err != nil {
+		return nil, errors.New("Failed to Unmarshal all Parts")
+	}
+	allb.Parts = append(allb.Parts,bt.PartId)
+
+	allBuAsBytes, _ := json.Marshal(allb)
+	err = stub.PutState("allParts", allBuAsBytes)
+	if err != nil {
+		return nil, err
+	}
 
 	return nil, nil
 }
