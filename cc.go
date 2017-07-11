@@ -141,7 +141,7 @@ func (t *SimpleChaincode) getPart(stub  shim.ChaincodeStubInterface, partId stri
 
 func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
-	//var err error
+	var err error
 	fmt.Println("Running createPart")
 
 	if len(args) != 3 {
