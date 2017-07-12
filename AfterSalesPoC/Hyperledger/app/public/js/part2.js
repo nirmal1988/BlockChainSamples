@@ -199,8 +199,8 @@ function connect_to_server(){
 			var data = JSON.parse(msg.data);
 
 			if(data.msg === 'allParts'){
-				console.log("---- ", data);
-				build_Batches(data.parts, null);
+				console.log("---- allParts ---- ", data);
+				build_Parts(data.parts, null);
 				$('#spinner2').hide();
 				$('#openTrades').show();
 			}
@@ -358,22 +358,22 @@ function connect_to_server(){
 // =================================================================================
 //	UI Building
 // =================================================================================
-function build_Batches(batches, panelDesc){
+function build_Parts(parts, panelDesc){
 	var html = '';
-	bag.batches = batches;
+	bag.parts = parts;
 	// If no panel is given, assume this is the trade panel
 	if(!panelDesc) {
 		panelDesc = panels[0];
 	}
 
-	for(var i in batches){
-		//console.log('!', batches[i]);
+	for(var i in parts){
+		//console.log('!', parts[i]);
 
-		if(excluded(batches[i], filter)) {
+		if(excluded(parts[i], filter)) {
 
 			// Create a row for each batch
 			html += '<tr>';
-			html +=		'<td>' + batches[i] + '</td>';
+			html +=		'<td>' + parts[i] + '</td>';
 			html += '</tr>';
 
 		}
@@ -427,7 +427,7 @@ function processFilterForm(panelDesc) {
 
 	console.log("New filter parameters: " + JSON.stringify(filter));
 	console.log("Rebuilding list");
-	build_Batches(bag.batches, panelDesc);
+	build_Parts(bag.batches, panelDesc);
 }
 
 /**

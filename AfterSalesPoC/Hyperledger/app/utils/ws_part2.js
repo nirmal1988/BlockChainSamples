@@ -27,10 +27,10 @@ module.exports.process_msg = function(ws, data, owner){
 		console.log("Get Part", data.partId);
 		chaincode.query.getPart([data.partId], cb_got_part);
 	}
-	/*else if(data.type == "getAllBatches"){
-		console.log("Get All Batches", owner);
-		chaincode.query.getAllBatches([owner], cb_got_allbatches);
-	}*/
+	else if(data.type == "getAllParts"){
+		console.log("Get All Parts", owner);
+		chaincode.query.getAllParts([owner], cb_got_allparts);
+	}
 	
 	function cb_got_part(e, part){
 		if(e != null){
@@ -41,12 +41,12 @@ module.exports.process_msg = function(ws, data, owner){
 		}
 	}
 	
-	function cb_got_allbatches(e, allBatches){
+	function cb_got_allparts(e, allParts){
 		if(e != null){
-			console.log("Get All Batches error", e);
+			console.log("Get All Parts error", e);
 		}
 		else{
-			sendMsg({msg: "allBatches", batches: JSON.parse(allBatches).batches});
+			sendMsg({msg: "allParts", parts: JSON.parse(allParts).parts});
 		}
 	}
 	
