@@ -1,11 +1,10 @@
-#newBatchPanel(hidden).panel
-	h1 Enter Batch Details
+#newPartPanel(hidden).panel
+	h1 Enter Part Details
 	hr
 
 	#innerWrap
-		img(src="/imgs/plane-airbus.jpg" style="float:left;margin-right: 60px; border-radius: 30px; width: 38%;box-shadow: 8px 7px 12px #888888;")
 		
-		form(action="/newPart" method="POST")#newBatchform
+		form(action="/newPart" method="POST")#newPartform
 			legend 
 				input(type="text" name="PartId" placeholder="Part Id")
 			legend 

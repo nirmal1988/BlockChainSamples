@@ -41,13 +41,13 @@ $(document).on('ready', function() {
 		if(bag.session.user_role && bag.session.user_role.toUpperCase() === "certifier".toUpperCase()) {
 			$("#dashboardLink").show();
 			$("#dashboardPanel").show();
-			$("#newBatchLink").hide();
-			$("#newBatchPanel").hide();
+			$("#newPartLink").hide();
+			$("#newPartPanel").hide();
 			$("#batchDetailsTable").hide();
 
 		} else if(user.username) {
-			$("#newBatchLink").show();
-			$("#newBatchPanel").show();
+			$("#newPartLink").show();
+			$("#newPartPanel").show();
 			$("#dashboardLink").show();
 			$("#dashboardPanel").hide();
 		}
@@ -99,9 +99,9 @@ $(document).on('ready', function() {
 		return false;
 	});
 
-	$("#newBatchLink").click(function(){
+	$("#newPartLink").click(function(){
 		$("#batchTagPanel").hide();
-		$("#newBatchPanel").show();
+		$("#newPartPanel").show();
 	});
 
 	$("#dashboardLink").click(function(){
