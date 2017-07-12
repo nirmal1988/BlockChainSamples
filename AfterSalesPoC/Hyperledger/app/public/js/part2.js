@@ -45,7 +45,16 @@ $(document).on('ready', function() {
 			$("#newPartPanel").hide();
 			$("#batchDetailsTable").hide();
 
-		} else if(user.username) {
+		}
+		else if (user.username==="SERVICE_CENTER"){
+			$("#newPartLink").show();
+			$("#newPartPanel").show();
+			$("#dashboardLink").show();
+			$("#dashboardPanel").hide();
+		 }
+		
+		
+		else if(user.username) {
 			$("#newPartLink").show();
 			$("#newPartPanel").show();
 			$("#dashboardLink").show();
