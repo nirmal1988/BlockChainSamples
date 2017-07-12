@@ -89,11 +89,11 @@ $(document).on('ready', function() {
 				$('#batchTag').html('');
 				$('#spinner').show();
 				$('#tagWrapper').hide();
-				$("#batchTagPanel").show();
+				//$("#batchTagPanel").show();
 				$("input[name='PartId']").val('');
 				$("input[name='ProductCode']").val(''),
 				$("input[name='Date']").val('')
-				$("#submit").prop('disabled', true);
+				//$("#submit").prop('disabled', true);
 
 			}
 		}
@@ -101,7 +101,7 @@ $(document).on('ready', function() {
 	});
 
 	$("#newPartLink").click(function(){
-		$("#batchTagPanel").hide();
+		//$("#batchTagPanel").hide();
 		$("#newPartPanel").show();
 	});
 
