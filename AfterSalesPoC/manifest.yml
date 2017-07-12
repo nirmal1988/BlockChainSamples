@@ -4,7 +4,7 @@ applications:
   memory: 256M
   instances: 1
   domain: mybluemix.net
-  name: bcfinaltest2
-  host: bcfinaltest2
+  name: vehicle-tracking
+  host: vehicle tracking
   disk_quota: 1024M
   command: node app.js
