@@ -71,6 +71,7 @@ $(document).on('ready', function() {
 	});*/
 
 	$("#submit").click(function(){
+		console.log("submitting createPart Form");
 		if(user.username){
 			var obj = 	{
 							type: "createPart",
@@ -81,7 +82,7 @@ $(document).on('ready', function() {
 							}
 						};
 
-			if(obj.part && obj.part.id){
+			if(obj.part && obj.part.partId){
 				console.log('creating part, sending', obj);
 				ws.send(JSON.stringify(obj));
 				$(".panel").hide();
