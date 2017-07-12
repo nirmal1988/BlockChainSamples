@@ -171,17 +171,16 @@ func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user st
 		var sb Part
 		json.Unmarshal(sbAsBytes, &sb)
 
-		if(user == CERTIFIER) {
-			rab.Parts = append(rab.Parts,sb.Id);
-		}else{
-			for j := range sb.Transactions{
-				var _owner = sb.Transactions[j].Owner
-				if (user == _owner){
-					rab.Parts = append(rab.Parts,sb.Id);
-					break;
-				}
-			}
-		}
+		//if(user == CERTIFIER) {
+			rab.Parts = append(rab.Parts,sb.PartId);
+		//}
+		//else{
+		//	var _owner = sb.Owner
+		//	if (user == _owner){
+		//		rab.Parts = append(rab.Parts,sb.PartId);
+		//		break;
+		//	}
+		//}
 	}
 
 	rabAsBytes, _ := json.Marshal(rab)
