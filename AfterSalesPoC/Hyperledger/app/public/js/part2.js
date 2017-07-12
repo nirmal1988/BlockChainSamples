@@ -317,11 +317,11 @@ function connect_to_server(){
 					new_block(temp);
 				}									//send to blockchain.js
 			}
-			else if(data.msg === 'batchCreated'){
+			else if(data.msg === 'partCreated'){
 				$("#notificationPanel").animate({width:'toggle'});
 				$('#spinner').hide();
 				$('#tagWrapper').show();
-				$('#batchTag').qrcode(data.batchId);
+				//$('#batchTag').qrcode(data.batchId);
 			}
 			else if(data.msg === 'reset'){
 				if(user.username && bag.session.user_role && bag.session.user_role.toUpperCase() === "certifier".toUpperCase()) {
