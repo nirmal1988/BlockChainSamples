@@ -297,6 +297,7 @@ input[type=button]:hover {
     background: #EFC100
 }
 input[type=text],
+input[type=date],
 input[type=password],
 input[type=number] {
     padding: 9px 14px;

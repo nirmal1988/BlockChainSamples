@@ -5,6 +5,6 @@ applications:
   instances: 1
   domain: mybluemix.net
   name: vehicle-tracking
-  host: vehicle tracking
+  host: vehicle-tracking
   disk_quota: 1024M
   command: node app.js
