@@ -156,8 +156,11 @@ func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user st
 
 	var res AllParts
 	err = json.Unmarshal(allBAsBytes, &res)
+	fmt.Println(allBAsBytes);
 	if err != nil {
-		return nil, errors.New("Failed to Unmarshal all Parts Bytes: Error: "+err)
+		fmt.Println("Printing error");
+		fmt.Println(err);
+		return nil, errors.New("Failed to Unmarshal all Parts")
 	}
 
 	var rab AllParts
