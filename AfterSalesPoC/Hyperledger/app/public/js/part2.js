@@ -41,9 +41,11 @@ $(document).on('ready', function() {
 		if(bag.session.user_role && bag.session.user_role.toUpperCase() === "certifier".toUpperCase()) {
 			$("#dashboardLink").show();
 			$("#dashboardPanel").show();
+			$("#updatePartLink").show();
 			$("#newPartLink").hide();
 			$("#newPartPanel").hide();
 			$("#batchDetailsTable").hide();
+			$("#updatePartPanel").show();
 
 		}
 		else if (user.username==="SERVICE_CENTER"){
@@ -51,6 +53,8 @@ $(document).on('ready', function() {
 			$("#newPartPanel").show();
 			$("#dashboardLink").show();
 			$("#dashboardPanel").hide();
+			$("#updatePartLink").show();
+			$("#updatePartPanel").show();
 		 }
 		
 		
@@ -58,7 +62,9 @@ $(document).on('ready', function() {
 			$("#newPartLink").show();
 			$("#newPartPanel").show();
 			$("#dashboardLink").show();
+			$("#updatePartLink").hide();
 			$("#dashboardPanel").hide();
+			$("#updatePartPanel").hide();
 		}
 
 	}
@@ -108,10 +114,41 @@ $(document).on('ready', function() {
 		}
 		return false;
 	});
+	$("#update").click(function(){
+		console.log("updating Part");
+		if(user.username){
+			var obj = 	{
+							type: "updatePart",
+							part: {
+								partId: $("input[name='PartId']").val()
+							}
+						};
+
+			if(obj.part && obj.part.partId){
+				console.log('updating part data, sending', obj);
+				ws.send(JSON.stringify(obj));
+				$(".panel").hide();
+				$('#batchTag').html('');
+				$('#spinner').show();
+				$('#tagWrapper').hide();
+				//$("#batchTagPanel").show();
+				$("input[name='PartId']").val('');
+				console.log("update request sent");
+				//$("#submit").prop('disabled', true);
+
+			}
+		}
+		return false;
+	});
 
 	$("#newPartLink").click(function(){
 		//$("#batchTagPanel").hide();
 		$("#newPartPanel").show();
+	});
+	
+	$("#updatePartLink").click(function(){
+		
+		$("#updatePartPanel").show();
 	});
 
 	$("#dashboardLink").click(function(){

@@ -1,0 +1,14 @@
+#updatePartPanel(hidden).panel
+	h1 Enter Part Details
+	hr
+
+	#innerWrap
+		
+		form(action="/newPart" method="POST")#updatePartform
+			legend 
+				input(type="text" name="PartId" placeholder="Part Id")
+			legend
+				button(type="button" style="margin:10px 10px 5px 10px" )#update
+					span.fa.fa-plus &nbsp;&nbsp;
+					span UPDATE
+				
