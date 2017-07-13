@@ -68,7 +68,7 @@ func (t *SimpleChaincode) Init(stub  shim.ChaincodeStubInterface, function strin
 
 	var parts AllParts
 	jsonAsBytes, _ := json.Marshal(parts)
-	err = stub.PutState("parts", jsonAsBytes)
+	err = stub.PutState("allParts", jsonAsBytes)
 	if err != nil {
 		return nil, err
 	}
@@ -223,7 +223,7 @@ func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []s
 		return nil, err
 	}
 
-	//Update All Batches Array
+	//Update All Parts Array
 	allBAsBytes, err := stub.GetState("allParts")
 	if err != nil {
 		return nil, errors.New("Failed to get all Parts")
