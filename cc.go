@@ -151,7 +151,7 @@ func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user st
 	//get the AllParts index
 	allBAsBytes, err := stub.GetState("allParts")
 	if err != nil {
-		return nil, error\ij,s.New("Failed to get all Parts")
+		return nil, errors.New("Failed to get all Parts")
 	}
 
 	var res AllParts
