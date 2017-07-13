@@ -30,7 +30,7 @@ var creds	= require("../user_creds.json");
 // ============================================================================================================================
 router.route("/").get(function(req, res){
 	check_login(res, req);
-	res.render("part2", {title: "Supply Chain Demo", bag: {setup: setup, e: process.error, session: req.session}} );
+	res.render("part2", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
 });
 
 router.route("/home").get(function(req, res){
@@ -39,11 +39,11 @@ router.route("/home").get(function(req, res){
 });
 router.route("/newPart").get(function(req, res){
 	check_login(res, req);
-	res.render("part2", {title: "Supply Chain Demo", bag: {setup: setup, e: process.error, session: req.session}} );
+	res.render("part2", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
 });
 router.route("/dashboard").get(function(req, res){
 	check_login(res, req);
-	res.render("part2", {title: "Supply Chain Demo", bag: {setup: setup, e: process.error, session: req.session}} );
+	res.render("part2", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
 });
 
 router.route("/getPart").post(function(req, res){
