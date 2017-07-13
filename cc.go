@@ -98,6 +98,9 @@ func (t *SimpleChaincode) Invoke(stub  shim.ChaincodeStubInterface, function str
 	} else if function == "createPart" {											//create a batch
 		return t.createPart(stub, args)
 	}
+	else if function == "updatePart" {											//update a part
+		return t.updatePart(stub, args)
+	}
 	fmt.Println("invoke did not find func: " + function)						//error
 
 	return nil, errors.New("Received unknown function invocation")
@@ -217,6 +220,58 @@ func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []s
 
 	//Commit part to ledger
 	fmt.Println("createPart Commit Part To Ledger");
+	btAsBytes, _ := json.Marshal(bt)
+	err = stub.PutState(bt.PartId, btAsBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	//Update All Parts Array
+	allBAsBytes, err := stub.GetState("allParts")
+	if err != nil {
+		return nil, errors.New("Failed to get all Parts")
+	}
+	var allb AllParts
+	err = json.Unmarshal(allBAsBytes, &allb)
+	if err != nil {
+		return nil, errors.New("Failed to Unmarshal all Parts")
+	}
+	allb.Parts = append(allb.Parts,bt.PartId)
+
+	allBuAsBytes, _ := json.Marshal(allb)
+	err = stub.PutState("allParts", allBuAsBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
+}
+func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	var err error
+	fmt.Println("Running updatePart")
+
+	if len(args) != 5 {
+		fmt.Println("Incorrect number of arguments. Expecting 5")
+		return nil, errors.New("Incorrect number of arguments. Expecting 5")
+	}
+
+	
+	//if (args[2] != PRODUCER1)&&(args[2] != PRODUCER2)  {
+	//	fmt.Println("You are not allowed to create a new Part")
+	//	return nil, errors.New("You are not allowed to create a new Part")
+	//}
+
+	//////// TODO
+	var bt Part
+	bt.PartId 				= args[0]
+	bt.vehicleId			= args[1]
+	bt.dateOFDelivery		= args[2]
+	bt.dateOFInstallation	= args[3]
+	bt.owner				= args[4]
+
+	//Commit part to ledger
+	fmt.Println("updatePart Commit Part To Ledger");
 	btAsBytes, _ := json.Marshal(bt)
 	err = stub.PutState(bt.PartId, btAsBytes)
 	if err != nil {

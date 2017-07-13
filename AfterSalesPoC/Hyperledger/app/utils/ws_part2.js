@@ -23,6 +23,12 @@ module.exports.process_msg = function(ws, data, owner){
 			chaincode.invoke.createPart([data.part.partId, data.part.productCode, data.part.dateOfManufacture], cb_invoked_createpart);				//create a new paper
 		}
 	}
+	else if(data.type == "updatePart"){
+		console.log("Update Part ", data, owner);
+		if(data.part){
+			chaincode.invoke.updatePart([data.part.partId, data.part.vehicleId, data.part.dateOFDelivery, data.part.dateOFInstallation, owner], cb_invoked_updatepart);				//create a new paper
+		}		
+	}
 	else if(data.type == "getPart"){
 		console.log("Get Part", data.partId);
 		chaincode.query.getPart([data.partId], cb_got_part);
@@ -58,6 +64,18 @@ module.exports.process_msg = function(ws, data, owner){
 		else{
 			console.log("part ID #" + data.part.id)
 			sendMsg({msg: "partCreated", partId: data.part.id});
+		}
+		
+
+	}
+	function cb_invoked_updatepart(e, a){
+		console.log("response: ", e, a);
+		if(e != null){
+			console.log("Invoked update part error", e);
+		}
+		else{
+			console.log("part ID #" + data.part.id)
+			sendMsg({msg: "partUpdated", partId: data.part.id});
 		}
 		
 

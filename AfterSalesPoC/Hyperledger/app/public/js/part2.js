@@ -38,14 +38,14 @@ $(document).on('ready', function() {
 	// Only show tabs if a user is logged in
 	if(user.username) {
 		// Display tabs based on user's role
-		if(bag.session.user_role && bag.session.user_role.toUpperCase() === "certifier".toUpperCase()) {
+		if(bag.session.user_role && bag.session.user_role.toUpperCase() === "dealer".toUpperCase()) {
 			$("#dashboardLink").show();
 			$("#dashboardPanel").show();
 			$("#updatePartLink").show();
 			$("#newPartLink").hide();
 			$("#newPartPanel").hide();
 			$("#batchDetailsTable").hide();
-			$("#updatePartPanel").show();
+			
 
 		}
 		else if (user.username==="SERVICE_CENTER"){
@@ -53,8 +53,8 @@ $(document).on('ready', function() {
 			$("#newPartPanel").show();
 			$("#dashboardLink").show();
 			$("#dashboardPanel").hide();
-			$("#updatePartLink").show();
-			$("#updatePartPanel").show();
+			$("#updatePartLink").show();		
+			
 		 }
 		
 		
@@ -149,6 +149,16 @@ $(document).on('ready', function() {
 	$("#updatePartLink").click(function(){
 		
 		$("#updatePartPanel").show();
+		$("#dashboardPanel").hide();
+		$("#newPartPanel").hide();
+		if(user.username === "SERVICE_CENTER") {
+			$("#de").prop('hidden', true);
+			$("#sc").prop('hidden', false);
+		}
+		else if(user.username === "DEALER"){
+			$("#de").prop('hidden', false);
+			$("#sc").prop('hidden', true);
+		}
 	});
 
 	$("#dashboardLink").click(function(){
@@ -226,7 +236,7 @@ function connect_to_server(){
 		clear_blocks();
 		$("#errorNotificationPanel").fadeOut();
 		ws.send(JSON.stringify({type: "chainstats", v:2}));
-		if(user.username && bag.session.user_role && bag.session.user_role.toUpperCase() === "certifier".toUpperCase()) {
+		if(user.username && bag.session.user_role && bag.session.user_role.toUpperCase() === "dealer".toUpperCase()) {
 			$('#spinner2').show();
 			$('#openTrades').hide();
 			ws.send(JSON.stringify({type: "getAllParts", v: 2}));
@@ -370,7 +380,7 @@ function connect_to_server(){
 				//$('#batchTag').qrcode(data.batchId);
 			}
 			else if(data.msg === 'reset'){
-				if(user.username && bag.session.user_role && bag.session.user_role.toUpperCase() === "certifier".toUpperCase()) {
+				if(user.username && bag.session.user_role && bag.session.user_role.toUpperCase() === "dealer".toUpperCase()) {
 					$('#spinner2').show();
 					$('#openTrades').hide();
 					ws.send(JSON.stringify({type: "getAllBatches", v: 2}));

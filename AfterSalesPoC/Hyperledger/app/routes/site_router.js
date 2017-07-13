@@ -41,6 +41,10 @@ router.route("/newPart").get(function(req, res){
 	check_login(res, req);
 	res.render("part2", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
 });
+router.route("/updatePart").get(function(req, res){
+	check_login(res, req);
+	res.render("part2", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
+});
 router.route("/dashboard").get(function(req, res){
 	check_login(res, req);
 	res.render("part2", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
