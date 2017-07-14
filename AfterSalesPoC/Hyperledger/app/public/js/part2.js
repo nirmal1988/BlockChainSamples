@@ -93,7 +93,7 @@ $(document).on('ready', function() {
 							part: {
 								partId: $("input[name='PartId']").val(),
 								productCode: $("input[name='ProductCode']").val(),
-								dateOfManufacture: $("input[name='Date']").val()
+								dateOfManufacture: $("input[name='DateOfManufacture']").val()
 							}
 						};
 
