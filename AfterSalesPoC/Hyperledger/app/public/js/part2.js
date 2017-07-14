@@ -121,6 +121,9 @@ $(document).on('ready', function() {
 							type: "updatePart",
 							part: {
 								partId: $("input[name='PartId']").val()
+								vehicleId: $("input[name='VehicleId']").val(),
+								dateOfDelivery: $("input[name='DateOfDelivery']").val()
+								dateOfInstallation: $("input[name='DateOfInstallation']").val()
 							}
 						};
 
@@ -265,9 +268,9 @@ function connect_to_server(){
 				var txs = data.part.transactions;
 				var html = ''
 				$("#batchDetailsTable").show();
-				/*for(var i=0; i<txs.length; i++){
-					console.log(txs[i]);
-					$("#bDetHeader").html("PART #" + data.part.id + ' - <span style="font-size:16px;font-weight:500">' + data.part.productCode + '</span>');
+				for(var i=0; i<txs.length; i++){
+					console.log("Trnsaction "+i+" "+txs[i]);
+					$("#bDetHeader").html("PART #" + data.part.partId + ' - <span style="font-size:16px;font-weight:500">' + data.part.productCode + '</span>');
 
 
 					if(txs[i].ttype == "CREATE"){
@@ -278,15 +281,13 @@ function connect_to_server(){
 						html += '</td>';
 						html += '<td style="text-align:left;padding-left:20px">';
 						html +=	'<div style="display: inline-block; vertical-align: middle;">';
-						html += '<p style="font-weight:500;">ADDED BY <span style="color:#5596E6">' + txs[i].owner +'</span></p>';
-						html += '<p style="">' + txs[i].vDate +'</p>';
-						html += '<p style="">' + txs[i].location +'</p>';
-						html += '<p style="">Qty: ' + txs[i].quantity +'</p>';
+						html += '<p style="font-weight:500;">ADDED BY <span style="color:#5596E6">' + txs[i].user +'</span></p>';
+						html += '<p style="">' + txs[i].dateOfManufacture +'</p>';
 						html +=	'</div>';
 						html += '</td>';
 						html += '</tr>';
 			        }
-			        else if(txs[i].ttype == "CLAIM"){
+			        else if(txs[i].ttype == "DELIVERY"){
 			          //litem = {avatar:"ion-ios-barcode-outline", date: data.batch.vDate, location: data.batch.location, desc:"PICKED UP BY ", owner:data.batch.owner};
 			        	html += '<tr>';
 						html +=	'<td>';
@@ -294,15 +295,13 @@ function connect_to_server(){
 						html += '</td>';
 						html += '<td style="text-align:left;padding-left:20px">';
 						html +=	'<div style="display: inline-block; vertical-align: middle;">';
-						html += '<p style="font-weight:500;">PICKED UP BY <span style="color:#5596E6">' + txs[i].owner +'</span></p>';
-						html += '<p style="">' + txs[i].vDate +'</p>';
-						html += '<p style="">' + txs[i].location +'</p>';
-						html += '<p style="">Qty: ' + txs[i].quantity +'</p>';
+						html += '<p style="font-weight:500;">DELIVERED TO <span style="color:#5596E6">' + txs[i].user +'</span></p>';
+						html += '<p style="">' + txs[i].dateOfDelivery +'</p>';
 						html +=	'</div>';
 						html += '</td>';
 						html += '</tr>';
 			        }
-			        else if(txs[i].ttype == "TRANSFER"){
+			        else if(txs[i].ttype == "INSTALLED"){
 			          //litem = {avatar:"ion-ios-shuffle", date: data.batch.vDate, location: data.batch.location, desc:"DELIVERED TO ", owner:data.batch.owner};
 			        	html += '<tr>';
 						html +=	'<td>';
@@ -310,54 +309,14 @@ function connect_to_server(){
 						html += '</td>';
 						html += '<td style="text-align:left;padding-left:20px">';
 						html +=	'<div style="display: inline-block; vertical-align: middle;">';
-						html += '<p style="font-weight:500;">DELIVERED TO <span style="color:#5596E6">' + txs[i].owner +'</span></p>';
-						html += '<p style="">' + txs[i].vDate +'</p>';
-						html += '<p style="">' + txs[i].location +'</p>';
-						html += '<p style="">Qty: ' + txs[i].quantity +'</p>';
-						html += '<p style="">Recipient\'s Signature:</p>';
-						html += '<img alt="sign" style="border:1px #D4DCDC solid;" src="' + txs[i].signature + '" />'
+						html += '<p style="font-weight:500;">PART INSTALLED BY <span style="color:#5596E6">' + txs[i].user +'</span></p>';
+						html += '<p style="">' + txs[i].dateOfInstallation +'</p>';
+						html += '<p style="">' + txs[i].vehicleId +'</p>';
 						html +=	'</div>';
 						html += '</td>';
 						html += '</tr>';
 			        }
-			        else if(txs[i].ttype == "SELL"){
-			          //litem = {avatar:"ion-ios-cart-outline", date: data.batch.vDate, location: data.batch.location, desc:"SOLD TO ", owner:data.batch.owner};
-			        	html += '<tr>';
-						html +=	'<td>';
-						html +=	'<div style="font-size: 34px;color:#5596E6;float:right;"><i class="ion-wrench"></i></div>';
-						html += '</td>';
-						html += '<td style="text-align:left;padding-left:20px">';
-						html +=	'<div style="display: inline-block; vertical-align: middle;">';
-						if(txs[i].quantity<=1){
-							html += '<p style="font-weight:500;">PLUG <span style="color:#5596E6">' + txs[i].quantity +'</span> ITEM TO <span style="color:#5596E6">' + txs[i].owner +'</span></p>';
-						}else {
-							html += '<p style="font-weight:500;">PLUG <span style="color:#5596E6">' + txs[i].quantity +'</span> ITEMS TO <span style="color:#5596E6">' + txs[i].owner +'</span></p>';
-						}
-						html += '<p style="">' + txs[i].vDate +'</p>';
-						html += '<p style="">' + txs[i].location +'</p>';
-						html +=	'</div>';
-						html += '</td>';
-						html += '</tr>';
-			        }
-			        else if(txs[i].ttype == "UPDATE QUALITY"){
-			          //litem = {ttype:data.batch.ttype, avatar:"ion-ios-bolt-outline", date: data.batch.vDate, location: data.batch.location, desc:"QUALITY IMPACTED DUE TO HIGH T°", owner:""};
-			        	html += '<tr>';
-						html +=	'<td>';
-						html +=	'<div style="font-size: 34px;color:#ef473a;float:right;"><i class="ion-ios-bolt-outline"></i></div>';
-						html += '</td>';
-						html += '<td style="text-align:left;padding-left:20px">';
-						html +=	'<div style="display: inline-block; vertical-align: middle;">';
-						html += '<p style="font-weight:500;color:#ef473a">QUALITY IMPACTED</p>';
-						html += '<p style="">' + txs[i].vDate +'</p>';
-						html += '<p style="">' + txs[i].location +'</p>';
-						html += '<p style="">Qty: ' + txs[i].quantity +'</p>';
-						html += '<p style="">Quality: ' + txs[i].quality +'</p>';
-						html +=	'</div>';
-						html += '</td>';
-						html += '</tr>';
-			        }
-
-				}*/
+				}
 
 				$("#batchDetailsBody").html(html);
 			}
@@ -377,13 +336,12 @@ function connect_to_server(){
 				$("#notificationPanel").animate({width:'toggle'});
 				$('#spinner').hide();
 				$('#tagWrapper').show();
-				//$('#batchTag').qrcode(data.batchId);
 			}
 			else if(data.msg === 'reset'){
 				if(user.username && bag.session.user_role && bag.session.user_role.toUpperCase() === "dealer".toUpperCase()) {
 					$('#spinner2').show();
 					$('#openTrades').hide();
-					ws.send(JSON.stringify({type: "getAllBatches", v: 2}));
+					ws.send(JSON.stringify({type: "getAllParts", v: 2}));
 				}
 			}
 		}
@@ -488,15 +446,14 @@ function processFilterForm(panelDesc) {
 
 /**
  * Validates a trade object against a given set of filters.
- * @param paper The object to be validated.
- * @param owner The specific owner in the trade object that you want to validate.
+ * @param part The object to be validated.
  * @param filter The filter object to validate the trade against.
  * @returns {boolean} True if the trade is valid according to the filter, false otherwise.
  */
-function excluded(batch, filter) {
+function excluded(part, filter) {
 	"use strict";
 
-	if(filter.batchId && filter.batchId!== "" && batch.toUpperCase().indexOf(filter.batchId.toUpperCase()) == -1 ) return false;
+	if(filter.partId && filter.partId!== "" && part.toUpperCase().indexOf(filter.partId.toUpperCase()) == -1 ) return false;
 
 	// Must be a valid trade if we reach this point
 	return true;

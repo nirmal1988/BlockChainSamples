@@ -20,13 +20,13 @@ module.exports.process_msg = function(ws, data, owner){
 	else if(data.type == "createPart"){
 		console.log("Create Part ", data, owner);
 		if(data.part){
-			chaincode.invoke.createPart([data.part.partId, data.part.productCode, data.part.dateOfManufacture], cb_invoked_createpart);				//create a new paper
+			chaincode.invoke.createPart([data.part.partId, data.part.productCode, data.part.dateOfManufacture, owner], cb_invoked_createpart);				//create a new paper
 		}
 	}
 	else if(data.type == "updatePart"){
 		console.log("Update Part ", data, owner);
 		if(data.part){
-			chaincode.invoke.updatePart([data.part.partId, data.part.vehicleId, data.part.dateOFDelivery, data.part.dateOFInstallation, owner], cb_invoked_updatepart);				//create a new paper
+			chaincode.invoke.updatePart([data.part.partId, data.part.vehicleId, data.part.dateOfDelivery, data.part.dateOfInstallation, owner], cb_invoked_updatepart);				//create a new paper
 		}		
 	}
 	else if(data.type == "getPart"){

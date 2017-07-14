@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 
@@ -29,12 +30,9 @@ import (
 
 const   PRODUCER1 = "SUPPLIER1"
 const 	PRODUCER2 = "SUPPLIER2"
-const 	DEALER1 = "DEALER1"
-const 	DEALER2 = "DEALER2"
-const 	SERVICECENTER = "SERVICECENTER"
-const   SHIPPING = "SHIPPINGCO"
-const   RETAILER = "RETAILER"
-const 	CONSUMER = "CONSUMER"
+const 	DEALER = "DEALER"
+const 	SERVICE_CENTER = "SERVICE_CENTER"
+
 
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
@@ -53,7 +51,7 @@ type Transaction struct {
 	DateOfDelivery		string	`json:"dateOfDelivery"`
 	DateOfInstallation	string	`json:"dateOfInstallation"`
 	VehicleId		string	`json:"vehicleId"`
-	TType 		string   `json:"ttype"`
+	TType 			string   `json:"ttype"`
 }
 
 //==============================================================================================================================
@@ -259,9 +257,9 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 	var err error
 	fmt.Println("Running updatePart")
 
-	if len(args) != 6 {
-		fmt.Println("Incorrect number of arguments. Expecting 6 - PartId, Vehicle Id, Delivery Date, Installation Date, User")
-		return nil, errors.New("Incorrect number of arguments. Expecting 6")
+	if len(args) != 5 {
+		fmt.Println("Incorrect number of arguments. Expecting 5 - PartId, Vehicle Id, Delivery Date, Installation Date, User")
+		return nil, errors.New("Incorrect number of arguments. Expecting 5")
 	}
 
 	//Get and Update Part data
@@ -276,7 +274,12 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 	}
 
 	var tx Transaction
-	tx.TType 		= "TRANSFER"
+	if (strings.Contains(args[4], DEALER)) {
+		tx.TType 	= "DELIVERY"
+	} else if (strings.Contains(args[4], SERVICE_CENTER)) {
+		tx.TType 	= "INSTALLED"
+	}
+
 	tx.VehicleId		= args[1]
 	tx.DateOfDelivery	= args[2]
 	tx.DateOfInstallation	= args[3]

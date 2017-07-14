@@ -63,11 +63,12 @@ router.route("/getPart").post(function(req, res){
 	})
 });
 
-/*router.route("/claimBatch").post(function(req, res){
 
-	chaincode.invoke.claimBatch([req.body.batchId,req.body.user,req.body.date,req.body.location], function (e, resMsg){
+router.route("/getAllParts").post(function(req, res){
+
+	chaincode.query.getAllParts([req.body.user], function (e, resMsg){
 		if(e != null){
-			console.log("Claim Batch error", e);
+			console.log("Get All Part error", e);
 			res.send(e);
 		}
 		else{
@@ -76,83 +77,6 @@ router.route("/getPart").post(function(req, res){
 	})
 });
 
-router.route("/getAllBatches").post(function(req, res){
-
-	chaincode.query.getAllBatches([req.body.user], function (e, resMsg){
-		if(e != null){
-			console.log("Get All Batch error", e);
-			//res.send(e);
-		}
-		else{
-			res.send(resMsg);
-		}
-	})
-});
-
-router.route("/getAllBatchesDetails").post(function(req, res){
-
-	chaincode.query.getAllBatchesDetails([req.body.user], function (e, resMsg){
-		if(e != null){
-			console.log("Get All Batch Details error", e);
-			//res.send(e);
-		}
-		else{
-			res.send(resMsg);
-		}
-	})
-});
-
-router.route("/getNbItems").post(function(req, res){
-
-	chaincode.query.getNbItems([req.body.user], function (e, resMsg){
-		if(e != null){
-			console.log("Get All Batch error", e);
-			//res.send(e);
-		}
-		else{
-			res.send(resMsg);
-		}
-	})
-});
-
-router.route("/transferBatch").post(function(req, res){
-
-	chaincode.invoke.transferBatch([req.body.batchId,req.body.user,req.body.date,req.body.location,req.body.newOwner,req.body.signature], function (e, resMsg){
-		if(e != null){
-			console.log("Transfer Batch error", e);
-			//res.send(e);
-		}
-		else{
-			res.send(resMsg);
-		}
-	})
-});
-
-router.route("/sellItem").post(function(req, res){
-	//console.log([req.body.batchId,req.body.user,req.body.date,req.body.location,(req.body.quantity).toString(),req.body.newOwner]);
-	chaincode.invoke.sellBatchItem([req.body.batchId,req.body.user,req.body.date,req.body.location,(req.body.quantity).toString(),req.body.newOwner], function (e, resMsg){
-		if(e != null){
-			console.log("Sell Item error", e);
-			//res.send(e);
-		}
-		else{
-			res.send(resMsg);
-		}
-	})
-});
-
-router.route("/updateBatchQuality").post(function(req, res){
-	chaincode.invoke.updateBatchQuality([req.body.user,req.body.date,req.body.location,req.body.msg], function (e, resMsg){
-		if(e != null){
-			console.log("Update Batch Quality error", e);
-			//res.send(e);
-		}
-		else{
-			res.send(resMsg);
-		}
-	})
-});
-*/
 router.route("/login").get(function(req, res){
 	res.render("login", {title: "Login", bag: {setup: setup, e: process.error, session: req.session}} );
 });
