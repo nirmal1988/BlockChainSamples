@@ -121,7 +121,7 @@ $(document).on('ready', function() {
 							type: "updatePart",
 							part: {
 								partId: $("input[name='PartId']").val()
-								vehicleId: $("input[name='VehicleId']").val(),
+								vehicleId: $("input[name='VehicleId']").val()
 								dateOfDelivery: $("input[name='DateOfDelivery']").val()
 								dateOfInstallation: $("input[name='DateOfInstallation']").val()
 							}
