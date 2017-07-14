@@ -20,6 +20,7 @@ module.exports.process_msg = function(ws, data, owner){
 	else if(data.type == "createPart"){
 		console.log("Create Part ", data, owner);
 		if(data.part){
+			console.log('Part manufacture date:'+data.part.dateOfManufacture);
 			chaincode.invoke.createPart([data.part.partId, data.part.productCode, data.part.dateOfManufacture, owner], cb_invoked_createpart);				//create a new paper
 		}
 	}

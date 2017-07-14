@@ -264,7 +264,7 @@ function connect_to_server(){
 				$('#openTrades').show();
 			}
 			else if(data.msg === 'part'){
-				console.log(data);
+				console.log('onMessage part:'+data.part);
 				var txs = data.part.transactions;
 				var html = ''
 				$("#batchDetailsTable").show();

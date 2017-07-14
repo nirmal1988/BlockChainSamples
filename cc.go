@@ -150,7 +150,7 @@ func (t *SimpleChaincode) getPart(stub  shim.ChaincodeStubInterface, partId stri
 // ============================================================================================================================
 func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user string)([]byte, error){
 
-	fmt.Println("getAllParts:Looking for All Parts " + user);
+	fmt.Println("getAllParts:Looking for All Parts");
 
 	//get the AllParts index
 	allBAsBytes, err := stub.GetState("allParts")
@@ -208,6 +208,7 @@ func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("Incorrect number of arguments. Expecting 4")
 	}
 
+	fmt.Println("Arguments :"+args[0]+","+args[1]+","+args[2]+","+args[3]);
 	// currently there is no such validation
 	//if (args[2] != PRODUCER1)&&(args[2] != PRODUCER2)  {
 	//	fmt.Println("You are not allowed to create a new Part")
@@ -261,6 +262,7 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 		fmt.Println("Incorrect number of arguments. Expecting 5 - PartId, Vehicle Id, Delivery Date, Installation Date, User")
 		return nil, errors.New("Incorrect number of arguments. Expecting 5")
 	}
+	fmt.Println("Arguments :"+args[0]+","+args[1]+","+args[2]+","+args[3]+","+args[4]);
 
 	//Get and Update Part data
 	bAsBytes, err := stub.GetState(args[0])
