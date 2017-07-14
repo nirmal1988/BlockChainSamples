@@ -35,7 +35,6 @@ const 	SERVICECENTER = "SERVICECENTER"
 const   SHIPPING = "SHIPPINGCO"
 const   RETAILER = "RETAILER"
 const 	CONSUMER = "CONSUMER"
-const 	CERTIFIER = "CERTIFIER"
 
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
@@ -104,8 +103,7 @@ func (t *SimpleChaincode) Invoke(stub  shim.ChaincodeStubInterface, function str
 		return t.Init(stub, "init", args)
 	} else if function == "createPart" {			//create a part
 		return t.createPart(stub, args)
-	}
-	else if function == "updatePart" {			//update a part
+	} else if function == "updatePart" {			//update a part
 		return t.updatePart(stub, args)
 	}
 	fmt.Println("invoke did not find func: " + function)	//error
