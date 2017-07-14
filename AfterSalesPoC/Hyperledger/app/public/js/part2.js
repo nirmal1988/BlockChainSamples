@@ -107,7 +107,7 @@ $(document).on('ready', function() {
 				//$("#batchTagPanel").show();
 				$("input[name='PartId']").val('');
 				$("input[name='ProductCode']").val(''),
-				$("input[name='Date']").val('')
+				$("input[name='DateOfManufacture']").val('')
 				//$("#submit").prop('disabled', true);
 
 			}
@@ -120,7 +120,7 @@ $(document).on('ready', function() {
 			var obj = 	{
 							type: "updatePart",
 							part: {
-								partId: $("input[name='PartId']").val(),
+								partId: $("input[name='PartIdToUpdate']").val(),
 								vehicleId: $("input[name='VehicleId']").val(),
 								dateOfDelivery: $("input[name='DateOfDelivery']").val(),
 								dateOfInstallation: $("input[name='DateOfInstallation']").val()
@@ -135,7 +135,10 @@ $(document).on('ready', function() {
 				$('#spinner').show();
 				$('#tagWrapper').hide();
 				//$("#batchTagPanel").show();
-				$("input[name='PartId']").val('');
+				$("input[name='PartIdToUpdate']").val('');
+				$("input[name='VehicleId']").val('');
+				$("input[name='DateOfDelivery']").val('');
+				$("input[name='DateOfInstallation']").val('');
 				console.log("update request sent");
 				//$("#submit").prop('disabled', true);
 
