@@ -288,7 +288,7 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 	//Commit updates part to ledger
 	fmt.Println("updatePart Commit Updates To Ledger");
 	btAsBytes, _ := json.Marshal(bch)
-	err = stub.PutState(bch.Id, btAsBytes)
+	err = stub.PutState(bch.PartId, btAsBytes)
 	if err != nil {
 		return nil, err
 	}
