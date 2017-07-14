@@ -203,9 +203,9 @@ func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []s
 	var err error
 	fmt.Println("Running createPart")
 
-	if len(args) != 3 {
-		fmt.Println("Incorrect number of arguments. Expecting 3")
-		return nil, errors.New("Incorrect number of arguments. Expecting 3")
+	if len(args) != 4 {
+		fmt.Println("Incorrect number of arguments. Expecting 4 - PartId, Product Code, Manufacture Date, User")
+		return nil, errors.New("Incorrect number of arguments. Expecting 4")
 	}
 
 	// currently there is no such validation
