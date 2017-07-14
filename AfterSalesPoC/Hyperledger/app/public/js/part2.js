@@ -120,9 +120,9 @@ $(document).on('ready', function() {
 			var obj = 	{
 							type: "updatePart",
 							part: {
-								partId: $("input[name='PartId']").val()
-								vehicleId: $("input[name='VehicleId']").val()
-								dateOfDelivery: $("input[name='DateOfDelivery']").val()
+								partId: $("input[name='PartId']").val(),
+								vehicleId: $("input[name='VehicleId']").val(),
+								dateOfDelivery: $("input[name='DateOfDelivery']").val(),
 								dateOfInstallation: $("input[name='DateOfInstallation']").val()
 							}
 						};
