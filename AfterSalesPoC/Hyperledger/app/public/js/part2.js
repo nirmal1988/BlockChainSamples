@@ -126,7 +126,7 @@ $(document).on('ready', function() {
 								dateOfInstallation: $("input[name='DateOfInstallation']").val()
 							}
 						};
-
+			console.log('obj.part :'+obj.part+' obj.part.partId:'+obj.part.partId);
 			if(obj.part && obj.part.partId){
 				console.log('updating part data, sending', obj);
 				ws.send(JSON.stringify(obj));
