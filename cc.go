@@ -42,12 +42,19 @@ type SimpleChaincode struct {
 }
 
 type Part struct {
-	PartId 				string 	`json:"partId"`
+	PartId 			string 	`json:"partId"`
 	ProductCode 		string  `json:"productCode"`
+	Transactions		[]Transaction `json:"transactions"`
+}
+
+// PART TRANSACTION HISTORY
+type Transaction struct {
+	User  			string  `json:"user"`
 	DateOfManufacture	string  `json:"dateOfManufacture"`
 	DateOfDelivery		string	`json:"dateOfDelivery"`
 	DateOfInstallation	string	`json:"dateOfInstallation"`
-	VehicleId			string	`json:"vehicleId"`
+	VehicleId		string	`json:"vehicleId"`
+	TType 		string   `json:"ttype"`
 }
 
 //==============================================================================================================================
@@ -93,15 +100,15 @@ func (t *SimpleChaincode) Invoke(stub  shim.ChaincodeStubInterface, function str
 	fmt.Println("Invoke is running " + function)
 
 	// Handle different functions
-	if function == "init" {													//initialize the chaincode state
+	if function == "init" {					//initialize the chaincode state
 		return t.Init(stub, "init", args)
-	} else if function == "createPart" {											//create a batch
+	} else if function == "createPart" {			//create a part
 		return t.createPart(stub, args)
 	}
-	else if function == "updatePart" {											//update a part
+	else if function == "updatePart" {			//update a part
 		return t.updatePart(stub, args)
 	}
-	fmt.Println("invoke did not find func: " + function)						//error
+	fmt.Println("invoke did not find func: " + function)	//error
 
 	return nil, errors.New("Received unknown function invocation")
 }
@@ -114,7 +121,6 @@ func (t *SimpleChaincode) Query(stub  shim.ChaincodeStubInterface, function stri
 	if len(args) != 1 { return nil, errors.New("Incorrect number of arguments passed") }
 
 	if function != "getPart" && function != "getAllParts" {
-	//&& function != "getAllBatchesDetails" && function != "getNbItems"
 		return nil, errors.New("Invalid query function name.")
 	}
 
@@ -148,8 +154,7 @@ func (t *SimpleChaincode) getPart(stub  shim.ChaincodeStubInterface, partId stri
 // ============================================================================================================================
 func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user string)([]byte, error){
 
-	fmt.Println("Start find getAllParts")
-	fmt.Println("Looking for All Parts " + user);
+	fmt.Println("getAllParts:Looking for All Parts " + user);
 
 	//get the AllParts index
 	allBAsBytes, err := stub.GetState("allParts")
@@ -159,9 +164,9 @@ func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user st
 
 	var res AllParts
 	err = json.Unmarshal(allBAsBytes, &res)
-	fmt.Println(allBAsBytes);
+	//fmt.Println(allBAsBytes);
 	if err != nil {
-		fmt.Println("Printing error");
+		fmt.Println("Printing Unmarshal error:-");
 		fmt.Println(err);
 		return nil, errors.New("Failed to Unmarshal all Parts")
 	}
@@ -177,7 +182,8 @@ func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user st
 		var sb Part
 		json.Unmarshal(sbAsBytes, &sb)
 
-		//if(user == CERTIFIER) {
+		// currently we show all parts to the users
+		//if(user == DEALER) {
 			rab.Parts = append(rab.Parts,sb.PartId);
 		//}
 		//else{
@@ -206,17 +212,20 @@ func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("Incorrect number of arguments. Expecting 3")
 	}
 
-	
+	// currently there is no such validation
 	//if (args[2] != PRODUCER1)&&(args[2] != PRODUCER2)  {
 	//	fmt.Println("You are not allowed to create a new Part")
 	//	return nil, errors.New("You are not allowed to create a new Part")
 	//}
 
-	//////// TODO
 	var bt Part
 	bt.PartId 			= args[0]
 	bt.ProductCode			= args[1]
-	bt.DateOfManufacture		= args[2]
+	var tx Transaction
+	tx.DateOfManufacture		= args[2]
+	tx.TType 			= "CREATE"
+	tx.User 			= args[3]
+	bt.Transactions = append(bt.Transactions, tx)
 
 	//Commit part to ledger
 	fmt.Println("createPart Commit Part To Ledger");
@@ -246,57 +255,48 @@ func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []s
 
 	return nil, nil
 }
+
 func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 	var err error
 	fmt.Println("Running updatePart")
 
-	if len(args) != 5 {
-		fmt.Println("Incorrect number of arguments. Expecting 5")
-		return nil, errors.New("Incorrect number of arguments. Expecting 5")
+	if len(args) != 6 {
+		fmt.Println("Incorrect number of arguments. Expecting 6 - PartId, Vehicle Id, Delivery Date, Installation Date, User")
+		return nil, errors.New("Incorrect number of arguments. Expecting 6")
 	}
 
-	
-	//if (args[2] != PRODUCER1)&&(args[2] != PRODUCER2)  {
-	//	fmt.Println("You are not allowed to create a new Part")
-	//	return nil, errors.New("You are not allowed to create a new Part")
-	//}
-
-	//////// TODO
-	var bt Part
-	bt.PartId 				= args[0]
-	bt.vehicleId			= args[1]
-	bt.dateOFDelivery		= args[2]
-	bt.dateOFInstallation	= args[3]
-	bt.owner				= args[4]
-
-	//Commit part to ledger
-	fmt.Println("updatePart Commit Part To Ledger");
-	btAsBytes, _ := json.Marshal(bt)
-	err = stub.PutState(bt.PartId, btAsBytes)
+	//Get and Update Part data
+	bAsBytes, err := stub.GetState(args[0])
 	if err != nil {
-		return nil, err
+		return nil, errors.New("Failed to get Part #" + args[0])
+	}
+	var bch Part
+	err = json.Unmarshal(bAsBytes, &bch)
+	if err != nil {
+		return nil, errors.New("Failed to Unmarshal Part #" + args[0])
 	}
 
-	//Update All Parts Array
-	allBAsBytes, err := stub.GetState("allParts")
-	if err != nil {
-		return nil, errors.New("Failed to get all Parts")
-	}
-	var allb AllParts
-	err = json.Unmarshal(allBAsBytes, &allb)
-	if err != nil {
-		return nil, errors.New("Failed to Unmarshal all Parts")
-	}
-	allb.Parts = append(allb.Parts,bt.PartId)
+	var tx Transaction
+	tx.TType 		= "TRANSFER"
+	tx.VehicleId		= args[1]
+	tx.DateOfDelivery	= args[2]
+	tx.DateOfInstallation	= args[3]
+	tx.User  		= args[4]
 
-	allBuAsBytes, _ := json.Marshal(allb)
-	err = stub.PutState("allParts", allBuAsBytes)
+
+	bch.Transactions = append(bch.Transactions, tx)
+
+	//Commit updates part to ledger
+	fmt.Println("updatePart Commit Updates To Ledger");
+	btAsBytes, _ := json.Marshal(bch)
+	err = stub.PutState(bch.Id, btAsBytes)
 	if err != nil {
 		return nil, err
 	}
 
 	return nil, nil
+
 }
 
 
