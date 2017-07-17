@@ -444,7 +444,7 @@ function processFilterForm(panelDesc) {
 
 	console.log("New filter parameters: " + JSON.stringify(filter));
 	console.log("Rebuilding list");
-	build_Parts(bag.batches, panelDesc);
+	build_Parts(bag.parts, panelDesc);
 }
 
 /**
