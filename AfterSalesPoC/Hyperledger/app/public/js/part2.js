@@ -49,12 +49,12 @@ $(document).on('ready', function() {
 
 		}
 		else if (user.username==="SERVICE_CENTER"){
-			$("#newPartLink").show();
-			$("#newPartPanel").show();
 			$("#dashboardLink").show();
-			$("#dashboardPanel").hide();
-			$("#updatePartLink").show();		
-			
+			$("#dashboardPanel").show();
+			$("#updatePartLink").show();
+			$("#newPartLink").hide();
+			$("#newPartPanel").hide();
+			$("#batchDetailsTable").hide();			
 		 }
 		
 		
@@ -124,6 +124,10 @@ $(document).on('ready', function() {
 								vehicleId: $("input[name='VehicleId']").val(),
 								dateOfDelivery: $("input[name='DateOfDelivery']").val(),
 								dateOfInstallation: $("input[name='DateOfInstallation']").val()
+								warrantyStartDate: $("input[name='WarrantyStartDate']").val()
+								warrantyEndDate: $("input[name='WarrantyEndDate']").val()
+								servicingDate: $("input[name='ServicingDate']").val()
+								serviceDesc: $("input[name='ServiceDesc']").val()
 							}
 						};
 			console.log('obj.part :'+obj.part+' obj.part.partId:'+obj.part.partId);
@@ -139,6 +143,10 @@ $(document).on('ready', function() {
 				$("input[name='VehicleId']").val('');
 				$("input[name='DateOfDelivery']").val('');
 				$("input[name='DateOfInstallation']").val('');
+				$("input[name='WarrantyStartDate']").val('');
+				$("input[name='WarrantyEndDate']").val('');
+				$("input[name='ServicingDate']").val('');
+				$("input[name='ServiceDesc']").val('');
 				console.log("update request sent");
 				//$("#submit").prop('disabled', true);
 
@@ -161,11 +169,34 @@ $(document).on('ready', function() {
 			$("#deliveryDt").prop('disabled', true);
 			$("#vehicleId").prop('disabled', false);
 			$("#installationDt").prop('disabled', false);
+			$("#warrantyStartDt").prop('disabled', false);
+			$("#warrantyEndDt").prop('disabled', false);
+			$("#servicingDt").prop('disabled', false);
+			$("#serviceDesc").prop('disabled', false);
+
+			$("#vehicleId").css('visibility', 'visible');
+			$("#installationDt").css('visibility', 'visible');
+			$("#warrantyStartDt").css('visibility', 'visible');
+			$("#warrantyEndDt").css('visibility', 'visible');
+			$("#servicingDt").css('visibility', 'visible');
+			$("#serviceDesc").css('visibility', 'visible');
 		}
 		else if(user.username === "DEALER"){
 			$("#deliveryDt").prop('disabled', false);
 			$("#vehicleId").prop('disabled', true);
 			$("#installationDt").prop('disabled', true);
+			$("#warrantyStartDt").prop('disabled', true);
+			$("#warrantyEndDt").prop('disabled', true);
+			$("#servicingDt").prop('disabled', true);
+			$("#serviceDesc").prop('disabled', true);
+
+			$("#vehicleId").css('visibility', 'hidden');
+			$("#installationDt").css('visibility', 'hidden');
+			$("#warrantyStartDt").css('visibility', 'hidden');
+			$("#warrantyEndDt").css('visibility', 'hidden');
+			$("#servicingDt").css('visibility', 'hidden');
+			$("#serviceDesc").css('visibility', 'hidden');
+
 		}
 	});
 
@@ -317,6 +348,23 @@ function connect_to_server(){
 						html += '<p style="font-weight:500;">PART INSTALLED BY <span style="color:#5596E6">' + txs[i].user +'</span></p>';
 						html += '<p style="">' + txs[i].dateOfInstallation +'</p>';
 						html += '<p style="">' + txs[i].vehicleId +'</p>';
+						html += '<p style="">' + txs[i].warrantyStartDate +'</p>';
+						html += '<p style="">' + txs[i].warrantyEndDate +'</p>';
+						html +=	'</div>';
+						html += '</td>';
+						html += '</tr>';
+			        }
+					else if(txs[i].ttype == "SERVICED"){
+			          //litem = {avatar:"ion-ios-shuffle", date: data.batch.vDate, location: data.batch.location, desc:"DELIVERED TO ", owner:data.batch.owner};
+			        	html += '<tr>';
+						html +=	'<td>';
+						html +=	'<div style="font-size: 34px;color:#5596E6;float:right;"><i class="ion-ios-shuffle"></i></div>';
+						html += '</td>';
+						html += '<td style="text-align:left;padding-left:20px">';
+						html +=	'<div style="display: inline-block; vertical-align: middle;">';
+						html += '<p style="font-weight:500;">PART SERVICED AT <span style="color:#5596E6">' + txs[i].user +'</span></p>';
+						html += '<p style="">' + txs[i].servicingDate +'</p>';
+						html += '<p style="">' + txs[i].serviceDesc +'</p>';
 						html +=	'</div>';
 						html += '</td>';
 						html += '</tr>';

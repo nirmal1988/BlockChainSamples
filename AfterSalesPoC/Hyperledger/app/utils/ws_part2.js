@@ -27,7 +27,7 @@ module.exports.process_msg = function(ws, data, owner){
 	else if(data.type == "updatePart"){
 		console.log("Update Part ", data, owner);
 		if(data.part){
-			chaincode.invoke.updatePart([data.part.partId, data.part.vehicleId, data.part.dateOfDelivery, data.part.dateOfInstallation, owner], cb_invoked_updatepart);				//create a new paper
+			chaincode.invoke.updatePart([data.part.partId, data.part.vehicleId, data.part.dateOfDelivery, data.part.dateOfInstallation, owner, data.part.warrantyStartDate, data.part.warrantyEndDate, data.part.servicingDate, data.part.serviceDesc], cb_invoked_updatepart);	//update part details
 		}		
 	}
 	else if(data.type == "getPart"){
