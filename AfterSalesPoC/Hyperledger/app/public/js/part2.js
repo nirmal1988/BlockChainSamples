@@ -123,10 +123,10 @@ $(document).on('ready', function() {
 								partId: $("input[name='PartIdToUpdate']").val(),
 								vehicleId: $("input[name='VehicleId']").val(),
 								dateOfDelivery: $("input[name='DateOfDelivery']").val(),
-								dateOfInstallation: $("input[name='DateOfInstallation']").val()
-								warrantyStartDate: $("input[name='WarrantyStartDate']").val()
-								warrantyEndDate: $("input[name='WarrantyEndDate']").val()
-								servicingDate: $("input[name='ServicingDate']").val()
+								dateOfInstallation: $("input[name='DateOfInstallation']").val(),
+								warrantyStartDate: $("input[name='WarrantyStartDate']").val(),
+								warrantyEndDate: $("input[name='WarrantyEndDate']").val(),
+								servicingDate: $("input[name='ServicingDate']").val(),
 								serviceDesc: $("input[name='ServiceDesc']").val()
 							}
 						};
