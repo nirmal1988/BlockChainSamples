@@ -158,14 +158,14 @@ $(document).on('ready', function() {
 		$("#dashboardPanel").hide();
 		$("#newPartPanel").hide();
 		if(user.username === "SERVICE_CENTER") {
-			$("#deliveryDt").addAttr("disabled");
-			$("#vehicleId").removeAttr("disabled");
-			$("#installationDt").removeAttr("disabled");
+			$("#deliveryDt").prop('disabled', true);
+			$("#vehicleId").prop('disabled', false);
+			$("#installationDt").prop('disabled', false);
 		}
 		else if(user.username === "DEALER"){
-			$("#deliveryDt").removeAttr("disabled");
-			$("#vehicleId").addAttr("disabled");
-			$("#installationDt").addAttr("disabled");
+			$("#deliveryDt").prop('disabled', false);
+			$("#vehicleId").prop('disabled', true);
+			$("#installationDt").prop('disabled', true);
 		}
 	});
 
