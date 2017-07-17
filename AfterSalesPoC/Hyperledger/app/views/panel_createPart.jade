@@ -5,12 +5,15 @@
 	#innerWrap
 		
 		form(action="/newPart" method="POST")#newPartform
+			h5 Part Id:
 			legend 
-				Part Id: input(type="text" name="PartId" placeholder="Part Id")
+				input(type="text" name="PartId" placeholder="Part Id")
+			h5 Product Code:
 			legend 
-				Product Code: input(type="text" name="ProductCode" placeholder="Product Code")
+				input(type="text" name="ProductCode" placeholder="Product Code")
+			h5 Date Of Manufacture:
 			legend 
-				Date Of Manufacture: input(type="date" name="DateOfManufacture" placeholder="Date of Manufacture")
+				input(type="date" name="DateOfManufacture" placeholder="Date of Manufacture")
 			legend
 				button(type="button" style="margin:10px 10px 5px 10px" )#submit
 					span.fa.fa-plus &nbsp;&nbsp;
