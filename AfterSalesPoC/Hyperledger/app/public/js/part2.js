@@ -166,14 +166,15 @@ $(document).on('ready', function() {
 		$("#dashboardPanel").hide();
 		$("#newPartPanel").hide();
 		if(user.username === "SERVICE_CENTER") {
-			$("#deliveryDt").prop('disabled', true);
+			/*$("#deliveryDt").prop('disabled', true);
 			$("#vehicleId").prop('disabled', false);
 			$("#installationDt").prop('disabled', false);
 			$("#warrantyStartDt").prop('disabled', false);
 			$("#warrantyEndDt").prop('disabled', false);
 			$("#servicingDt").prop('disabled', false);
-			$("#serviceDesc").prop('disabled', false);
+			$("#serviceDesc").prop('disabled', false);*/
 
+			$("#deliveryDt").css('visibility', 'hidden');
 			$("#vehicleId").css('visibility', 'visible');
 			$("#installationDt").css('visibility', 'visible');
 			$("#warrantyStartDt").css('visibility', 'visible');
@@ -182,14 +183,15 @@ $(document).on('ready', function() {
 			$("#serviceDesc").css('visibility', 'visible');
 		}
 		else if(user.username === "DEALER"){
-			$("#deliveryDt").prop('disabled', false);
+			/*$("#deliveryDt").prop('disabled', false);
 			$("#vehicleId").prop('disabled', true);
 			$("#installationDt").prop('disabled', true);
 			$("#warrantyStartDt").prop('disabled', true);
 			$("#warrantyEndDt").prop('disabled', true);
 			$("#servicingDt").prop('disabled', true);
-			$("#serviceDesc").prop('disabled', true);
+			$("#serviceDesc").prop('disabled', true);*/
 
+			$("#deliveryDt").css('visibility', 'visible');
 			$("#vehicleId").css('visibility', 'hidden');
 			$("#installationDt").css('visibility', 'hidden');
 			$("#warrantyStartDt").css('visibility', 'hidden');
