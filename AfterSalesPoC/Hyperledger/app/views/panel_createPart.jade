@@ -5,17 +5,29 @@
 	#innerWrap
 		
 		form(action="/newPart" method="POST")#newPartform
-			legend 
-				h5 Part Id:
-				input(type="text" name="PartId" placeholder="Part Id")
-			legend 
-				h5 Product Code:
-				input(type="text" name="ProductCode" placeholder="Product Code")
-			legend 
-				h5 Date Of Manufacture:
-				input(type="date" name="DateOfManufacture" placeholder="Date of Manufacture")
-			legend
-				button(type="button" style="margin:10px 10px 5px 10px" )#submit
-					span.fa.fa-plus &nbsp;&nbsp;
-					span SUBMIT
+			table#createPartTable.tablesorter(style="width:30%;float:left")
+				tr
+					td
+						h5 Part Id:
+					td
+						legend 
+							input(type="text" name="PartId" placeholder="Part Id")
+				tr
+					td
+						h5 Product Code:
+					td
+						legend 
+							input(type="text" name="ProductCode" placeholder="Product Code")
+				tr
+					td
+						h5 Date Of Manufacture:
+					td
+						legend 	
+							input(type="date" name="DateOfManufacture" placeholder="Date of Manufacture")
+				tr
+					td#createPartBut(colspan="2" style="font-size: 12px;")
+						legend
+							button(type="button" style="margin:10px 10px 5px 10px" )#submit
+								span.fa.fa-plus &nbsp;&nbsp;
+								span SUBMIT
 				
