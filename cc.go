@@ -283,7 +283,7 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 	if (strings.Contains(args[4], DEALER)) {
 		tx.TType 	= "DELIVERY"
 	} else if (strings.Contains(args[4], SERVICE_CENTER)) {
-		if args[7] != nil { // servicing date
+		if if len(strings.TrimSpace(args[7])) == 0  { // servicing date
 			tx.TType 	= "SERVICED"
 		} else {
 			tx.TType 	= "INSTALLED"
