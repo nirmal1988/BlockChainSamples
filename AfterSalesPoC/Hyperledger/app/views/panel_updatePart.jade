@@ -6,13 +6,13 @@
 		
 		form(action="/updatePart" method="POST")#updatePartform
 			legend 
-				input(type="text" name="PartIdToUpdate" placeholder="Part Id")
+				PartId To Update: input(type="text" name="PartIdToUpdate" placeholder="Part Id")
 			legend 
-				input(type="date" name="DateOfDelivery" placeholder="Date Of Delivery" )#de
+				Date Of Delivery: input(type="date" name="DateOfDelivery" placeholder="Date Of Delivery" )#deliveryDt
 			legend 
-				input(type="text" name="VehicleId" placeholder="Vehicle Id" )#cs
+				Vehicle Id: input(type="text" name="VehicleId" placeholder="Vehicle Id" )#vehicleId
 			legend 
-				input(type="date" name="DateOfInstallation" placeholder="Date Of Installation" )#cs
+				Date Of Installation: input(type="date" name="DateOfInstallation" placeholder="Date Of Installation" )#installationDt
 			legend
 				button(type="button" style="margin:10px 10px 5px 10px" )#update
 					span.fa.fa-plus &nbsp;&nbsp;
