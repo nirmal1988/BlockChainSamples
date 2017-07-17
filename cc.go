@@ -297,7 +297,7 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 	tx.WarrantyStartDate	= args[5]
 	tx.WarrantyEndDate	= args[6]
 	tx.ServicingDate	= args[7]
-	tx.ServicingDesc	= args[8]
+	tx.ServiceDesc		= args[8]
 
 
 	bch.Transactions = append(bch.Transactions, tx)
