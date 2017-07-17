@@ -342,6 +342,11 @@ function connect_to_server(){
 				$('#spinner').hide();
 				$('#tagWrapper').show();
 			}
+			else if(data.msg === 'partUpdated'){
+				$("#updateNotificationPanel").animate({width:'toggle'});
+				$('#spinner').hide();
+				$('#tagWrapper').show();
+			}
 			else if(data.msg === 'reset'){
 				if(user.username && bag.session.user_role && bag.session.user_role.toUpperCase() === "dealer".toUpperCase()) {
 					$('#spinner2').show();

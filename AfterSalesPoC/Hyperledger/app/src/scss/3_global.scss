@@ -181,7 +181,7 @@
 	border-top:25px $acc_color1 solid;
 }
 
-#notificationPanel{
+#notificationPanel, #updateNotificationPanel{
 	display:none;
 	width: 450px;
 	position: absolute;
@@ -195,7 +195,7 @@
 	border-bottom-left-radius: 10px;
 	text-align: center;
 }
-#noticeText, #errorNoticeText{
+#noticeText, #errorNoticeText, #updateNoticeText{
 	margin-bottom:20px;
 	font-size:13px;
 	width:100%;

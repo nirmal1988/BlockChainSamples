@@ -456,7 +456,7 @@ a:visited {
     width: 45px
 }
 #errorNotificationPanel,
-#notificationPanel {
+#notificationPanel, #updateNotificationPanel {
     display: none;
     width: 450px;
     position: absolute;
@@ -507,7 +507,7 @@ th.header {
     width: 100%;
     border-top: 25px #5596E6 solid
 }
-#notificationPanel {
+#notificationPanel, #updateNotificationPanel {
     color: #F1D356;
     background: #F3F3F3;
     border-left: 25px #6CC284 solid
