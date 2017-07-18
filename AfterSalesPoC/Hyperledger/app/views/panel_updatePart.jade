@@ -5,53 +5,55 @@
 	#innerWrap
 		
 		form(action="/updatePart" method="POST")#updatePartform
-			panel
-				h4 Enter PartId To Update:
-				input(type="text" name="PartIdToUpdate" placeholder="Part Id")
-				hr
 			table#updatePartTable(style="width:80%;float:center")
+				tr
+					td(style="width:60%")
+						h4 PartId To Update:
+					td
+						legend
+							input(type="text" name="PartIdToUpdate" placeholder="Part Id")
 				tr#deliveryDt
-					td(style="width:50%")
+					td(style="width:60%")
 						h5 Date Of Delivery:
 					td
 						legend 	
-							input(type="date" name="DateOfDelivery" placeholder="Date Of Delivery" disabled)
+							input(type="date" name="DateOfDelivery" placeholder="Date Of Delivery")
 				tr#vehicleId
 					td
 						h5 Vehicle Id:
 					td
 						legend 
-							input(type="text" name="VehicleId" placeholder="Vehicle Id" disabled)
+							input(type="text" name="VehicleId" placeholder="Vehicle Id")
 				tr#installationDt
 					td
 						h5 Date Of Installation:
 					td
 						legend 
-							input(type="date" name="DateOfInstallation" placeholder="Date Of Installation" disabled)
+							input(type="date" name="DateOfInstallation" placeholder="Date Of Installation")
 				tr#warrantyStartDt
 					td
 						h5 Warranty Start Date:
 					td
 						legend 
-							input(type="date" name="WarrantyStartDate" placeholder="Warranty Start Date" disabled)
+							input(type="date" name="WarrantyStartDate" placeholder="Warranty Start Date")
 				tr#warrantyEndDt
 					td
 						h5 Warranty End Date:
 					td
 						legend 
-							input(type="date" name="WarrantyEndDate" placeholder="Warranty End Date" disabled)
+							input(type="date" name="WarrantyEndDate" placeholder="Warranty End Date")
 				tr#servicingDt
 					td
 						h5 Servicing Date:
 					td
 						legend 
-							input(type="date" name="ServicingDate" placeholder="Servicing Date" disabled)
+							input(type="date" name="ServicingDate" placeholder="Servicing Date")
 				tr#serviceDesc
 					td
 						h5 Service Desc:
 					td
 						legend 
-							input(type="text" name="ServiceDesc" placeholder="Service Desc" disabled)
+							input(type="text" name="ServiceDesc" placeholder="Service Desc")
 				tr
 					td#updatePartBut(colspan="2" style="font-size: 12px;")
 						legend
