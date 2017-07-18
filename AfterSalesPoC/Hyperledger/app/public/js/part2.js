@@ -166,7 +166,7 @@ $(document).on('ready', function() {
 			$("#vehicleId").prop('disabled', false);
 			$("#installationDt").prop('disabled', false);
 			$("#warrantyStartDt").prop('disabled', false);
-			$("#warrantyEndDt").prop('disabled', false);
+			$("#warrantyEndDt").prop('disabled', false);*/
 
 			$("#deliveryDt").css('display', 'none');
 			$("#vehicleId").css('display', 'block');
