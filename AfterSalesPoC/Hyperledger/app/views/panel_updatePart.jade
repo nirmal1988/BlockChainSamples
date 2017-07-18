@@ -5,13 +5,11 @@
 	#innerWrap
 		
 		form(action="/updatePart" method="POST")#updatePartform
+			panel
+				h4 Enter PartId To Update:
+				input(type="text" name="PartIdToUpdate" placeholder="Part Id")
+				hr
 			table#updatePartTable(style="width:80%;float:center")
-				tr
-					td(style="width:50%")
-						h4 Enter PartId To Update:
-					td
-						legend
-							input(type="text" name="PartIdToUpdate" placeholder="Part Id")
 				tr#deliveryDt
 					td(style="width:50%")
 						h5 Date Of Delivery:
