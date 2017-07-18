@@ -5,9 +5,8 @@
 	#innerWrap
 		
 		form(action="/updatePart" method="POST")#updatePartform
-			legend 	
-				h4 Enter PartId To Update:
-				input(type="text" name="PartIdToUpdate" placeholder="Part Id")
+			div
+				h4 Enter PartId To Update: input(type="text" name="PartIdToUpdate" placeholder="Part Id")
 			table#updatePartTable(style="width:80%;float:left")
 				tr
 					td(style="width:50%")
