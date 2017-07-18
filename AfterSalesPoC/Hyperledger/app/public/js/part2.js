@@ -117,6 +117,11 @@ $(document).on('ready', function() {
 	$("#update").click(function(){
 		console.log("updating Part");
 		if(user.username){
+
+			// check part is valid
+			var bId = $("input[name='PartIdToUpdate']").val();
+			ws.send(JSON.stringify({type: "getPart", partId: bId}));
+
 			var obj = 	{
 							type: "updatePart",
 							part: {
@@ -376,8 +381,6 @@ function connect_to_server(){
 					$('#openTrades').hide();
 					ws.send(JSON.stringify({type: "getAllParts", v: 2}));
 				}
-			} else if(data.msg === 'errorResponse'){
-				console.log(data.desc);
 			}
 		}
 		catch(e){

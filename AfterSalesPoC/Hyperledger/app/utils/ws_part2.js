@@ -73,7 +73,6 @@ module.exports.process_msg = function(ws, data, owner){
 		console.log("response: ", e, a);
 		if(e != null){
 			console.log("Invoked update part error", e);
-			sendMsg({msg: "errorResponse", desc: e});
 		}
 		else{
 			console.log("part ID #" + data.part.id)
