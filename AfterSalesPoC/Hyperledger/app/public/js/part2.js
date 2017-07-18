@@ -117,11 +117,6 @@ $(document).on('ready', function() {
 	$("#update").click(function(){
 		console.log("updating Part");
 		if(user.username){
-
-			// check part is valid
-			var bId = $("input[name='PartIdToUpdate']").val();
-			ws.send(JSON.stringify({type: "getPart", partId: bId}));
-
 			var obj = 	{
 							type: "updatePart",
 							part: {
