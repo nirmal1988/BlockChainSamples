@@ -376,6 +376,8 @@ function connect_to_server(){
 					$('#openTrades').hide();
 					ws.send(JSON.stringify({type: "getAllParts", v: 2}));
 				}
+			} else if(data.msg === 'errorResponse'){
+				console.log(data.desc);
 			}
 		}
 		catch(e){
