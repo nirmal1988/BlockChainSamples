@@ -125,9 +125,7 @@ $(document).on('ready', function() {
 								dateOfDelivery: $("input[name='DateOfDelivery']").val(),
 								dateOfInstallation: $("input[name='DateOfInstallation']").val(),
 								warrantyStartDate: $("input[name='WarrantyStartDate']").val(),
-								warrantyEndDate: $("input[name='WarrantyEndDate']").val(),
-								servicingDate: $("input[name='ServicingDate']").val(),
-								serviceDesc: $("input[name='ServiceDesc']").val()
+								warrantyEndDate: $("input[name='WarrantyEndDate']").val()
 							}
 						};
 			console.log('obj.part :'+obj.part+' obj.part.partId:'+obj.part.partId);
@@ -145,8 +143,6 @@ $(document).on('ready', function() {
 				$("input[name='DateOfInstallation']").val('');
 				$("input[name='WarrantyStartDate']").val('');
 				$("input[name='WarrantyEndDate']").val('');
-				$("input[name='ServicingDate']").val('');
-				$("input[name='ServiceDesc']").val('');
 				console.log("update request sent");
 				//$("#submit").prop('disabled', true);
 
@@ -171,33 +167,25 @@ $(document).on('ready', function() {
 			$("#installationDt").prop('disabled', false);
 			$("#warrantyStartDt").prop('disabled', false);
 			$("#warrantyEndDt").prop('disabled', false);
-			$("#servicingDt").prop('disabled', false);
-			$("#serviceDesc").prop('disabled', false);*/
 
 			$("#deliveryDt").css('display', 'none');
 			$("#vehicleId").css('display', 'block');
 			$("#installationDt").css('display', 'block');
 			$("#warrantyStartDt").css('display', 'block');
 			$("#warrantyEndDt").css('display', 'block');
-			$("#servicingDt").css('display', 'block');
-			$("#serviceDesc").css('display', 'block');
 		}
 		else if(user.username === "DEALER"){
 			/*$("#deliveryDt").prop('disabled', false);
 			$("#vehicleId").prop('disabled', true);
 			$("#installationDt").prop('disabled', true);
 			$("#warrantyStartDt").prop('disabled', true);
-			$("#warrantyEndDt").prop('disabled', true);
-			$("#servicingDt").prop('disabled', true);
-			$("#serviceDesc").prop('disabled', true);*/
+			$("#warrantyEndDt").prop('disabled', true);*/
 
 			$("#deliveryDt").css('display', 'block');
 			$("#vehicleId").css('display', 'none');
 			$("#installationDt").css('display', 'none');
 			$("#warrantyStartDt").css('display', 'none');
 			$("#warrantyEndDt").css('display', 'none');
-			$("#servicingDt").css('display', 'none');
-			$("#serviceDesc").css('display', 'none');
 
 		}
 	});
@@ -352,21 +340,6 @@ function connect_to_server(){
 						html += '<p style="">' + txs[i].vehicleId +'</p>';
 						html += '<p style="">' + txs[i].warrantyStartDate +'</p>';
 						html += '<p style="">' + txs[i].warrantyEndDate +'</p>';
-						html +=	'</div>';
-						html += '</td>';
-						html += '</tr>';
-			        }
-					else if(txs[i].ttype == "SERVICED"){
-			          //litem = {avatar:"ion-ios-shuffle", date: data.batch.vDate, location: data.batch.location, desc:"DELIVERED TO ", owner:data.batch.owner};
-			        	html += '<tr>';
-						html +=	'<td>';
-						html +=	'<div style="font-size: 34px;color:#5596E6;float:right;"><i class="ion-ios-bolt-outline"></i></div>';
-						html += '</td>';
-						html += '<td style="text-align:left;padding-left:20px">';
-						html +=	'<div style="display: inline-block; vertical-align: middle;">';
-						html += '<p style="font-weight:500;">PART SERVICED AT <span style="color:#5596E6">' + txs[i].user +'</span></p>';
-						html += '<p style="">' + txs[i].servicingDate +'</p>';
-						html += '<p style="">' + txs[i].serviceDesc +'</p>';
 						html +=	'</div>';
 						html += '</td>';
 						html += '</tr>';

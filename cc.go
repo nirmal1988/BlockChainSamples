@@ -53,8 +53,6 @@ type Transaction struct {
 	VehicleId		string	`json:"vehicleId"`
 	WarrantyStartDate	string	`json:"warrantyStartDate"`
 	WarrantyEndDate		string	`json:"warrantyEndDate"`
-	ServicingDate		string	`json:"servicingDate"`
-	ServiceDesc		string	`json:"serviceDesc"`
 	TType 			string   `json:"ttype"`
 }
 
@@ -262,11 +260,11 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 	var err error
 	fmt.Println("Running updatePart")
 
-	if len(args) != 9 {
-		fmt.Println("Incorrect number of arguments. Expecting 9 - PartId, Vehicle Id, Delivery Date, Installation Date, User, Warranty Start Date, Warranty End Date, Servicing Date, Service Desc")
-		return nil, errors.New("Incorrect number of arguments. Expecting 9")
+	if len(args) != 7 {
+		fmt.Println("Incorrect number of arguments. Expecting 7 - PartId, Vehicle Id, Delivery Date, Installation Date, User, Warranty Start Date, Warranty End Date")
+		return nil, errors.New("Incorrect number of arguments. Expecting 7")
 	}
-	fmt.Println("Arguments :"+args[0]+","+args[1]+","+args[2]+","+args[3]+","+args[4]+","+args[5]+","+args[6]+","+args[7]+","+args[8]);
+	fmt.Println("Arguments :"+args[0]+","+args[1]+","+args[2]+","+args[3]+","+args[4]+","+args[5]+","+args[6]);
 
 	//Get and Update Part data
 	bAsBytes, err := stub.GetState(args[0])
@@ -283,11 +281,7 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 	if (strings.Contains(args[4], DEALER)) {
 		tx.TType 	= "DELIVERY"
 	} else if (strings.Contains(args[4], SERVICE_CENTER)) {
-		if len(strings.TrimSpace(args[7])) == 0  { // servicing date
-			tx.TType 	= "SERVICED"
-		} else {
-			tx.TType 	= "INSTALLED"
-		}
+		tx.TType 	= "INSTALLED"
 	}
 
 	tx.VehicleId		= args[1]
@@ -296,8 +290,6 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 	tx.User  		= args[4]
 	tx.WarrantyStartDate	= args[5]
 	tx.WarrantyEndDate	= args[6]
-	tx.ServicingDate	= args[7]
-	tx.ServiceDesc		= args[8]
 
 
 	bch.Transactions = append(bch.Transactions, tx)
