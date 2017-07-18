@@ -265,7 +265,7 @@ function connect_to_server(){
 		clear_blocks();
 		$("#errorNotificationPanel").fadeOut();
 		ws.send(JSON.stringify({type: "chainstats", v:2}));
-		if(user.username && bag.session.user_role && bag.session.user_role.toUpperCase() === "dealer".toUpperCase()) {
+		if(user.username && bag.session.user_role && (bag.session.user_role.toUpperCase() === "dealer".toUpperCase() || bag.session.user_role.toUpperCase() === "service_center".toUpperCase())) {
 			$('#spinner2').show();
 			$('#openTrades').hide();
 			ws.send(JSON.stringify({type: "getAllParts", v: 2}));
