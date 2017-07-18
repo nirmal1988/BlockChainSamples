@@ -308,7 +308,7 @@ function connect_to_server(){
 						html += '<td style="text-align:left;padding-left:20px">';
 						html +=	'<div style="display: inline-block; vertical-align: middle;">';
 						html += '<p style="font-weight:500;">ADDED BY <span style="color:#5596E6">' + txs[i].user +'</span></p>';
-						html += '<p style="">' + txs[i].dateOfManufacture +'</p>';
+						html += '<p style="">on ' + txs[i].dateOfManufacture +'</p>';
 						html +=	'</div>';
 						html += '</td>';
 						html += '</tr>';
@@ -322,7 +322,7 @@ function connect_to_server(){
 						html += '<td style="text-align:left;padding-left:20px">';
 						html +=	'<div style="display: inline-block; vertical-align: middle;">';
 						html += '<p style="font-weight:500;">DELIVERED TO <span style="color:#5596E6">' + txs[i].user +'</span></p>';
-						html += '<p style="">' + txs[i].dateOfDelivery +'</p>';
+						html += '<p style="">on ' + txs[i].dateOfDelivery +'</p>';
 						html +=	'</div>';
 						html += '</td>';
 						html += '</tr>';
@@ -336,10 +336,10 @@ function connect_to_server(){
 						html += '<td style="text-align:left;padding-left:20px">';
 						html +=	'<div style="display: inline-block; vertical-align: middle;">';
 						html += '<p style="font-weight:500;">PART INSTALLED BY <span style="color:#5596E6">' + txs[i].user +'</span></p>';
-						html += '<p style="">' + txs[i].dateOfInstallation +'</p>';
-						html += '<p style="">' + txs[i].vehicleId +'</p>';
-						html += '<p style="">' + txs[i].warrantyStartDate +'</p>';
-						html += '<p style="">' + txs[i].warrantyEndDate +'</p>';
+						html += '<p style="">on ' + txs[i].dateOfInstallation +'</p>';
+						html += '<p style="">Vehicle ID: ' + txs[i].vehicleId +'</p>';
+						html += '<p style="">Warranty Start Date:' + txs[i].warrantyStartDate +'</p>';
+						html += '<p style="">Warranty End Date:' + txs[i].warrantyEndDate +'</p>';
 						html +=	'</div>';
 						html += '</td>';
 						html += '</tr>';
