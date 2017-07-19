@@ -22,10 +22,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strings"
-
 	"github.com/hyperledger/fabric/core/chaincode/shim"
-
 )
 
 
@@ -259,6 +256,7 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 	}
 
 	var tx Transaction
+	tx.TType 	= args[7];
 
 	tx.VehicleId		= args[1]
 	tx.DateOfDelivery	= args[2]
@@ -266,7 +264,6 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 	tx.User  		= args[4]
 	tx.WarrantyStartDate	= args[5]
 	tx.WarrantyEndDate	= args[6]
-	tx.TType 		= args[7];
 
 
 	bch.Transactions = append(bch.Transactions, tx)
