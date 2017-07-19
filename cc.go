@@ -28,11 +28,6 @@ import (
 
 )
 
-const   PRODUCER1 = "SUPPLIER1"
-const 	PRODUCER2 = "SUPPLIER2"
-const 	DEALER = "DEALER"
-const 	SERVICE_CENTER = "SERVICE_CENTER"
-
 
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
@@ -181,16 +176,7 @@ func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user st
 		json.Unmarshal(sbAsBytes, &sb)
 
 		// currently we show all parts to the users
-		//if(user == DEALER) {
-			rab.Parts = append(rab.Parts,sb.PartId);
-		//}
-		//else{
-		//	var _owner = sb.Owner
-		//	if (user == _owner){
-		//		rab.Parts = append(rab.Parts,sb.PartId);
-		//		break;
-		//	}
-		//}
+		rab.Parts = append(rab.Parts,sb.PartId);
 	}
 
 	rabAsBytes, _ := json.Marshal(rab)
@@ -211,11 +197,6 @@ func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []s
 	}
 
 	fmt.Println("Arguments :"+args[0]+","+args[1]+","+args[2]+","+args[3]);
-	// currently there is no such validation
-	//if (args[2] != PRODUCER1)&&(args[2] != PRODUCER2)  {
-	//	fmt.Println("You are not allowed to create a new Part")
-	//	return nil, errors.New("You are not allowed to create a new Part")
-	//}
 
 	var bt Part
 	bt.PartId 			= args[0]
@@ -260,11 +241,11 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 	var err error
 	fmt.Println("Running updatePart")
 
-	if len(args) != 7 {
-		fmt.Println("Incorrect number of arguments. Expecting 7 - PartId, Vehicle Id, Delivery Date, Installation Date, User, Warranty Start Date, Warranty End Date")
+	if len(args) != 8 {
+		fmt.Println("Incorrect number of arguments. Expecting 8 - PartId, Vehicle Id, Delivery Date, Installation Date, User, Warranty Start Date, Warranty End Date, Type")
 		return nil, errors.New("Incorrect number of arguments. Expecting 7")
 	}
-	fmt.Println("Arguments :"+args[0]+","+args[1]+","+args[2]+","+args[3]+","+args[4]+","+args[5]+","+args[6]);
+	fmt.Println("Arguments :"+args[0]+","+args[1]+","+args[2]+","+args[3]+","+args[4]+","+args[5]+","+args[6]+","+args[7]);
 
 	//Get and Update Part data
 	bAsBytes, err := stub.GetState(args[0])
@@ -278,11 +259,6 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 	}
 
 	var tx Transaction
-	if (strings.Contains(args[4], DEALER)) {
-		tx.TType 	= "DELIVERY"
-	} else if (strings.Contains(args[4], SERVICE_CENTER)) {
-		tx.TType 	= "INSTALLED"
-	}
 
 	tx.VehicleId		= args[1]
 	tx.DateOfDelivery	= args[2]
@@ -290,6 +266,7 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 	tx.User  		= args[4]
 	tx.WarrantyStartDate	= args[5]
 	tx.WarrantyEndDate	= args[6]
+	tx.TType 		= args[7];
 
 
 	bch.Transactions = append(bch.Transactions, tx)

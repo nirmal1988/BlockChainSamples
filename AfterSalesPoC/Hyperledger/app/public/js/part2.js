@@ -39,7 +39,7 @@ $(document).on('ready', function() {
 	// Only show tabs if a user is logged in
 	if(user.username) {
 		// Display tabs based on user's role
-		if(bag.session.user_role && bag.session.user_role.toUpperCase() === "dealer".toUpperCase()) {
+		if(bag.session.user_role && bag.session.user_role.toUpperCase() === "DEALER") {
 			$("#dashboardLink").show();
 			$("#dashboardPanel").show();
 			$("#updatePartLink").show();
@@ -49,7 +49,7 @@ $(document).on('ready', function() {
 			
 
 		}
-		else if (user.username==="SERVICE_CENTER"){
+		else if (user.username==="SERVICE_CENTER" || bag.session.user_role.toUpperCase() === "SERVICE_CENTER"){
 			$("#dashboardLink").show();
 			$("#dashboardPanel").show();
 			$("#updatePartLink").show();
@@ -122,6 +122,12 @@ $(document).on('ready', function() {
 	$("#update").click(function(){
 		console.log("updating Part");
 		if(user.username){
+			var tranType;
+			if(bag.session.user_role.toUpperCase() === "DEALER") {
+				tranType = "DELIVERY";
+			} else if(bag.session.user_role.toUpperCase() === "SERVICE_CENTER") {
+				tranType = "INSTALLED";
+			}
 			var obj = 	{
 							type: "updatePart",
 							part: {
@@ -130,7 +136,8 @@ $(document).on('ready', function() {
 								dateOfDelivery: $("input[name='DateOfDelivery']").val(),
 								dateOfInstallation: $("input[name='DateOfInstallation']").val(),
 								warrantyStartDate: $("input[name='WarrantyStartDate']").val(),
-								warrantyEndDate: $("input[name='WarrantyEndDate']").val()
+								warrantyEndDate: $("input[name='WarrantyEndDate']").val(),
+								tranType: tranType
 							}
 						};
 			console.log('obj.part :'+obj.part+' obj.part.partId:'+obj.part.partId);
@@ -170,7 +177,7 @@ $(document).on('ready', function() {
 		$("#updatePartPanel").show();
 		$("#dashboardPanel").hide();
 		$("#newPartPanel").hide();
-		if(user.username === "SERVICE_CENTER") {
+		if(user.username === "SERVICE_CENTER" || bag.session.user_role.toUpperCase() === "SERVICE_CENTER") {
 			/*$("#deliveryDt").prop('disabled', true);
 			$("#vehicleId").prop('disabled', false);
 			$("#installationDt").prop('disabled', false);
@@ -183,7 +190,7 @@ $(document).on('ready', function() {
 			$("#warrantyStartDt").css('display', 'block');
 			$("#warrantyEndDt").css('display', 'block');
 		}
-		else if(user.username === "DEALER"){
+		else if(user.username === "DEALER" || bag.session.user_role.toUpperCase() === "DEALER"){
 			/*$("#deliveryDt").prop('disabled', false);
 			$("#vehicleId").prop('disabled', true);
 			$("#installationDt").prop('disabled', true);
