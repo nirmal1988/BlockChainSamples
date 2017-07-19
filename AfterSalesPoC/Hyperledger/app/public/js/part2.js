@@ -99,7 +99,7 @@ $(document).on('ready', function() {
 						};
 
 			if(obj.part && obj.part.partId){
-				var exists = $inArray(obj.part.partId, allParts);
+				var exists = $.inArray(obj.part.partId, allParts);
 				if(exists == -1) {
 					console.log('creating part, sending', obj);
 					ws.send(JSON.stringify(obj));
@@ -142,7 +142,7 @@ $(document).on('ready', function() {
 						};
 			console.log('obj.part :'+obj.part+' obj.part.partId:'+obj.part.partId);
 			if(obj.part && obj.part.partId){
-				var exists = $inArray(obj.part.partId, allParts);
+				var exists = $.inArray(obj.part.partId, allParts);
 				if(exists >= 0) {
 					console.log('updating part data, sending', obj);
 					ws.send(JSON.stringify(obj));
