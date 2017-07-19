@@ -10,7 +10,7 @@
 /* global $ */
 var ws = {};
 var user = {username: bag.session.username};
-var valid_users = ["DEALER","SUPPLIER1","SUPPLIER2","SERVICE_CENTER", "SKF", "BOSCH", "DAIMLER-SC","STAHLGRUBER"];
+var valid_users = ["SKF", "BOSCH", "STAHLGRUBER", "MMW"];
 var allParts = [];
 var panels = [
 	{

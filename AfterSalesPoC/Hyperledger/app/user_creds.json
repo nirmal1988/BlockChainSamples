@@ -1,10 +1,6 @@
 [
-	{"username":"DEALER","password":"passw0rd","role":"DEALER"},
 	{"username":"STAHLGRUBER","password":"passw0rd","role":"DEALER"},
-	{"username":"SUPPLIER1","password":"passw0rd","role":"SUPPLIER"},
-	{"username":"SUPPLIER2","password":"passw0rd","role":"SUPPLIER"},
 	{"username":"SKF","password":"passw0rd","role":"SUPPLIER"},
 	{"username":"BOSCH","password":"passw0rd","role":"SUPPLIER"},
-	{"username":"DAIMLER-SC","password":"passw0rd","role":"SERVICE_CENTER"},
-	{"username":"SERVICE_CENTER","password":"passw0rd","role":"SERVICE_CENTER"}
+	{"username":"MMW","password":"passw0rd","role":"SERVICE_CENTER"}
 ]
