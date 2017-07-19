@@ -10,7 +10,8 @@
 /* global $ */
 var ws = {};
 var user = {username: bag.session.username};
-var valid_users = ["CERTIFIER","SUPPLIER1","SUPPLIER2","SERVICE_CENTER"];
+var valid_users = ["CERTIFIER","SUPPLIER1","SUPPLIER2","SERVICE_CENTER", "SKF", "BOSCH", "DAIMLER-SC"];
+var allParts = [];
 var panels = [
 	{
 		name: "dashboard",
@@ -98,18 +99,22 @@ $(document).on('ready', function() {
 						};
 
 			if(obj.part && obj.part.partId){
-				console.log('creating part, sending', obj);
-				ws.send(JSON.stringify(obj));
-				$(".panel").hide();
-				$('#batchTag').html('');
-				$('#spinner').show();
-				$('#tagWrapper').hide();
-				//$("#batchTagPanel").show();
-				$("input[name='PartId']").val('');
-				$("input[name='ProductCode']").val(''),
-				$("input[name='DateOfManufacture']").val('')
-				//$("#submit").prop('disabled', true);
-
+				var exists = $inArray(obj.part.partId, allParts);
+				if(exists == -1) {
+					console.log('creating part, sending', obj);
+					ws.send(JSON.stringify(obj));
+					$(".panel").hide();
+					$('#batchTag').html('');
+					$('#spinner').show();
+					$('#tagWrapper').hide();
+					//$("#batchTagPanel").show();
+					$("input[name='PartId']").val('');
+					$("input[name='ProductCode']").val(''),
+					$("input[name='DateOfManufacture']").val('')
+					//$("#submit").prop('disabled', true);
+				} else {
+					alert('Part with id '+obj.part.partId+' already exists.');
+				}
 			}
 		}
 		return false;
@@ -130,22 +135,26 @@ $(document).on('ready', function() {
 						};
 			console.log('obj.part :'+obj.part+' obj.part.partId:'+obj.part.partId);
 			if(obj.part && obj.part.partId){
-				console.log('updating part data, sending', obj);
-				ws.send(JSON.stringify(obj));
-				$(".panel").hide();
-				$('#batchTag').html('');
-				$('#spinner').show();
-				$('#tagWrapper').hide();
-				//$("#batchTagPanel").show();
-				$("input[name='PartIdToUpdate']").val('');
-				$("input[name='VehicleId']").val('');
-				$("input[name='DateOfDelivery']").val('');
-				$("input[name='DateOfInstallation']").val('');
-				$("input[name='WarrantyStartDate']").val('');
-				$("input[name='WarrantyEndDate']").val('');
-				console.log("update request sent");
-				//$("#submit").prop('disabled', true);
-
+				var exists = $inArray(obj.part.partId, allParts);
+				if(exists >= 0) {
+					console.log('updating part data, sending', obj);
+					ws.send(JSON.stringify(obj));
+					$(".panel").hide();
+					$('#batchTag').html('');
+					$('#spinner').show();
+					$('#tagWrapper').hide();
+					//$("#batchTagPanel").show();
+					$("input[name='PartIdToUpdate']").val('');
+					$("input[name='VehicleId']").val('');
+					$("input[name='DateOfDelivery']").val('');
+					$("input[name='DateOfInstallation']").val('');
+					$("input[name='WarrantyStartDate']").val('');
+					$("input[name='WarrantyEndDate']").val('');
+					console.log("update request sent");
+					//$("#submit").prop('disabled', true);
+				} else {
+					alert('Part '+ obj.part.partId +' not found');
+				}
 			}
 		}
 		return false;
@@ -412,10 +421,10 @@ function build_Parts(parts, panelDesc){
 	if(!panelDesc) {
 		panelDesc = panels[0];
 	}
-
+	allParts = [];
 	for(var i in parts){
-		//console.log('!', parts[i]);
-
+		console.log('!', parts[i]);
+		allParts[i] = parts[i];
 		if(excluded(parts[i], filter)) {
 
 			// Create a row for each batch
