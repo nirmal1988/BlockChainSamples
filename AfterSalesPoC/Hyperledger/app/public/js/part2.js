@@ -113,7 +113,10 @@ $(document).on('ready', function() {
 					$("input[name='DateOfManufacture']").val('')
 					//$("#submit").prop('disabled', true);
 				} else {
-					alert('Part with id '+obj.part.partId+' already exists.');
+					//alert('Part with id '+obj.part.partId+' already exists.');
+					$("#errorName").html("Error");
+					$("#errorNoticeText").html('Part with id '+obj.part.partId+' already exists.');
+					$("#errorNotificationPanel").fadeIn();
 				}
 			}
 		}
@@ -160,7 +163,10 @@ $(document).on('ready', function() {
 					console.log("update request sent");
 					//$("#submit").prop('disabled', true);
 				} else {
-					alert('Part '+ obj.part.partId +' not found');
+					//alert('Part '+ obj.part.partId +' not found');
+					$("#errorName").html("Error");
+					$("#errorNoticeText").html('Part '+ obj.part.partId +' not found');
+					$("#errorNotificationPanel").fadeIn();
 				}
 			}
 		}
