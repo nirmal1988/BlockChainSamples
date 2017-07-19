@@ -61,10 +61,10 @@ $(document).on('ready', function() {
 		
 		else if(user.username) {
 			$("#newPartLink").show();
-			$("#newPartPanel").show();
+			$("#newPartPanel").hide();
 			$("#dashboardLink").show();
 			$("#updatePartLink").hide();
-			$("#dashboardPanel").hide();
+			$("#dashboardPanel").show();
 			$("#updatePartPanel").hide();
 		}
 
