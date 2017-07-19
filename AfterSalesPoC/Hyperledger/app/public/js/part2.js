@@ -10,7 +10,7 @@
 /* global $ */
 var ws = {};
 var user = {username: bag.session.username};
-var valid_users = ["CERTIFIER","SUPPLIER1","SUPPLIER2","SERVICE_CENTER", "SKF", "BOSCH", "DAIMLER-SC"];
+var valid_users = ["DEALER","SUPPLIER1","SUPPLIER2","SERVICE_CENTER", "SKF", "BOSCH", "DAIMLER-SC","STAHLGRUBER"];
 var allParts = [];
 var panels = [
 	{
@@ -287,7 +287,7 @@ function connect_to_server(){
 		clear_blocks();
 		$("#errorNotificationPanel").fadeOut();
 		ws.send(JSON.stringify({type: "chainstats", v:2}));
-		if(user.username && bag.session.user_role && (bag.session.user_role.toUpperCase() === "dealer".toUpperCase() || bag.session.user_role.toUpperCase() === "service_center".toUpperCase())) {
+		if(user.username && bag.session.user_role) {
 			$('#spinner2').show();
 			$('#openTrades').hide();
 			ws.send(JSON.stringify({type: "getAllParts", v: 2}));
