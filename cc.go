@@ -223,7 +223,7 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 
 	if len(args) != 8 {
 		fmt.Println("Incorrect number of arguments. Expecting 8 - PartId, Vehicle Id, Delivery Date, Installation Date, User, Warranty Start Date, Warranty End Date, Type")
-		return nil, errors.New("Incorrect number of arguments. Expecting 7")
+		return nil, errors.New("Incorrect number of arguments. Expecting 8")
 	}
 	fmt.Println("Arguments :"+args[0]+","+args[1]+","+args[2]+","+args[3]+","+args[4]+","+args[5]+","+args[6]+","+args[7]);
 
