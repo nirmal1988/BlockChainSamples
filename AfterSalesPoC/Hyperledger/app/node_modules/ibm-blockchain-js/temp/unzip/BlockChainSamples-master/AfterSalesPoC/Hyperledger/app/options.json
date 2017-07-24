@@ -1,0 +1,17 @@
+{
+	"network":{
+		"peers": "",
+		"users": "",
+		"options": {
+			"quiet": true,
+			"timeout": 60000,
+			"maxRetry": 5
+		}
+	},
+	"chaincode":{
+		"zip_url": "https://github.com/findsukesh/BlockChainSamples/archive/master.zip",
+		"unzip_dir": "BlockChainSamples-master",
+		"git_url": "https://github.com/findsukesh/BlockChainSamples",
+		"deployed_name" : "43db6df5e681aea692c16a8d3dca63213874bb87f05dd0b06454a61835dd2b99debfe0231e5eb58db21e2cdceebbc0bb6902da96113a73cb074307797633b813"
+	}
+}
