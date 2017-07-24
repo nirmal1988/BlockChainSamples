@@ -12,6 +12,22 @@ import (
 type SimpleChaincode struct {
 }
 
+//VehicleId, Description, RegistrationNumber, Make, VIN, DateofRegistration, ChassisNumber, Color, OwnerName, OwnerPhoneNumber, OwnerEmail
+type Vehicle struct {
+	VehicleId 			string 	`json:"vehicleId"`
+	Description 		string  `json:"description"`
+	RegistrationNumber 		string  `json:"registrationNumber"`
+	Make 		string  `json:"make"`
+	Vin 		string  `json:"vin"`
+	DateofRegistration 		string  `json:"dateofRegistration"`
+	ChassisNumber 		string  `json:"chassisNumber"`
+	Color 		string  `json:"color"`
+	OwnerName 		string  `json:"ownerName"`
+	OwnerPhoneNumber 		string  `json:"ownerPhoneNumber"`
+	OwnerEmail 		string  `json:"ownerEmail"`
+	Parts		[]Part `json:"parts"`
+}
+
 type Part struct {
 	PartId 			string 	`json:"partId"`
 	ProductCode 		string  `json:"productCode"`
@@ -34,6 +50,11 @@ type Transaction struct {
 //				Used as an index when querying all parts.
 //==============================================================================================================================
 
+type AllVehicles struct{
+	Vehicles []string `json:"vehicles"`
+}
+
+
 type AllParts struct{
 	Parts []string `json:"parts"`
 }
@@ -46,7 +67,15 @@ func (t *SimpleChaincode) Init(stub  shim.ChaincodeStubInterface, function strin
 
 	var err error
 
+	var vehicles AllVehicles
 	var parts AllParts
+
+	jsonAsBytes, _ := json.Marshal(vehicles)
+	err = stub.PutState("allVehicles", jsonAsBytes)
+	if err != nil {
+		return nil, err
+	}
+
 	jsonAsBytes, _ := json.Marshal(parts)
 	err = stub.PutState("allParts", jsonAsBytes)
 	if err != nil {
