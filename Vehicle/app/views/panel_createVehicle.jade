@@ -1,0 +1,39 @@
+#newVehiclePanel(hidden).panel
+	h1 Enter Vehicle Details
+	hr
+
+	#innerWrap
+		
+		form(action="/newVehicle" method="POST")#newPartform
+			table#createVehicleTable(style="width:50%;float:left")
+				tr
+					td
+						h5 Make:
+					td
+						legend 
+							input(type="text" name="Make" placeholder="Make")
+				tr
+					td
+						h5 Chassis Number:
+					td
+						legend 
+							input(type="text" name="ChassisNumber" placeholder="Chassis Number")
+				tr
+					td
+						h5 Vin:
+					td
+						legend 
+							input(type="text" name="Vin" placeholder="Vin")
+				tr
+					td
+						h5 Description:
+					td
+						legend 
+							textarea(row="3" name="Description" placeholder="Description")				
+				tr
+					td#createPartBut(colspan="2" style="font-size: 12px;")
+						legend
+							button(type="button" style="margin:10px 10px 5px 10px" )#submit
+								span.fa.fa-plus &nbsp;&nbsp;
+								span SUBMIT
+				

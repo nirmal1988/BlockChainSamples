@@ -1,0 +1,38 @@
+#vehicleDashboardPanel(hidden).panel
+	h1 Vehicle Tracker
+	hr
+
+	#dashboardModal.modalDialog(style="margin-top: 200px")
+			div
+				.modal-header
+					h5 Filter Vehicle
+					hr
+				.modal-content
+					form#dashboardFilter
+						input#dashboard_Vin.dashboard-filter(type="text" name="Vin" placeholder="Vin")
+						br
+						br
+						a.filter-button(href="#close" title="Close" ) Close
+						
+	div#contentTable					
+		div(style="text-align:center")
+			span#spinner2.fa.fa-circle-o-notch.fa-spin(style="font-size: 80px;color:#5596E6")					
+		#openTrades
+
+			br
+			a.filter-button(href="#dashboardModal") Filter Vehicles
+			br
+			br
+			table#dashboardTable.tablesorter(style="width:30%;float:left")
+				thead
+					tr 
+						th Vehicle Vin
+				tbody#dashboardBody
+				tr
+					td
+
+			table#batchDetailsTable.tablesorter(style="width:64%;float:right")
+				thead
+					tr 
+						th#bDetHeader(colspan="2" style="font-size: 12px;")
+				tbody#batchDetailsBody

@@ -47,7 +47,11 @@ router.route("/updatePart").get(function(req, res){
 });
 router.route("/dashboard").get(function(req, res){
 	check_login(res, req);
-	res.render("part2", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
+	res.render("vehicle", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
+});
+router.route("/newVehicle").get(function(req, res){
+	check_login(res, req);
+	res.render("vehicle", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
 });
 
 router.route("/getPart").post(function(req, res){
@@ -120,10 +124,10 @@ module.exports = router;
 
 
 function check_login(res, req){
-	if(!req.session.username || req.session.username == ""){
-		console.log("! not logged in, redirecting to login");
-		res.redirect("/login");
-	}
+	//if(!req.session.username || req.session.username == ""){
+	//	console.log("! not logged in, redirecting to login");
+	//	res.redirect("/login");
+	//}
 }
 
 

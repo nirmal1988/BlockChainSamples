@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"		
+	"crypto/rand"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
@@ -15,17 +17,30 @@ type SimpleChaincode struct {
 //VehicleId, Description, RegistrationNumber, Make, VIN, DateofRegistration, ChassisNumber, Color, OwnerName, OwnerPhoneNumber, OwnerEmail
 type Vehicle struct {
 	VehicleId 			string 	`json:"vehicleId"`
+	Make 		string  `json:"make"`
+	ChassisNumber 		string  `json:"chassisNumber"`
+	Vin 		string  `json:"vin"`
+	Color 		string  `json:"color"`
+	Description 		string  `json:"description"`	
+	VehicleTransactions		[]VehicleTransaction `json:"vehicleTransactions"`
+}
+
+type VehicleTransaction struct {	
 	Description 		string  `json:"description"`
-	RegistrationNumber 		string  `json:"registrationNumber"`
+	LicensePlateNumber 		string  `json:"registrationNumber"`
 	Make 		string  `json:"make"`
 	Vin 		string  `json:"vin"`
 	DateofRegistration 		string  `json:"dateofRegistration"`
+	DateofDelivery 		string  `json:"dateofDelivery"`
 	ChassisNumber 		string  `json:"chassisNumber"`
 	Color 		string  `json:"color"`
 	OwnerName 		string  `json:"ownerName"`
 	OwnerPhoneNumber 		string  `json:"ownerPhoneNumber"`
 	OwnerEmail 		string  `json:"ownerEmail"`
 	Parts		[]Part `json:"parts"`
+	TType 			string   `json:"ttype"`
+	UpdatedBy  			string  `json:"updatedBy"`
+	UpdatedOn  			string  `json:"updatedOn"`
 }
 
 type Part struct {
@@ -47,7 +62,7 @@ type Transaction struct {
 }
 
 //==============================================================================================================================
-//				Used as an index when querying all parts.
+//				Used as an index when querying all vehicles and parts.
 //==============================================================================================================================
 
 type AllVehicles struct{
@@ -63,21 +78,21 @@ type AllParts struct{
 // ============================================================================================================================
 // Init
 // ============================================================================================================================
-func (t *SimpleChaincode) Init(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 
 	var err error
 
 	var vehicles AllVehicles
 	var parts AllParts
 
-	jsonAsBytes, _ := json.Marshal(vehicles)
-	err = stub.PutState("allVehicles", jsonAsBytes)
+	jsonAsBytesVehicles, _ := json.Marshal(vehicles)
+	err = stub.PutState("allVehicles", jsonAsBytesVehicles)
 	if err != nil {
 		return nil, err
 	}
 
-	jsonAsBytes, _ := json.Marshal(parts)
-	err = stub.PutState("allParts", jsonAsBytes)
+	jsonAsBytesParts, _ := json.Marshal(parts)
+	err = stub.PutState("allParts", jsonAsBytesParts)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +103,7 @@ func (t *SimpleChaincode) Init(stub  shim.ChaincodeStubInterface, function strin
 // ============================================================================================================================
 // Run - Our entry point for Invocations - [LEGACY] obc-peer 4/25/2016
 // ============================================================================================================================
-func (t *SimpleChaincode) Run(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Run(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	fmt.Println("run is running " + function)
 	return t.Invoke(stub, function, args)
 }
@@ -98,12 +113,20 @@ func (t *SimpleChaincode) Run(stub shim.ChaincodeStubInterface, function string,
 // ============================================================================================================================
 // Run - Our entry point
 // ============================================================================================================================
-func (t *SimpleChaincode) Invoke(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	fmt.Println("Invoke is running " + function)
 
 	// Handle different functions
 	if function == "init" {					//initialize the chaincode state
 		return t.Init(stub, "init", args)
+	} else if function == "createVehicle" {			//create a vehicle
+		return t.createVehicle(stub, args)	
+	} else if function == "updateVehicle" {			//create a vehicle
+		return t.updateVehicle(stub, args)
+	} else if function == "addPart" {			//create a part
+		return t.addPart(stub, args)	
+	} else if function == "updatePart" {			//create a part
+		return t.updatePart(stub, args)			
 	} else if function == "createPart" {			//create a part
 		return t.createPart(stub, args)
 	} else if function == "updatePart" {			//update a part
@@ -117,7 +140,7 @@ func (t *SimpleChaincode) Invoke(stub  shim.ChaincodeStubInterface, function str
 // ============================================================================================================================
 // Query - read a variable from chaincode state - (aka read)
 // ============================================================================================================================
-func (t *SimpleChaincode) Query(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 
 	if len(args) != 1 { return nil, errors.New("Incorrect number of arguments passed") }
 
@@ -135,7 +158,7 @@ func (t *SimpleChaincode) Query(stub  shim.ChaincodeStubInterface, function stri
 // ============================================================================================================================
 // Get Part Details
 // ============================================================================================================================
-func (t *SimpleChaincode) getPart(stub  shim.ChaincodeStubInterface, partId string)([]byte, error){
+func (t *SimpleChaincode) getPart(stub *shim.ChaincodeStub, partId string)([]byte, error){
 
 	fmt.Println("Start find Part")
 	fmt.Println("Looking for Part #" + partId);
@@ -153,7 +176,7 @@ func (t *SimpleChaincode) getPart(stub  shim.ChaincodeStubInterface, partId stri
 // ============================================================================================================================
 // Get All Parts
 // ============================================================================================================================
-func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user string)([]byte, error){
+func (t *SimpleChaincode) getAllParts(stub *shim.ChaincodeStub, user string)([]byte, error){
 
 	fmt.Println("getAllParts:Looking for All Parts");
 
@@ -193,8 +216,122 @@ func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user st
 
 }
 
+// creating new vehicle in blockchain
+func (t *SimpleChaincode) createVehicle(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+
+	var err error
+	fmt.Println("Running createVehicle")
+
+	if len(args) != 4 {
+		fmt.Println("Incorrect number of arguments. Expecting 4 - PartId, Product Code, Manufacture Date, User")
+		return nil, errors.New("Incorrect number of arguments. Expecting 4")
+	}
+
+	fmt.Println("Arguments :"+args[0]+","+args[1]+","+args[2]+","+args[3]);
+
+	var bt Vehicle
+	bt.VehicleId = NewUniqueId()
+	bt.Make			= args[0]
+	bt.ChassisNumber = args[1]
+	bt.Vin = args[2]
+	bt.Description = args[3]
+	bt.Color  = args[4]
+	
+	var tx VehicleTransaction 
+	tx.Make			= args[0]
+	tx.ChassisNumber = args[1]
+	tx.Vin = args[2]
+	tx.Description = args[3]
+	tx.Color  = args[4]
+	tx.TType 			= "CREATE"
+	tx.UpdatedBy 			= args[5]
+	tx.UpdatedOn   			= time.Now().Local().String()
+	bt.VehicleTransactions = append(bt.VehicleTransactions, tx)
+
+	//Commit vehicle to ledger
+	fmt.Println("createVehicle Commit Vehicle To Ledger");
+	btAsBytes, _ := json.Marshal(bt)
+	err = stub.PutState(bt.VehicleId, btAsBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	//Update All Vehicles Array
+	allBAsBytes, err := stub.GetState("allVehicles")
+	if err != nil {
+		return nil, errors.New("Failed to get all Vehicles")
+	}
+	var allb AllVehicles
+	err = json.Unmarshal(allBAsBytes, &allb)
+	if err != nil {
+		return nil, errors.New("Failed to Unmarshal all Vehicles")
+	}
+	allb.Vehicles = append(allb.Vehicles,bt.VehicleId)
+
+	allBuAsBytes, _ := json.Marshal(allb)
+	err = stub.PutState("allVehicles", allBuAsBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
+}
+
+// Updating existing vehicle in blockchain
+func (t *SimpleChaincode) updateVehicle(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+
+	var err error
+	fmt.Println("Running updateVehicle")
+
+	if len(args) != 8 {
+		fmt.Println("Incorrect number of arguments. Expecting")
+		return nil, errors.New("Incorrect number of arguments. Expecting 8")
+	}
+	fmt.Println("Arguments :"+args[0]+","+args[1]+","+args[2]+","+args[3]+","+args[4]+","+args[5]+","+args[6]+","+args[7]);
+
+	//Get and Update Part data
+	bAsBytes, err := stub.GetState(args[0])
+	if err != nil {
+		return nil, errors.New("Failed to get Vehicle #" + args[0])
+	}
+	var bch Vehicle
+	err = json.Unmarshal(bAsBytes, &bch)
+	if err != nil {
+		return nil, errors.New("Failed to Unmarshal Vehicle #" + args[0])
+	}
+
+	var tx VehicleTransaction 
+	tx.TType 	= args[1];
+
+	tx.Description 		= args[2]
+	tx.LicensePlateNumber	= args[3]
+	tx.Make	= args[4]
+	tx.Vin  		= args[5]
+	tx.DateofRegistration	= args[6]
+	tx.DateofDelivery	= args[7]
+	tx.ChassisNumber	= args[8]
+	tx.Color 	= args[9]
+	tx.OwnerName 	= args[10]
+	tx.OwnerPhoneNumber 	= args[11]
+	tx.OwnerEmail 	= args[12]
+	tx.UpdatedBy   	= args[13]
+	tx.UpdatedOn   	= time.Now().Local().String()
+
+	bch.VehicleTransactions = append(bch.VehicleTransactions, tx)
+
+	//Commit updates part to ledger
+	fmt.Println("updateVehicle Commit Updates To Ledger");
+	btAsBytes, _ := json.Marshal(bch)
+	err = stub.PutState(bch.VehicleId, btAsBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
+}
+
 // creating new part in blockchain
-func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *SimpleChaincode) createPart(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 
 	var err error
 	fmt.Println("Running createPart")
@@ -245,7 +382,7 @@ func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []s
 }
 
 // Updating existing part in blockchain
-func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *SimpleChaincode) updatePart(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 
 	var err error
 	fmt.Println("Running updatePart")
@@ -292,12 +429,25 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 
 }
 
+func NewUniqueId() string{
+	n := 10
+    b := make([]byte, n)
+    if _, err := rand.Read(b); err != nil {
+        panic(err)
+    }
+	s := ""
+    s = fmt.Sprintf("%X", b)
+	return s    
+}
 
 // ============================================================================================================================
 // Main function
 // ============================================================================================================================
 
 func main() {
+	
+    fmt.Println(time.Now().Local().String())
+	
 	err := shim.Start(new(SimpleChaincode))
 	if err != nil {
 		fmt.Printf("Error starting Simple chaincode: %s", err)

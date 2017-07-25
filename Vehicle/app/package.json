@@ -2,7 +2,7 @@
 	"name": "r3",
 	"version": "0.0.1",
 	"description": "A Node.js web application that demonstrates utilizing IBM Blockchain JS to call REST APIs on the blockchain.",
-	"main":"app.js",
+	"main": "app.js",
 	"scripts": {
 		"start": "node app.js"
 	},
@@ -16,7 +16,7 @@
 		"cookie-parser": "1.4.1",
 		"body-parser": "1.0.2",
 		"debug": "0.7.4",
-		"cors":"2.5.3",
+		"cors": "2.5.3",
 		"async": "1.5.0",
 		"adm-zip": "0.4.7",
 		"ws": "1.0.1",
