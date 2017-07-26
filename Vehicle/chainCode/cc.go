@@ -131,8 +131,8 @@ func (t *SimpleChaincode) Invoke(stub  shim.ChaincodeStubInterface, function str
 	// Handle different functions
 	if function == "init" {					//initialize the chaincode state
 		return t.Init(stub, "init", args)
-	} else if function == "MycreateVehicle" {			//create a vehicle
-		return t.MycreateVehicle(stub, args)	
+	} else if function == "createVehicle" {			//create a vehicle
+		return t.createVehicle(stub, args)	
 	} else if function == "updateVehicle" {			//create a vehicle
 		return t.updateVehicle(stub, args)
 	} else if function == "addPart" {			//create a part
@@ -273,7 +273,7 @@ func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user
 }
 
 // creating new vehicle in blockchain
-func (t *SimpleChaincode) MycreateVehicle(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *SimpleChaincode) createVehicle(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 	var err error
 	fmt.Println("Running createVehicle")
