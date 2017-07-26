@@ -359,7 +359,7 @@ func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []s
 	fmt.Println("Arguments :"+args[0]+","+args[1]+","+args[2]+","+args[3]);
 
 	var bt Part
-	bt.PartId 			= 1001
+	bt.PartId 			= "1001"
 	bt.ProductCode			= args[1]
 	var tx Transaction
 	tx.DateOfManufacture		= args[2]
