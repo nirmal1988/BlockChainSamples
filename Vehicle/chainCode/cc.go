@@ -161,6 +161,7 @@ func (t *SimpleChaincode) Query(stub  shim.ChaincodeStubInterface, function stri
 	}
 
 	if function == "getPart" { return t.getPart(stub, args[0]) }
+	if function == "getAllVehicles" { return t.getAllVehicles(stub, args[0]) }
 	if function == "getAllParts" { return t.getAllParts(stub, args[0]) }
 
 	return nil, nil
@@ -220,6 +221,49 @@ func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user st
 
 		// currently we show all parts to the users
 		rab.Parts = append(rab.Parts,sb.PartId);
+	}
+
+	rabAsBytes, _ := json.Marshal(rab)
+
+	return rabAsBytes, nil
+
+}
+
+// ============================================================================================================================
+// Get All Parts
+// ============================================================================================================================
+func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user string)([]byte, error){
+
+	fmt.Println("getAllVehicles:Looking for All Vehicles");
+
+	//get the AllParts index
+	allBAsBytes, err := stub.GetState("allVehicles")
+	if err != nil {
+		return nil, errors.New("Failed to get all Vehicles")
+	}
+
+	var res AllParts
+	err = json.Unmarshal(allBAsBytes, &res)
+	//fmt.Println(allBAsBytes);
+	if err != nil {
+		fmt.Println("Printing Unmarshal error:-");
+		fmt.Println(err);
+		return nil, errors.New("Failed to Unmarshal all Vehicles")
+	}
+
+	var rab AllVehicles
+
+	for i := range res.Vehicles{
+
+		sbAsBytes, err := stub.GetState(res.Vehicles[i])
+		if err != nil {
+			return nil, errors.New("Failed to get Vehicle")
+		}
+		var sb Vehicle
+		json.Unmarshal(sbAsBytes, &sb)
+
+		// currently we show all parts to the users
+		rab.Vehicles = append(rab.Vehicles,sb.VehicleId);
 	}
 
 	rabAsBytes, _ := json.Marshal(rab)
