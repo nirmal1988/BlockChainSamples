@@ -242,7 +242,7 @@ func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user
 		return nil, errors.New("Failed to get all Vehicles")
 	}
 
-	var res AllParts
+	var res AllVehicles
 	err = json.Unmarshal(allBAsBytes, &res)
 	//fmt.Println(allBAsBytes);
 	if err != nil {
