@@ -21,7 +21,11 @@ type Vehicle struct {
 	ChassisNumber 		string  `json:"chassisNumber"`
 	Vin 		string  `json:"vin"`
 	Color 		string  `json:"color"`
+	LicensePlateNumber 		string  `json:"registrationNumber"`
+	DateOfManufacture 		string  `json:"dateOfManufacture"`	
 	Description 		string  `json:"description"`	
+	WarrantyStartDate 		string  `json:"warrantyStartDate"`	
+	WarrantyEndDate 		string  `json:"warrantyEndDate"`	
 	VehicleTransactions		[]VehicleTransaction `json:"vehicleTransactions"`
 }
 
@@ -34,13 +38,21 @@ type VehicleTransaction struct {
 	DateofDelivery 		string  `json:"dateofDelivery"`
 	ChassisNumber 		string  `json:"chassisNumber"`
 	Color 		string  `json:"color"`
+	DateOfManufacture 		string  `json:"dateOfManufacture"`	
+	WarrantyStartDate 		string  `json:"warrantyStartDate"`	
+	WarrantyEndDate 		string  `json:"warrantyEndDate"`		
+	Owner Owner `json:"owner"`
+	Parts		[]Part `json:"parts"`
+	TType 			string   `json:"ttype"`
+	TValue 			string   `json:"tvalue"`
+	UpdatedBy  			string  `json:"updatedBy"`
+	UpdatedOn  			string  `json:"updatedOn"`
+}
+
+type Owner struct {
 	OwnerName 		string  `json:"ownerName"`
 	OwnerPhoneNumber 		string  `json:"ownerPhoneNumber"`
 	OwnerEmail 		string  `json:"ownerEmail"`
-	Parts		[]Part `json:"parts"`
-	TType 			string   `json:"ttype"`
-	UpdatedBy  			string  `json:"updatedBy"`
-	UpdatedOn  			string  `json:"updatedOn"`
 }
 
 type Part struct {
@@ -124,7 +136,7 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
 	} else if function == "updateVehicle" {			//create a vehicle
 		return t.updateVehicle(stub, args)
 	} else if function == "addPart" {			//create a part
-		return t.addPart(stub, args)	
+		return t.createPart(stub, args)	
 	} else if function == "updatePart" {			//create a part
 		return t.updatePart(stub, args)			
 	} else if function == "createPart" {			//create a part
@@ -236,13 +248,16 @@ func (t *SimpleChaincode) createVehicle(stub *shim.ChaincodeStub, args []string)
 	bt.Vin = args[2]
 	bt.Description = args[3]
 	bt.Color  = args[4]
-	
+	bt.DateOfManufacture = time.Now().Local().String()
+
 	var tx VehicleTransaction 
 	tx.Make			= args[0]
 	tx.ChassisNumber = args[1]
 	tx.Vin = args[2]
 	tx.Description = args[3]
 	tx.Color  = args[4]
+	tx.DateOfManufacture = time.Now().Local().String()
+
 	tx.TType 			= "CREATE"
 	tx.UpdatedBy 			= args[5]
 	tx.UpdatedOn   			= time.Now().Local().String()
@@ -311,9 +326,9 @@ func (t *SimpleChaincode) updateVehicle(stub *shim.ChaincodeStub, args []string)
 	tx.DateofDelivery	= args[7]
 	tx.ChassisNumber	= args[8]
 	tx.Color 	= args[9]
-	tx.OwnerName 	= args[10]
-	tx.OwnerPhoneNumber 	= args[11]
-	tx.OwnerEmail 	= args[12]
+	tx.Owner.OwnerName 	= args[10]
+	tx.Owner.OwnerPhoneNumber 	= args[11]
+	tx.Owner.OwnerEmail 	= args[12]
 	tx.UpdatedBy   	= args[13]
 	tx.UpdatedOn   	= time.Now().Local().String()
 
