@@ -234,8 +234,8 @@ func (t *SimpleChaincode) createVehicle(stub  shim.ChaincodeStubInterface, args 
 	var err error
 	fmt.Println("Running createVehicle")
 
-	if len(args) != 4 {
-		fmt.Println("Incorrect number of arguments. Expecting 4 - PartId, Product Code, Manufacture Date, User")
+	if len(args) != 6 {
+		fmt.Println("Incorrect number of arguments. Expecting 6 - PartId, Product Code, Manufacture Date, User")
 		return nil, errors.New("Incorrect number of arguments. Expecting 4")
 	}
 
