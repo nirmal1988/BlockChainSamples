@@ -138,7 +138,7 @@ else console.log("Running using Developer settings");
 // ============================================================================================================================
 // 														Test Area
 // ============================================================================================================================
-var part2 = require("./utils/ws_part2");
+var wsInteraction = require("./utils/wsInteraction");
 var ws = require("ws");
 
 var Ibc1 = require("ibm-blockchain-js");
@@ -210,7 +210,7 @@ function cb_ready(err, cc){																	//response has chaincode functions
 	else{
 		chaincode = cc;
 		console.log(chaincode);
-		part2.setup(ibc, cc);
+		wsInteraction.setup(ibc, cc);
 		router.setup(ibc, cc);
 		
 		if(!cc.details.deployed_name || cc.details.deployed_name === ""){												//decide if i need to deploy
@@ -249,7 +249,7 @@ function cb_deployed(e, d){
 			        var sessionID = ws.upgradeReq.signedCookies["connect.sid"];
 			        sessionStore.get(sessionID, function(err, sess) {
 				    	if(sess){
-				    		part2.process_msg(ws, data, sess.username);
+				    		wsInteraction.process_msg(ws, data, sess.username);
 				    	}
 				    });
 			    }); 

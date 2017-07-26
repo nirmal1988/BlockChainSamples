@@ -11,7 +11,7 @@
 var ws = {};
 var user = {username: bag.session.username};
 var valid_users = ["SKF", "BOSCH", "STAHLGRUBER", "MMW"];
-var allParts = [];
+var allChassisNumbers = [];
 var panels = [
 	{
 		name: "dashboard",
@@ -96,36 +96,40 @@ $(document).on('ready', function() {
 		return false;
 	});*/
 
-	$("#submit").click(function(){
-		console.log("submitting createPart Form");
+	$("#createVehicle").click(function(){
+		console.log("submitting createVehicle Form");
 		if(user.username){
 			var obj = 	{
-							type: "createPart",
-							part: {
-								partId: $("input[name='PartId']").val(),
-								productCode: $("input[name='ProductCode']").val(),
-								dateOfManufacture: $("input[name='DateOfManufacture']").val()
+							type: "createVehicle",
+							vehicle: {
+								make: $("input[name='Make']").val(),
+								chassisNumber: $("input[name='ChassisNumber']").val(),
+								vin: $("input[name='Vin']").val(),
+								color: $("input[name='Color']").val(),
+								description: $("input[name='Description']").val()
 							}
 						};
 
-			if(obj.part && obj.part.partId){
-				var exists = $.inArray(obj.part.partId, allParts);
+			if(obj.vehicle && obj.vehicle.chassisNumber){
+				var exists = $.inArray(obj.vehicle.chassisNumber, allChassisNumbers);
 				if(exists == -1) {
-					console.log('creating part, sending', obj);
+					console.log('creating vehicle, sending', obj);
 					ws.send(JSON.stringify(obj));
 					$(".panel").hide();
 					$('#batchTag').html('');
 					$('#spinner').show();
 					$('#tagWrapper').hide();
 					//$("#batchTagPanel").show();
-					$("input[name='PartId']").val('');
-					$("input[name='ProductCode']").val(''),
-					$("input[name='DateOfManufacture']").val('')
+					$("input[name='Make']").val('');
+					$("input[name='ChassisNumber']").val(''),
+					$("input[name='Vin']").val('')
+					$("input[name='Color']").val('')
+					$("input[name='Description']").val('')
 					//$("#submit").prop('disabled', true);
 				} else {
 					//alert('Part with id '+obj.part.partId+' already exists.');
 					$("#errorName").html("Error");
-					$("#errorNoticeText").html('Part with id '+obj.part.partId+' already exists.');
+					$("#errorNoticeText").html('Vehicle with chassis number- '+obj.vehicle.chassisNumber+' already exists.');
 					$("#errorNotificationPanel").fadeIn();
 				}
 			}

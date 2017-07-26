@@ -26,6 +26,8 @@ var lastTx = ''
 // On Load
 // =================================================================================
 $(document).on('ready', function() {
+	user.username = "SKF";
+	bag.session.user_role="SERVICE_CENTER";
 	connect_to_server();
 	if(user.username)
 	{
@@ -53,9 +55,9 @@ $(document).on('ready', function() {
 			$("#dashboardLink").show();
 			$("#dashboardPanel").show();
 			$("#updatePartLink").show();
-			$("#newPartLink").hide();
-			$("#newPartPanel").hide();
-			$("#batchDetailsTable").hide();			
+			$("#newPartLink").show();
+			$("#newPartPanel").show();
+			$("#batchDetailsTable").show();			
 		 }
 		
 		

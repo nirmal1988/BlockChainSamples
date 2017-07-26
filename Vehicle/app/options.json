@@ -9,9 +9,9 @@
 		}
 	},
 	"chaincode":{
-		"zip_url": "https://github.com/findsukesh/BlockChainSamples/archive/master.zip",
+		"zip_url": "https://github.com/nirmal1988/BlockChainSamples/archive/master.zip",
 		"unzip_dir": "BlockChainSamples-master",
-		"git_url": "https://github.com/findsukesh/BlockChainSamples",
-		"deployed_name" : "7a0d9c9d895757b5e40baef31148f849ecd9e238671689f1f9dd75dd62ff41f13823ae62a3cd1a01a892f50c36021dd93f20b12085aada3eb5bcd96f1c89d24a"
+		"git_url": "https://github.com/nirmal1988/BlockChainSamples",
+		"deployed_name" : "cf1b7f11e01f6db071422e6d3f94ba80030b566de16aa1b0a32892a644acef069fe6b155dbcda1b43d9b4f07832f30f41e571783c62f0ea94d634a69dd8ef015"
 	}
 }
