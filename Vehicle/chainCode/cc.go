@@ -86,10 +86,10 @@ type AllParts struct{
 
 // ============================================================================================================================
 // Init --- 
-// Local - *shim.ChaincodeStub 
+// Local - shim.ChaincodeStubInterface 
 // Server - shim.ChaincodeStubInterface
 // ============================================================================================================================
-func (t *SimpleChaincode) Init(stub  *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Init(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 
 	var err error
 
@@ -114,7 +114,7 @@ func (t *SimpleChaincode) Init(stub  *shim.ChaincodeStub, function string, args 
 // ============================================================================================================================
 // Run - Our entry point for Invocations - [LEGACY] obc-peer 4/25/2016
 // ============================================================================================================================
-func (t *SimpleChaincode) Run(stub  *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Run(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("run is running " + function)
 	return t.Invoke(stub, function, args)
 }
@@ -124,7 +124,7 @@ func (t *SimpleChaincode) Run(stub  *shim.ChaincodeStub, function string, args [
 // ============================================================================================================================
 // Run - Our entry point
 // ============================================================================================================================
-func (t *SimpleChaincode) Invoke(stub  *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Invoke(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("Invoke is running " + function)
 
 	// Handle different functions
@@ -151,7 +151,7 @@ func (t *SimpleChaincode) Invoke(stub  *shim.ChaincodeStub, function string, arg
 // ============================================================================================================================
 // Query - read a variable from chaincode state - (aka read)
 // ============================================================================================================================
-func (t *SimpleChaincode) Query(stub  *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Query(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 
 	if len(args) != 1 { return nil, errors.New("Incorrect number of arguments passed") }
 
@@ -170,7 +170,7 @@ func (t *SimpleChaincode) Query(stub  *shim.ChaincodeStub, function string, args
 // ============================================================================================================================
 // Get Part Details
 // ============================================================================================================================
-func (t *SimpleChaincode) getPart(stub  *shim.ChaincodeStub, partId string)([]byte, error){
+func (t *SimpleChaincode) getPart(stub  shim.ChaincodeStubInterface, partId string)([]byte, error){
 
 	fmt.Println("Start find Part")
 	fmt.Println("Looking for Part #" + partId);
@@ -188,7 +188,7 @@ func (t *SimpleChaincode) getPart(stub  *shim.ChaincodeStub, partId string)([]by
 // ============================================================================================================================
 // Get All Parts
 // ============================================================================================================================
-func (t *SimpleChaincode) getAllParts(stub  *shim.ChaincodeStub, user string)([]byte, error){
+func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user string)([]byte, error){
 
 	fmt.Println("getAllParts:Looking for All Parts");
 
@@ -231,7 +231,7 @@ func (t *SimpleChaincode) getAllParts(stub  *shim.ChaincodeStub, user string)([]
 // ============================================================================================================================
 // Get All Parts
 // ============================================================================================================================
-func (t *SimpleChaincode) getAllVehicles(stub  *shim.ChaincodeStub, user string)([]byte, error){
+func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user string)([]byte, error){
 
 	fmt.Println("getAllVehicles:Looking for All Vehicles");
 
@@ -272,7 +272,7 @@ func (t *SimpleChaincode) getAllVehicles(stub  *shim.ChaincodeStub, user string)
 }
 
 // creating new vehicle in blockchain
-func (t *SimpleChaincode) createVehicle(stub  *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) createVehicle(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 	var err error
 	fmt.Println("Running createVehicle")
@@ -327,7 +327,7 @@ func (t *SimpleChaincode) createVehicle(stub  *shim.ChaincodeStub, args []string
 }
 
 // Updating existing vehicle in blockchain
-func (t *SimpleChaincode) updateVehicle(stub  *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 	var err error
 	fmt.Println("Running updateVehicle")
@@ -382,7 +382,7 @@ func (t *SimpleChaincode) updateVehicle(stub  *shim.ChaincodeStub, args []string
 }
 
 // creating new part in blockchain
-func (t *SimpleChaincode) createPart(stub  *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 	var err error
 	fmt.Println("Running createPart")
@@ -433,7 +433,7 @@ func (t *SimpleChaincode) createPart(stub  *shim.ChaincodeStub, args []string) (
 }
 
 // Updating existing part in blockchain
-func (t *SimpleChaincode) updatePart(stub  *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 	var err error
 	fmt.Println("Running updatePart")
