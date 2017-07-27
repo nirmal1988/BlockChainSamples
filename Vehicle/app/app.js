@@ -213,6 +213,8 @@ function cb_ready(err, cc){																	//response has chaincode functions
 		wsInteraction.setup(ibc, cc);
 		router.setup(ibc, cc);
 		
+		console.log("cc.details.deployed_name"+ cc.details.deployed_name);
+
 		if(!cc.details.deployed_name || cc.details.deployed_name === ""){												//decide if i need to deploy
 			cc.deploy("init", [], {save_path: "./cc_summaries", delay_ms: 60000}, cb_deployed);
 		}

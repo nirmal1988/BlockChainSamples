@@ -1,4 +1,5 @@
 [
+	{"username":"MFR","password":"passw0rd","role":"MANUFACTURER"},
 	{"username":"STAHLGRUBER","password":"passw0rd","role":"DEALER"},
 	{"username":"SKF","password":"passw0rd","role":"SUPPLIER"},
 	{"username":"BOSCH","password":"passw0rd","role":"SUPPLIER"},

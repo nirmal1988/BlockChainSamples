@@ -124,10 +124,10 @@ module.exports = router;
 
 
 function check_login(res, req){
-	//if(!req.session.username || req.session.username == ""){
-	//	console.log("! not logged in, redirecting to login");
-	//	res.redirect("/login");
-	//}
+	if(!req.session.username || req.session.username == ""){
+		console.log("! not logged in, redirecting to login");
+		res.redirect("/login");
+	}
 }
 
 

@@ -26,8 +26,8 @@ var lastTx = ''
 // On Load
 // =================================================================================
 $(document).on('ready', function() {
-	user.username = "SKF";
-	bag.session.user_role="MANUFACTURER";
+	// user.username = "SKF";
+	// bag.session.user_role="MANUFACTURER";
 	connect_to_server();
 	if(user.username)
 	{
@@ -384,7 +384,7 @@ function connect_to_server(){
 						html += '<td style="text-align:left;padding-left:20px">';
 						html +=	'<div style="display: inline-block; vertical-align: middle;">';
 						html += '<p style="font-weight:500;">ADDED BY <span style="color:#5596E6">' + txs[i].updatedBy +'</span></p>';
-						html += '<p style="">on ' + txs[i].updatedOn +'</p>';
+						html += '<p style="">on ' + moment(new Date(txs[i].updatedOn)).format('lll') +'</p>';
 						html +=	'</div>';
 						html += '</td>';
 						html += '</tr>';
