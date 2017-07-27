@@ -155,6 +155,7 @@ func (t *SimpleChaincode) Query(stub  shim.ChaincodeStubInterface, function stri
 
 	if len(args) != 1 { return nil, errors.New("Incorrect number of arguments passed") }
 
+	if function == "getVehicle" { return t.getVehicle(stub, args[0]) }
 	if function == "getPart" { return t.getPart(stub, args[0]) }
 	if function == "getAllVehicles" { return t.getAllVehicles(stub, args[0]) }
 	if function == "getAllParts" { return t.getAllParts(stub, args[0]) }

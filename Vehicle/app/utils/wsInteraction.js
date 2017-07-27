@@ -17,6 +17,10 @@ module.exports.process_msg = function(ws, data, owner){
 		console.log("Chainstats msg");
 		ibc.chain_stats(cb_chainstats);
 	}
+	else if(data.type == "getVehicle"){
+		console.log("Get Part", data.vehicleId);
+		chaincode.query.getVehicle([data.vehicleId], cb_got_vehicle);
+	}
 	else if(data.type == "getAllVehicles"){
 		console.log("Get All Vehicles", owner);
 		chaincode.query.getAllVehicles([owner], cb_got_allvehicles);
@@ -67,6 +71,15 @@ module.exports.process_msg = function(ws, data, owner){
 		}
 	}
 	
+	function cb_got_vehicle(e, vehicle){
+		if(e != null){
+			console.log("Get Vehicle error", e);
+		}
+		else{
+			sendMsg({msg: "vehicle", vehicle: JSON.parse(vehicle)});
+		}
+	}
+
 	function cb_got_allvehicles(e, allVehicles){
 		if(e != null){
 			console.log("Get All Vehicles error", e);

@@ -296,6 +296,12 @@ $(document).on('ready', function() {
 	    ws.send(JSON.stringify({type: "getPart", partId: bId}));
 	});
 
+	$("#dashboardTablevehicles").on('click', 'tr', function() {
+		var bId = $(this).find('td:first').text() ;
+		if(bId == "" || bId.length != 20) return false;
+	    ws.send(JSON.stringify({type: "getVehicle", vehicleId: bId}));
+	});
+
 });
 
 
@@ -350,7 +356,7 @@ function connect_to_server(){
 			var data = JSON.parse(msg.data);
 			if(data.msg === 'allVehicles'){
 				console.log("---- allVehicles ---- ", data);
-				build_Vehicles(data.parts, null);
+				build_Vehicles(data.vehicles, null);
 				$('#spinner2').hide();
 				$('#openTrades').show();
 			}
@@ -359,6 +365,64 @@ function connect_to_server(){
 				build_Parts(data.parts, null);
 				$('#spinner2').hide();
 				$('#openTrades').show();
+			}
+			else if(data.msg === 'vehicle'){
+				console.log('onMessage vehicle:'+data.vehicle);
+				var txs = data.vehicle.vehicleTransactions;
+				var html = ''
+				$("#batchDetailsTable").show();
+				for(var i=0; i<txs.length; i++){
+					console.log("Trnsaction "+i+" "+txs[i]);
+					$("#bDetHeader").html("Chassis Number #" + data.vehicle.chassisNumber);
+
+					if(txs[i].ttype == "CREATE"){
+			          //litem = {avatar:"ion-ios-box-outline", date: tx.vDate, location: tx.location, desc:"ADDED BY ", owner:tx.owner};
+				        html += '<tr>';
+						html +=	'<td>';
+						html +=	'<div style="font-size: 34px;color:#5596E6;float:right;"><i class="icon ion-ios-box-outline"></i></div>';
+						html += '</td>';
+						html += '<td style="text-align:left;padding-left:20px">';
+						html +=	'<div style="display: inline-block; vertical-align: middle;">';
+						html += '<p style="font-weight:500;">ADDED BY <span style="color:#5596E6">' + txs[i].updatedBy +'</span></p>';
+						html += '<p style="">on ' + txs[i].updatedOn +'</p>';
+						html +=	'</div>';
+						html += '</td>';
+						html += '</tr>';
+			        }
+			        else if(txs[i].ttype == "DELIVERY"){
+			          //litem = {avatar:"ion-ios-barcode-outline", date: data.batch.vDate, location: data.batch.location, desc:"PICKED UP BY ", owner:data.batch.owner};
+			        	html += '<tr>';
+						html +=	'<td>';
+						html +=	'<div style="font-size: 34px;color:#5596E6;float:right;"><i class="ion-ios-shuffle"></i></div>';
+						html += '</td>';
+						html += '<td style="text-align:left;padding-left:20px">';
+						html +=	'<div style="display: inline-block; vertical-align: middle;">';
+						html += '<p style="font-weight:500;">DELIVERED TO <span style="color:#5596E6">' + txs[i].user +'</span></p>';
+						html += '<p style="">on ' + txs[i].dateOfDelivery +'</p>';
+						html +=	'</div>';
+						html += '</td>';
+						html += '</tr>';
+			        }
+			        else if(txs[i].ttype == "INSTALLED"){
+			          //litem = {avatar:"ion-ios-shuffle", date: data.batch.vDate, location: data.batch.location, desc:"DELIVERED TO ", owner:data.batch.owner};
+			        	html += '<tr>';
+						html +=	'<td>';
+						html +=	'<div style="font-size: 34px;color:#5596E6;float:right;"><i class="ion-ios-barcode-outline"></i></div>';
+						html += '</td>';
+						html += '<td style="text-align:left;padding-left:20px">';
+						html +=	'<div style="display: inline-block; vertical-align: middle;">';
+						html += '<p style="font-weight:500;">PART INSTALLED BY <span style="color:#5596E6">' + txs[i].user +'</span></p>';
+						html += '<p style="">on ' + txs[i].dateOfInstallation +'</p>';
+						html += '<p style="">Vehicle ID: ' + txs[i].vehicleId +'</p>';
+						html += '<p style="">Warranty Start Date:' + txs[i].warrantyStartDate +'</p>';
+						html += '<p style="">Warranty End Date:' + txs[i].warrantyEndDate +'</p>';
+						html +=	'</div>';
+						html += '</td>';
+						html += '</tr>';
+			        }
+				}
+
+				$("#vehiclesbatchDetailsBody").html(html);
 			}
 			else if(data.msg === 'part'){
 				console.log('onMessage part:'+data.part);
@@ -510,8 +574,9 @@ function build_Vehicles(vehicles, panelDesc){
 		if(excluded(vehicles[i], filter)) {
 
 			// Create a row for each batch
-			html += '<tr>';
-			html +=		'<td>' + vehicles[i] + '</td>';
+			html += '<tr id="vehicledashboardTableRow" style="cursor:pointer;">';
+			html +=		'<td style="display:none;">' + vehicles[i].split("-")[0] + '</td>';
+			html +=		'<td>' + vehicles[i].split("-")[1] + '</td>';
 			html += '</tr>';
 
 		}
@@ -519,8 +584,8 @@ function build_Vehicles(vehicles, panelDesc){
 
 	// Placeholder for an empty table
 	if(html == '' && panelDesc.name === "dashboard") html = '<tr><td>Nothing here...</td></tr>';
-
-	$("#batchDetailsBody").html(html);
+	console.log(html);
+	$("#vehicledashboardBody").html(html);
 }
 
 function build_Parts(parts, panelDesc){
