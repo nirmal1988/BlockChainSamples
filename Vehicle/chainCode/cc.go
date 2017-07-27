@@ -155,7 +155,7 @@ func (t *SimpleChaincode) Query(stub  shim.ChaincodeStubInterface, function stri
 
 	if len(args) != 1 { return nil, errors.New("Incorrect number of arguments passed") }
 
-	if function != "getPart" && function != "getAllParts" {
+	if function == "" {
 		return nil, errors.New("Invalid query function name.")
 	}
 
@@ -235,7 +235,7 @@ func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user
 
 	fmt.Println("getAllVehicles:Looking for All Vehicles");
 
-	//get the AllParts index
+	//get the AllVehicles index
 	allBAsBytes, err := stub.GetState("allVehicles")
 	if err != nil {
 		return nil, errors.New("Failed to get all Vehicles")
