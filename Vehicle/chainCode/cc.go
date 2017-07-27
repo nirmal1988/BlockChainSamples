@@ -154,7 +154,7 @@ func (t *SimpleChaincode) Invoke(stub  shim.ChaincodeStubInterface, function str
 func (t *SimpleChaincode) Query(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 
 	if len(args) != 1 { return nil, errors.New("Incorrect number of arguments passed") }
-	
+
 	if function == "getPart" { return t.getPart(stub, args[0]) }
 	if function == "getAllVehicles" { return t.getAllVehicles(stub, args[0]) }
 	if function == "getAllParts" { return t.getAllParts(stub, args[0]) }
@@ -223,6 +223,25 @@ func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user st
 	return rabAsBytes, nil
 
 }
+
+// ============================================================================================================================
+// Get Vehicle Details
+// ============================================================================================================================
+func (t *SimpleChaincode) getVehicle(stub  shim.ChaincodeStubInterface, vehicleId string)([]byte, error){
+
+	fmt.Println("Start find Vehicle")
+	fmt.Println("Looking for Vehicle #" + vehicleId);
+
+	//get the part index
+	bAsBytes, err := stub.GetState(vehicleId)
+	if err != nil {
+		return nil, errors.New("Failed to get Vehicle Id #" + vehicleId)
+	}
+
+	return bAsBytes, nil
+
+}
+
 
 // ============================================================================================================================
 // Get All Parts
