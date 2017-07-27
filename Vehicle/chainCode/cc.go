@@ -262,7 +262,7 @@ func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user
 		json.Unmarshal(sbAsBytes, &sb)
 
 		// currently we show all parts to the users
-		rab.Vehicles = append(rab.Vehicles,sb.VehicleId);
+		rab.Vehicles = append(rab.Vehicles,sb.ChassisNumber);
 	}
 
 	rabAsBytes, _ := json.Marshal(rab)
