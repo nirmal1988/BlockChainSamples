@@ -225,6 +225,25 @@ func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user st
 }
 
 // ============================================================================================================================
+// Get Vehicle Details
+// ============================================================================================================================
+func (t *SimpleChaincode) getVehicle(stub  shim.ChaincodeStubInterface, vehicleId string)([]byte, error){
+
+	fmt.Println("Start find Vehicle")
+	fmt.Println("Looking for Vehicle #" + vehicleId);
+
+	//get the part index
+	bAsBytes, err := stub.GetState(vehicleId)
+	if err != nil {
+		return nil, errors.New("Failed to get Vehicle Id #" + vehicleId)
+	}
+
+	return bAsBytes, nil
+
+}
+
+
+// ============================================================================================================================
 // Get All Parts
 // ============================================================================================================================
 func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user string)([]byte, error){
