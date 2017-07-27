@@ -154,11 +154,7 @@ func (t *SimpleChaincode) Invoke(stub  shim.ChaincodeStubInterface, function str
 func (t *SimpleChaincode) Query(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 
 	if len(args) != 1 { return nil, errors.New("Incorrect number of arguments passed") }
-
-	if function == "" {
-		return nil, errors.New("Invalid query function name.")
-	}
-
+	
 	if function == "getPart" { return t.getPart(stub, args[0]) }
 	if function == "getAllVehicles" { return t.getAllVehicles(stub, args[0]) }
 	if function == "getAllParts" { return t.getAllParts(stub, args[0]) }
