@@ -27,7 +27,7 @@ var lastTx = ''
 // =================================================================================
 $(document).on('ready', function() {
 	user.username = "SKF";
-	bag.session.user_role="SERVICE_CENTER";
+	bag.session.user_role="MANUFACTURER";
 	connect_to_server();
 	if(user.username)
 	{
@@ -40,8 +40,27 @@ $(document).on('ready', function() {
 
 	// Only show tabs if a user is logged in
 	if(user.username) {
+		$("#vehiclesnav").show();
+		$("#partsnav").show();
 		// Display tabs based on user's role
-		if(bag.session.user_role && bag.session.user_role.toUpperCase() === "DEALER") {
+		if (user.username==="MANUFACTURER" || bag.session.user_role.toUpperCase() === "MANUFACTURER"){
+			$('#vehicleDashboardPanel').show();
+			$("#createVehicleTable").hide();
+			$("#newVehiclePanel").hide();
+			
+			$("#newVehicle").show();
+			$("#updateVehicle").show();
+			$("#newPartLink").show();
+			$("#updatePartLink").show();
+			$("#dashboardLink").show();
+			
+			
+			$("#dashboardLink").show();
+			$("#dashboardPanel").show();
+			
+			$("#batchDetailsTable").hide();			
+		 }
+		else if(bag.session.user_role && bag.session.user_role.toUpperCase() === "DEALER") {
 			$("#dashboardLink").show();
 			$("#dashboardPanel").show();
 			$("#updatePartLink").show();
@@ -80,6 +99,21 @@ $(document).on('ready', function() {
 
 	}
 
+	$("#createNewVehicle").click(function(){
+		$("#vehicleList").show();
+		$("#createNewVehicle").hide();
+		$('#vehicleDashboardPanel').hide();
+		$("#createVehicleTable").show();
+		$("#newVehiclePanel").show();
+	});
+	$("#vehicleList").click(function(){
+		$("#vehicleList").hide();
+		$("#createNewVehicle").show();
+		$('#vehicleDashboardPanel').show();
+		$("#createVehicleTable").hide();
+		$("#newVehiclePanel").hide();
+	});
+
 	// =================================================================================
 	// jQuery UI Events
 	// =================================================================================
@@ -104,9 +138,7 @@ $(document).on('ready', function() {
 							vehicle: {
 								make: $("input[name='Make']").val(),
 								chassisNumber: $("input[name='ChassisNumber']").val(),
-								vin: $("input[name='Vin']").val(),
-								color: $("input[name='Color']").val(),
-								description: $("input[name='Description']").val()
+								vin: $("input[name='Vin']").val()								
 							}
 						};
 
@@ -123,9 +155,6 @@ $(document).on('ready', function() {
 					$("input[name='Make']").val('');
 					$("input[name='ChassisNumber']").val(''),
 					$("input[name='Vin']").val('')
-					$("input[name='Color']").val('')
-					$("input[name='Description']").val('')
-					//$("#submit").prop('disabled', true);
 				} else {
 					//alert('Part with id '+obj.part.partId+' already exists.');
 					$("#errorName").html("Error");
@@ -304,6 +333,7 @@ function connect_to_server(){
 		if(user.username && bag.session.user_role) {
 			$('#spinner2').show();
 			$('#openTrades').hide();
+			ws.send(JSON.stringify({type: "getAllVehicles", v: 2}));
 			ws.send(JSON.stringify({type: "getAllParts", v: 2}));
 		}
 
@@ -318,8 +348,13 @@ function connect_to_server(){
 	function onMessage(msg){
 		try{
 			var data = JSON.parse(msg.data);
-
-			if(data.msg === 'allParts'){
+			if(data.msg === 'allVehicles'){
+				console.log("---- allVehicles ---- ", data);
+				build_Vehicles(data.parts, null);
+				$('#spinner2').hide();
+				$('#openTrades').show();
+			}
+			else if(data.msg === 'allParts'){
 				console.log("---- allParts ---- ", data);
 				build_Parts(data.parts, null);
 				$('#spinner2').hide();
@@ -396,13 +431,33 @@ function connect_to_server(){
 					new_block(temp);
 				}									//send to blockchain.js
 			}
+			else if(data.msg === 'vehicleCreated'){
+				$("#notificationPanel").animate({width:'toggle'});
+				$($("#noticeText").find('p')[0]).html("Your Vehicle has been created.");
+				$("#notificationPanel").show();
+				$('#spinner').hide();
+				$('#tagWrapper').show();	
+				ws.send(JSON.stringify({type: "getAllVehicles", v: 2}));			
+				$("#vehicleList").click();
+			}
+			else if(data.msg === 'vehicleUpdated'){
+				$("#notificationPanel").animate({width:'toggle'});
+				$($("#noticeText").find('p')[0]).html("Your Vehicle has been updated.");
+				$("#notificationPanel").show();
+				$('#spinner').hide();
+				$('#tagWrapper').show();
+			}
 			else if(data.msg === 'partCreated'){
 				$("#notificationPanel").animate({width:'toggle'});
+				$($("#noticeText").find('p')[0]).html("Your Part has been created.");
+				$("#notificationPanel").show();				
 				$('#spinner').hide();
 				$('#tagWrapper').show();
 			}
 			else if(data.msg === 'partUpdated'){
 				$("#updateNotificationPanel").animate({width:'toggle'});
+				$($("#noticeText").find('p')[0]).html("Your Part has been updated.");
+				$("#notificationPanel").show();				
 				$('#spinner').hide();
 				$('#tagWrapper').show();
 			}
@@ -441,6 +496,33 @@ function connect_to_server(){
 // =================================================================================
 //	UI Building
 // =================================================================================
+function build_Vehicles(vehicles, panelDesc){
+	var html = '';
+	bag.vehicles = vehicles;
+	// If no panel is given, assume this is the trade panel
+	if(!panelDesc) {
+		panelDesc = panels[0];
+	}
+	allVehicles = [];
+	for(var i in vehicles){
+		console.log('!', vehicles[i]);
+		allVehicles[i] = vehicles[i];
+		if(excluded(vehicles[i], filter)) {
+
+			// Create a row for each batch
+			html += '<tr>';
+			html +=		'<td>' + vehicles[i] + '</td>';
+			html += '</tr>';
+
+		}
+	}
+
+	// Placeholder for an empty table
+	if(html == '' && panelDesc.name === "dashboard") html = '<tr><td>Nothing here...</td></tr>';
+
+	$("#batchDetailsBody").html(html);
+}
+
 function build_Parts(parts, panelDesc){
 	var html = '';
 	bag.parts = parts;

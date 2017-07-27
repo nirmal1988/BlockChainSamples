@@ -17,10 +17,14 @@ module.exports.process_msg = function(ws, data, owner){
 		console.log("Chainstats msg");
 		ibc.chain_stats(cb_chainstats);
 	}
+	else if(data.type == "getAllVehicles"){
+		console.log("Get All Vehicles", owner);
+		chaincode.query.getAllVehicles([owner], cb_got_allvehicles);
+	}
 	else if(data.type == "createVehicle"){
 		console.log("Create Vehicle ", data, owner);
 		if(data.vehicle){			
-			chaincode.invoke.createVehicle([data.vehicle.make, data.vehicle.chassisNumber, data.vehicle.vin, data.vehicle.description, data.vehicle.color, owner], cb_invoked_createVehicle);				//create a new Vehicle
+			chaincode.invoke.createVehicle([data.vehicle.make, data.vehicle.chassisNumber, data.vehicle.vin, owner], cb_invoked_createVehicle);				//create a new Vehicle
 		}
 	}
 	else if(data.type == "createPart"){
@@ -63,6 +67,15 @@ module.exports.process_msg = function(ws, data, owner){
 		}
 	}
 	
+	function cb_got_allvehicles(e, allVehicles){
+		if(e != null){
+			console.log("Get All Vehicles error", e);
+		}
+		else{
+			sendMsg({msg: "allVehicles", vehicles: JSON.parse(allVehicles).vehicles});
+		}
+	}
+
 	function cb_invoked_createVehicle(e, a){
 		console.log("response: ", e, a);
 		if(e != null){
