@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"		
 	"crypto/rand"
+	"strings"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
@@ -28,6 +29,7 @@ type Vehicle struct {
 	WarrantyEndDate 		string  `json:"warrantyEndDate"`	
 	DateofDelivery 		string  `json:"dateofDelivery"`
 	ServiceRequestRaised	string 	`json:"serviceRequestRaised"`	
+	Parts		[]Part `json:"parts"`
 	VehicleTransactions		[]VehicleTransaction `json:"vehicleTransactions"`
 }
 
@@ -86,7 +88,7 @@ type AllParts struct{
 
 // ============================================================================================================================
 // Init --- 
-// Local - shim.ChaincodeStubInterface 
+// Local - *shim.ChaincodeStub
 // Server - shim.ChaincodeStubInterface
 // ============================================================================================================================
 func (t *SimpleChaincode) Init(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
@@ -233,7 +235,7 @@ func (t *SimpleChaincode) getVehicle(stub  shim.ChaincodeStubInterface, vehicleI
 	fmt.Println("Start find Vehicle")
 	fmt.Println("Looking for Vehicle #" + vehicleId);
 
-	//get the part index
+	//get the vehicle index
 	bAsBytes, err := stub.GetState(vehicleId)
 	if err != nil {
 		return nil, errors.New("Failed to get Vehicle Id #" + vehicleId)
@@ -371,26 +373,79 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 	if err != nil {
 		return nil, errors.New("Failed to Unmarshal Vehicle #" + args[0])
 	}
-		
-	bch.Owner.Name 	= args[2]
-	bch.Owner.PhoneNumber 	= args[3]
-	bch.Owner.Email 	= args[4]
+	
+	var updateStr string
+	if bch.Owner.Name 	!= args[2] {
+		bch.Owner.Name 	= args[2]
+		updateStr += ",Owner Name to "+ args[2]
+	}
+
+	if bch.Owner.PhoneNumber != args[3] {
+		bch.Owner.PhoneNumber 	= args[3]
+		updateStr += ",Owner Phone to "+ args[3]
+	}
+
+	if bch.Owner.Email != args[4] {
+		bch.Owner.Email 	= args[4]
+		updateStr += ",Owner Email to "+ args[4]
+	}
+	
 	bch.Dealer.Name 	= args[5]
 	bch.Dealer.PhoneNumber 	= args[6]
-	bch.Dealer.Email 	= args[6]
-	bch.LicensePlateNumber	= args[7]
-	bch.DateofDelivery	= args[8]
-	bch.WarrantyStartDate	= args[9]
-	bch.WarrantyEndDate	= args[10]
+	bch.Dealer.Email 	= args[7]
+
+	if bch.LicensePlateNumber != args[8] {
+		bch.LicensePlateNumber=  args[8]
+		updateStr += ",License Plate Number"+ args[8]
+	}
+
+	if bch.DateofDelivery != args[9] {
+		bch.DateofDelivery =  args[9]
+		updateStr += ",Date of Delivery"+ args[9]
+	}
+
+	if bch.WarrantyStartDate != args[10] {
+		bch.WarrantyStartDate =  args[10]
+		updateStr += ",Warranty Start Date"+ args[10]
+	}
+
+	if bch.WarrantyEndDate != args[11] {
+		bch.WarrantyEndDate =  args[11]
+		updateStr += ",Warranty End Date"+ args[11]
+	}	
 	
 	var tx VehicleTransaction 
 	tx.TType 	= args[1];
-	tx.WarrantyStartDate	= args[9]
-	tx.WarrantyEndDate	= args[10]
+	tx.WarrantyStartDate	= args[10]
+	tx.WarrantyEndDate	= args[11]
 		
-	tx.UpdatedBy   	= args[11]
+	tx.UpdatedBy   	= args[12]
 	tx.UpdatedOn   	= time.Now().Local().String()
 
+	//parts-13
+	p := strings.Split(args[13], ",")
+	var pr Part
+	var prFound string
+	updateStr += ",Parts: "
+	for i := range p {
+		c := strings.Split(p[i], "-")
+		pr.PartId = c[0]
+		pr.ProductCode = c[1]
+
+		for j := range bch.Parts {
+			if bch.Parts[j].PartId == pr.PartId {
+				prFound = "Y"
+			}
+		}
+
+		if prFound == "Y" {
+			updateStr += "~Updated  Part #"+ pr.PartId			
+		} else{
+			updateStr += "~Added  Part #"+ pr.PartId			
+		}
+		bch.Parts = append(bch.Parts, pr)
+	}
+	
 	bch.VehicleTransactions = append(bch.VehicleTransactions, tx)
 
 	//Commit updates part to ledger
@@ -418,7 +473,7 @@ func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []s
 	fmt.Println("Arguments :"+args[0]+","+args[1]+","+args[2]+","+args[3]);
 
 	var bt Part
-	bt.PartId 			= "1001"
+	bt.PartId 			= args[0]
 	bt.ProductCode			= args[1]
 	var tx Transaction
 	tx.DateOfManufacture		= args[2]
