@@ -277,9 +277,9 @@ func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user
 		var sb Vehicle
 		json.Unmarshal(sbAsBytes, &sb)
 		
-		if user != "" {
+		if user != nil && user != "" {
 			// return only customer vehicles
-			if sb.Owner != null && sb.Owner.Name == user {
+			if sb.Owner != nil && sb.Owner.Name == user {
 				rab.Vehicles = append(rab.Vehicles, sb.VehicleId +"-"+ sb.ChassisNumber);
 			}
 		} else if user == "" {
