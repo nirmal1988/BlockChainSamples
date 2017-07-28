@@ -245,7 +245,11 @@ func (t *SimpleChaincode) getVehicle(stub  shim.ChaincodeStubInterface, vehicleI
 
 
 // ============================================================================================================================
+<<<<<<< HEAD
 // Get All Vehicles
+=======
+// Get All Parts
+>>>>>>> e5033c36dbe93653226b63eca440c4eaf0e2012e
 // ============================================================================================================================
 func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user string)([]byte, error){
 
