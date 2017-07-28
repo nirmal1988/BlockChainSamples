@@ -283,7 +283,7 @@ func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user
 				rab.Vehicles = append(rab.Vehicles, sb.VehicleId +"-"+ sb.ChassisNumber);
 			}
 		} else if user == "" {
-			// return all vehicles
+			// return all vehicles for mfr, dealer, service center
 			rab.Vehicles = append(rab.Vehicles, sb.VehicleId +"-"+ sb.ChassisNumber);
 		}
 	}
