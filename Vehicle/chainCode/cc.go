@@ -415,7 +415,7 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 	}	
 	
 	var tx VehicleTransaction 
-	tx.TType 	= args[1];
+	tx.TType 	= args[1] +"|"+ updateStr;
 	tx.WarrantyStartDate	= args[10]
 	tx.WarrantyEndDate	= args[11]
 		
