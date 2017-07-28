@@ -1,5 +1,5 @@
 #vehicleDashboardPanel(hidden).panel
-	h1 Vehicle Tracker
+	h2(style="font-weight:bold;") Vehicle Tracker
 	hr
 
 	#dashboardModal.modalDialog(style="margin-top: 200px")
@@ -17,16 +17,12 @@
 	div#contentTable					
 		div(style="text-align:center")
 			span#spinner2.fa.fa-circle-o-notch.fa-spin(style="font-size: 80px;color:#5596E6")					
-		#openTrades
-
-			br
-			a.filter-button(href="#dashboardModal") Filter Vehicles
-			br
-			br
-			table#dashboardTablevehicles.tablesorter(style="width:30%;float:left")
+		#openTrades			
+			table#dashboardTablevehicles.tablesorter(style="width:20%;float:left")
 				thead
 					tr 
-						th Chassis Number
+						th(style="font-size: 15px;text-align: left;font-weight: bold;") Chassis Number &nbsp;&nbsp;
+							a.filter-button(href="#dashboardModal") Filter 
 				tbody#vehicledashboardBody
 				tr
 					td
@@ -36,3 +32,11 @@
 					tr 
 						th#bDetHeader(colspan="2" style="font-size: 12px;")
 				tbody#vehiclesbatchDetailsBody
+			table#vehicleDetailsTable.tablesorter(style="width:64%;float:right;display:none;")
+				thead
+					tr 
+						th#vehicleDetHeader(colspan="2" style="font-size: 15px;text-align: left;font-weight: bold;") Vehicle Details
+				tbody#vehicleDetailsBody
+					// --------------- Dashboard View
+					include ./panel_updateVehicle.jade
+		

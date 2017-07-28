@@ -11,6 +11,7 @@
 var ws = {};
 var user = {username: bag.session.username};
 var valid_users = ["SKF", "BOSCH", "STAHLGRUBER", "MMW"];
+var valid_customers = ["CUST1", "CUST2"];
 var allChassisNumbers = [];
 var panels = [
 	{
@@ -97,6 +98,10 @@ $(document).on('ready', function() {
 			$("#updatePartPanel").hide();
 		}
 
+		$("#allCustomers").append('<option id=""></option>')
+		$("#allCustomers").append('<option id="'+ valid_customers[0] +'">'+ valid_customers[0] +'</option>')
+		$("#allCustomers").append('<option id="'+ valid_customers[1] +'">'+ valid_customers[1] +'</option>')
+
 	}
 
 	$("#createNewVehicle").click(function(){
@@ -114,6 +119,10 @@ $(document).on('ready', function() {
 		$("#newVehiclePanel").hide();
 	});
 
+	function editVehicleDetails(){
+		$('#vehicleDetailsTable').show();
+		$('#batchDetailsTable').hide();
+	}
 	// =================================================================================
 	// jQuery UI Events
 	// =================================================================================
@@ -165,6 +174,55 @@ $(document).on('ready', function() {
 		}
 		return false;
 	});
+
+	$("#updateVehicle").click(function(){
+		console.log("updating Vehicle");
+		if(user.username){
+			var tranType;
+			if(bag.session.user_role.toUpperCase() === "DEALER") {
+				tranType = "DEALER|UPDATED";
+			} else if(bag.session.user_role.toUpperCase() === "SERVICE_CENTER") {
+				tranType = "SERVICE_CENTER|UPDATED";
+			}
+			var _parts = "";
+			$(".part-un-selected").each(function(obj){
+				_parts +=","+ $(obj).attr("id");
+			});
+			
+			var obj = 	{
+							type: "updateVehicle",
+							vehicle: {
+								vehicleId: $("input[name='upVehicleId']").val(),
+								ttype: tranType,
+								owner: {name: $('#allCustomers').val(), email: '', phoneNumber: ''},
+								dealer: {name: user.username, email: '', phoneNumber: ''},
+								licensePlateNumber:  $("input[name='upLicensePlateNumber']").val(),
+								warrantyStartDate: $("input[name='upWarrantyStartDate']").val(),
+								warrantyEndDate: $("input[name='upWarrantyEndDate']").val(),
+								parts: _parts								
+							}
+						};
+			console.log('obj.part :'+obj.vehicle+' obj.part.partId:'+obj.vehicle.vehicleId);
+			if(obj.vehicle && obj.vehicle.vehicleId){
+					console.log('updating vehicle data, sending', obj);
+					ws.send(JSON.stringify(obj));
+					$(".panel").hide();
+					$('#batchTag').html('');
+					$('#spinner').show();
+					$('#tagWrapper').hide();
+					//$("#batchTagPanel").show();
+					$("input[name='PartIdToUpdate']").val('');
+					$("input[name='VehicleId']").val('');
+					$("input[name='DateOfDelivery']").val('');
+					$("input[name='DateOfInstallation']").val('');
+					$("input[name='WarrantyStartDate']").val('');
+					$("input[name='WarrantyEndDate']").val('');
+					console.log("update request sent");
+			}
+		}
+		return false;
+	});
+
 	$("#update").click(function(){
 		console.log("updating Part");
 		if(user.username){
@@ -319,6 +377,7 @@ function escapeHtml(str) {
 // =================================================================================
 function connect_to_server(){
 	var connected = false;
+	var selectedParts;
 	connect();
 
 	function connect(){
@@ -366,15 +425,48 @@ function connect_to_server(){
 				$('#spinner2').hide();
 				$('#openTrades').show();
 			}
+			else if(data.msg === 'allPartsForUpdateVehicle'){
+				console.log("---- allParts ---- ", data);
+				build_Parts(data.parts, null);
+				var str="<b>Add new Parts:</b></br>";
+				for(var i in data.parts){
+					str += "<span><input type='checkbox' id='"+ data.parts[i] +"' class='part-un-selected' />"+ data.parts[i] +"</span>"
+				}
+				$("#upParts").html(str);
+				console.log(str);
+			}
 			else if(data.msg === 'vehicle'){
 				console.log('onMessage vehicle:'+data.vehicle);
 				var txs = data.vehicle.vehicleTransactions;
 				var html = ''
 				$("#batchDetailsTable").show();
-				for(var i=0; i<txs.length; i++){
-					console.log("Trnsaction "+i+" "+txs[i]);
-					$("#bDetHeader").html("Chassis Number #" + data.vehicle.chassisNumber);
+				console.log("Trnsaction "+i+" "+txs[i]);
+				ws.send(JSON.stringify({type: "getAllPartsForUpdateVehicle", v: 2}));
+				$("#bDetHeader").html("Chassis Number #" + data.vehicle.chassisNumber +"<input type='button' onclick='$(\"#vehicleDetailsTable\").show();$(\"#batchDetailsTable\").hide();' style='margin-left:20px;' vehicleId='"+ data.vehicle.vehicleId +"' value='Edit' id='editVehicleDetails'/>");
+				selectedParts = data.vehicle.parts;
 
+				// show vehicle details
+				$("#vehicleDetailsTable").hide();
+				$("input[name='upVehicleId']").val(data.vehicle.vehicleId);
+				$("input[name='upMake']").val(data.vehicle.make);
+				$("input[name='upChassisNumber']").val(data.vehicle.chassisNumber);
+				$("input[name='upVin']").val(data.vehicle.vin);
+				$("input[name='upLicensePlateNumber']").val(data.vehicle.licensePlateNumber);
+				$("input[name='upWarrantyStartDate']").val(data.vehicle.warrantyStartDate);
+				$("input[name='upWarrantyEndDate']").val(data.vehicle.warrantyEndDate);
+				$("input[name='upDateOfManufacture']").val(data.vehicle.dateOfManufacture);
+				$("input[name='upDateofDelivery']").val(data.vehicle.dateofDelivery);
+				$("input[name='upDealer']").val(data.vehicle.dealer.name);
+				$('#allCustomers option[value="'+ data.vehicle.owner.name +'"]').attr('selected','selected');
+				// list parts
+				$("#selectedParts").append('<option id="0">Added Parts</option>')
+				for(var i in data.vehicle.parts){
+					$("#selectedParts").append('<option id="'+ data.vehicle.parts[i].partId +'">'+ data.vehicle.parts[i].partId +'</option>')
+				}
+				
+
+				for(var i=0; i<txs.length; i++){
+					
 					if(txs[i].ttype == "CREATE"){
 			          //litem = {avatar:"ion-ios-box-outline", date: tx.vDate, location: tx.location, desc:"ADDED BY ", owner:tx.owner};
 				        html += '<tr>';

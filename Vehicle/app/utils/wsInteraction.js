@@ -23,12 +23,18 @@ module.exports.process_msg = function(ws, data, owner){
 	}
 	else if(data.type == "getAllVehicles"){
 		console.log("Get All Vehicles", owner);
-		chaincode.query.getAllVehicles([owner], cb_got_allvehicles);
+		chaincode.query.getAllVehicles([""], cb_got_allvehicles);
 	}
 	else if(data.type == "createVehicle"){
 		console.log("Create Vehicle ", data, owner);
 		if(data.vehicle){			
 			chaincode.invoke.createVehicle([data.vehicle.make, data.vehicle.chassisNumber, data.vehicle.vin, owner], cb_invoked_createVehicle);				//create a new Vehicle
+		}
+	}
+	else if(data.type == "updateVehicle"){
+		console.log("Update Vehicle ", data, owner);
+		if(data.vehicle){			
+			chaincode.invoke.updateVehicle([data.vehicle.vehicleId, data.vehicle.ttype, data.vehicle.owner.name, data.vehicle.owner.phoneNumber, data.vehicle.owner.email, data.vehicle.dealer.name, data.vehicle.dealer.phoneNumber, data.vehicle.dealer.email, data.vehicle.licensePlateNumber, data.vehicle.dateofDelivery, data.vehicle.warrantyStartDate, data.vehicle.warrantyEndDate, owner, data.vehicle.parts], cb_invoked_updateVehicle);				//update vehicle
 		}
 	}
 	else if(data.type == "createPart"){
@@ -50,7 +56,11 @@ module.exports.process_msg = function(ws, data, owner){
 	}
 	else if(data.type == "getAllParts"){
 		console.log("Get All Parts", owner);
-		chaincode.query.getAllParts([owner], cb_got_allparts);
+		chaincode.query.getAllParts([""], cb_got_allparts);
+	}
+	else if(data.type == "getAllPartsForUpdateVehicle"){
+		console.log("Get All Parts", owner);
+		chaincode.query.getAllParts([""], cb_got_allpartsForUpdateVehicle);
 	}
 	
 	function cb_got_part(e, part){
@@ -68,6 +78,15 @@ module.exports.process_msg = function(ws, data, owner){
 		}
 		else{
 			sendMsg({msg: "allParts", parts: JSON.parse(allParts).parts});
+		}
+	}
+
+	function cb_got_allpartsForUpdateVehicle(e, allParts){
+		if(e != null){
+			console.log("Get All Parts error", e);
+		}
+		else{
+			sendMsg({msg: "allPartsForUpdateVehicle", parts: JSON.parse(allParts).parts});
 		}
 	}
 	
@@ -97,6 +116,17 @@ module.exports.process_msg = function(ws, data, owner){
 		else{
 			console.log("Vehicle ID #" + data.vehicle.chassisNumber)
 			sendMsg({msg: "vehicleCreated", chassisNumber: data.vehicle.chassisNumber});
+		}
+	}
+
+	function cb_invoked_updateVehicle(e, a){
+		console.log("response: ", e, a);
+		if(e != null){
+			console.log("Invoked update vehicle error", e);
+		}
+		else{
+			console.log("Vehicle ID #" + data.vehicle.chassisNumber)
+			sendMsg({msg: "vehicleUpdated", chassisNumber: data.vehicle.chassisNumber});
 		}
 	}
 
