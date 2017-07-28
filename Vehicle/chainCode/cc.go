@@ -245,7 +245,7 @@ func (t *SimpleChaincode) getVehicle(stub  shim.ChaincodeStubInterface, vehicleI
 
 
 // ============================================================================================================================
-// Get All Parts
+// Get All Vehicles
 // ============================================================================================================================
 func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user string)([]byte, error){
 
@@ -276,9 +276,16 @@ func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user
 		}
 		var sb Vehicle
 		json.Unmarshal(sbAsBytes, &sb)
-
-		// currently we show all parts to the users
-		rab.Vehicles = append(rab.Vehicles,sb.VehicleId +"-"+ sb.ChassisNumber);
+		
+		if user != null && user != "" {
+			// return only customer vehicles
+			if sb.Owner != null && sb.Owner.Name == user {
+				rab.Vehicles = append(rab.Vehicles, sb.VehicleId +"-"+ sb.ChassisNumber);
+			}
+		} else if user == "" {
+			// return all vehicles
+			rab.Vehicles = append(rab.Vehicles, sb.VehicleId +"-"+ sb.ChassisNumber);
+		}
 	}
 
 	rabAsBytes, _ := json.Marshal(rab)
