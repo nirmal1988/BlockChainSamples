@@ -31,6 +31,14 @@ module.exports.process_msg = function(ws, data, owner){
 			chaincode.invoke.createVehicle([data.vehicle.make, data.vehicle.chassisNumber, data.vehicle.vin, owner], cb_invoked_createVehicle);				//create a new Vehicle
 		}
 	}
+	else if(data.type == "customerVehicle"){
+		console.log("Get Customer Vehicle", owner);
+		chaincode.query.getAllVehicles([""], cb_got_customerVehicle);
+	}
+	else if(data.type == "getCustomerVehicleDetails"){
+		console.log("------ Get Customer Vehicle Details", data.vehicleId);
+		chaincode.query.getVehicle([data.vehicleId], cb_got_customerVehicleDetails);
+	}
 	else if(data.type == "updateVehicle"){
 		console.log("Update Vehicle ", data, owner);
 		if(data.vehicle){			
@@ -99,6 +107,16 @@ module.exports.process_msg = function(ws, data, owner){
 		}
 	}
 
+	function cb_got_customerVehicleDetails(e, vehicle){
+		console.log("--------------- cb_got_customerVehicleDetails");
+		if(e != null){
+			console.log("Get Vehicle error", e);
+		}
+		else{
+			sendMsg({msg: "customerVehicleDetails", vehicle: JSON.parse(vehicle)});
+		}
+	}	
+
 	function cb_got_allvehicles(e, allVehicles){
 		if(e != null){
 			console.log("Get All Vehicles error", e);
@@ -116,6 +134,17 @@ module.exports.process_msg = function(ws, data, owner){
 		else{
 			console.log("Vehicle ID #" + data.vehicle.chassisNumber)
 			sendMsg({msg: "vehicleCreated", chassisNumber: data.vehicle.chassisNumber});
+		}
+	}
+
+	function cb_got_customerVehicle(e, customerVehicle){
+		console.log("---------------- cb_got_customerVehicle");
+		if(e != null){
+			console.log("Get Customer Vehicle error", e);
+		}
+		else{
+			console.log(JSON.parse(customerVehicle).vehicles);
+			sendMsg({msg: "customerVehicle", vehicles: JSON.parse(customerVehicle).vehicles});
 		}
 	}
 

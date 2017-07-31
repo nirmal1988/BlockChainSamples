@@ -400,6 +400,7 @@ function connect_to_server(){
 			$('#openTrades').hide();
 			ws.send(JSON.stringify({type: "getAllVehicles", v: 2}));
 			ws.send(JSON.stringify({type: "getAllParts", v: 2}));
+			ws.send(JSON.stringify({type: "customerVehicle", v: 2}));
 		}
 
 	}
@@ -424,6 +425,36 @@ function connect_to_server(){
 				build_Parts(data.parts, null);
 				$('#spinner2').hide();
 				$('#openTrades').show();
+			}
+			else if(data.msg === 'customerVehicle'){
+				console.log("-----onMessage customerVehicle----", data);
+				//build_Vehicles(data.vehicles, null);
+				
+				console.log("First data from Vehicle List:  ", data.vehicles[0]);
+				firstVehicleId = data.vehicles[0].split("-")[0];
+				
+				ws.send(JSON.stringify({type: "getCustomerVehicleDetails", vehicleId: firstVehicleId}));
+
+				$('#spinner2').hide();
+				$('#openTrades').show();	
+			}	
+			
+			else if(data.msg === 'customerVehicleDetails'){
+				console.log('----- onMessage customerVehicleDetails:', data.vehicle);
+
+				$("#customerVehicleDetailsTable").show();
+				$("input[name='upVehicleId']").val(data.vehicle.vehicleId);
+				$("input[name='upMake']").val(data.vehicle.make);
+				$("input[name='upChassisNumber']").val(data.vehicle.chassisNumber);
+				$("input[name='upVin']").val(data.vehicle.vin);
+				$("input[name='upVehicleOwner']").val(data.vehicle.owner.name);
+				$("input[name='upLicensePlateNumber']").val(data.vehicle.licensePlateNumber);
+				$("input[name='upWarrantyStartDate']").val(data.vehicle.warrantyStartDate);
+				$("input[name='upWarrantyEndDate']").val(data.vehicle.warrantyEndDate);
+				$("input[name='upDateOfManufacture']").val(data.vehicle.dateOfManufacture);
+				$("input[name='upDateofDelivery']").val(data.vehicle.dateofDelivery);
+				$("input[name='upDealer']").val(data.vehicle.dealer.name);
+				
 			}
 			else if(data.msg === 'allPartsForUpdateVehicle'){
 				console.log("---- allParts ---- ", data);

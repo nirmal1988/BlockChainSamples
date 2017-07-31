@@ -53,6 +53,10 @@ router.route("/vehicle").get(function(req, res){
 	check_login(res, req);
 	res.render("vehicle", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
 });
+router.route("/customerVehicle").get(function(req, res){
+	check_login(res, req);
+	res.render("customerVehicle", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
+});
 
 router.route("/getPart").post(function(req, res){
 
