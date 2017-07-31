@@ -314,7 +314,18 @@ func (t *SimpleChaincode) createVehicle(stub  shim.ChaincodeStubInterface, args 
 	bt.ChassisNumber = args[1]
 	bt.Vin = args[2]
 	bt.DateOfManufacture = time.Now().Local().String()
-
+	
+	var own Owner
+	own.Name = ""
+	own.PhoneNumber = ""
+	own.Email = ""
+	var del Dealer
+	del.Name = ""
+	del.PhoneNumber = ""
+	del.Email = ""
+	bt.Owner = own
+	bt.Dealer = del
+	
 	var tx VehicleTransaction 	
 	tx.TType 			= "CREATE"
 	tx.UpdatedBy 			= args[3]
@@ -371,11 +382,8 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 
 	var updateStr string
 	var own Owner
-	if bch.Owner != nil && bch.Owner.Name 	!= args[2] {
+	if bch.Owner.Name != args[2] {
 		bch.Owner.Name 	= args[2]		
-	} else if bch.Owner == nil && args[2] != "" {
-		own.Name =  args[2]
-		bch.Owner = own		
 	} 	
 	
 	var del Dealer
