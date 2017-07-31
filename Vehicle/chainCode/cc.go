@@ -5,7 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"time"		
-	"crypto/rand"		
+	"crypto/rand"	
+	"strings"	
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
@@ -402,22 +403,22 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 	
 	if bch.LicensePlateNumber != args[8] {
 		bch.LicensePlateNumber=  args[8]
-		updateStr += ",License Plate Number"+ args[8]
+		updateStr += ",License Plate Number to "+ args[8]
 	}
 
 	if bch.DateofDelivery != args[9] {
 		bch.DateofDelivery =  args[9]
-		updateStr += ",Date of Delivery"+ args[9]
+		updateStr += ",Date of Delivery to "+ args[9]
 	}
 
 	if bch.WarrantyStartDate != args[10] {
 		bch.WarrantyStartDate =  args[10]
-		updateStr += ",Warranty Start Date"+ args[10]
+		updateStr += ",Warranty Start Date to "+ args[10]
 	}
 
 	if bch.WarrantyEndDate != args[11] {
 		bch.WarrantyEndDate =  args[11]
-		updateStr += ",Warranty End Date"+ args[11]
+		updateStr += ",Warranty End Date to "+ args[11]
 	}	
 	
 	var tx VehicleTransaction 
@@ -427,6 +428,12 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 	tx.UpdatedBy   	= args[12]
 	tx.UpdatedOn   	= time.Now().Local().String()
 	
+	//parts-13
+	p := strings.Split(args[13], ",")
+	var pr Part
+	var prFound string
+	updateStr += ",Parts: "
+		
 	tx.TType 	= args[1] +" |"+ updateStr
 	bch.VehicleTransactions = append(bch.VehicleTransactions, tx)
 
