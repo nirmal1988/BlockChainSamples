@@ -380,8 +380,7 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 		return nil, errors.New("Failed to Unmarshal Vehicle #" + args[0])
 	}	
 
-	var updateStr string
-	var own Owner
+	var updateStr string	
 	if bch.Owner.Name != args[2] {
 		bch.Owner.Name 	= args[2]		
 	} 	
