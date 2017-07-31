@@ -357,9 +357,9 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 	var err error
 	fmt.Println("Running updateVehicle")
 
-	if len(args) != 12 {
+	if len(args) != 14 {
 		fmt.Println("Incorrect number of arguments. Expecting owener name, owner phoneNumber, owner email, dealer name, dealer phoneNumber, dealer email, lpn, date of delivery, warranty start date, warranty end date, updated by")
-		return nil, errors.New("Incorrect number of arguments. Expecting 8")
+		return nil, errors.New("Incorrect number of arguments. Expecting 4")
 	}
 	fmt.Println("Arguments :"+args[0]+","+args[1]+","+args[2]+","+args[3]+","+args[4]+","+args[5]+","+args[6]+","+args[7]);
 
