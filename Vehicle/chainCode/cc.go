@@ -433,7 +433,25 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 	var pr Part
 	var prFound string
 	updateStr += ",Parts: "
-		
+	for i := range p {
+		c := strings.Split(p[i], "-")
+		pr.PartId = c[0]
+		pr.ProductCode = c[1]
+
+		//for j := range bch.Parts {
+		//	if bch.Parts[j].PartId == pr.PartId {
+		//		prFound = "Y"
+		//	}
+		//}
+
+		if prFound == "Y" {
+			updateStr += "~Updated  Part #"+ pr.PartId			
+		} else{
+			updateStr += "~Added  Part #"+ pr.PartId			
+		}
+		bch.Parts = append(bch.Parts, pr)
+	}
+	
 	tx.TType 	= args[1] +" |"+ updateStr
 	bch.VehicleTransactions = append(bch.VehicleTransactions, tx)
 
