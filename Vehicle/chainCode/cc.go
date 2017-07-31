@@ -369,6 +369,12 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 		return nil, errors.New("Failed to Unmarshal Vehicle #" + args[0])
 	}	
 	
+	var del Dealer
+	del.Name 	= args[5]
+	del.PhoneNumber 	= args[6]
+	del.Email 	= args[7]	
+	bch.Dealer = del
+	
 	var tx VehicleTransaction 
 	tx.TType 	= args[1]
 	tx.WarrantyStartDate	= args[10]
