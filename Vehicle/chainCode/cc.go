@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"		
 	"crypto/rand"	
+	"strings"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
