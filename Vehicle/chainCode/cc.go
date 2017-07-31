@@ -357,10 +357,6 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 	var err error
 	fmt.Println("Running updateVehicle")
 
-	if len(args) != 14 {
-		fmt.Println("Incorrect number of arguments. Expecting owener name, owner phoneNumber, owner email, dealer name, dealer phoneNumber, dealer email, lpn, date of delivery, warranty start date, warranty end date, updated by")
-		return nil, errors.New("Incorrect number of arguments. Expecting 4")
-	}
 	fmt.Println("Arguments :"+args[0]+","+args[1]+","+args[2]+","+args[3]+","+args[4]+","+args[5]+","+args[6]+","+args[7]);
 
 	//Get and Update Part data
@@ -374,77 +370,19 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 		return nil, errors.New("Failed to Unmarshal Vehicle #" + args[0])
 	}
 	
-	var updateStr string
-	if bch.Owner.Name 	!= args[2] {
-		bch.Owner.Name 	= args[2]
-		updateStr += ",Owner Name to "+ args[2]
-	}
-
-	if bch.Owner.PhoneNumber != args[3] {
-		bch.Owner.PhoneNumber 	= args[3]
-		updateStr += ",Owner Phone to "+ args[3]
-	}
-
-	if bch.Owner.Email != args[4] {
-		bch.Owner.Email 	= args[4]
-		updateStr += ",Owner Email to "+ args[4]
-	}
 	
 	bch.Dealer.Name 	= args[5]
 	bch.Dealer.PhoneNumber 	= args[6]
 	bch.Dealer.Email 	= args[7]
 
-	if bch.LicensePlateNumber != args[8] {
-		bch.LicensePlateNumber=  args[8]
-		updateStr += ",License Plate Number"+ args[8]
-	}
-
-	if bch.DateofDelivery != args[9] {
-		bch.DateofDelivery =  args[9]
-		updateStr += ",Date of Delivery"+ args[9]
-	}
-
-	if bch.WarrantyStartDate != args[10] {
-		bch.WarrantyStartDate =  args[10]
-		updateStr += ",Warranty Start Date"+ args[10]
-	}
-
-	if bch.WarrantyEndDate != args[11] {
-		bch.WarrantyEndDate =  args[11]
-		updateStr += ",Warranty End Date"+ args[11]
-	}	
 	
 	var tx VehicleTransaction 
-	tx.TType 	= args[1] +"|"+ updateStr;
+	tx.TType 	= args[1]
 	tx.WarrantyStartDate	= args[10]
 	tx.WarrantyEndDate	= args[11]
 		
 	tx.UpdatedBy   	= args[12]
 	tx.UpdatedOn   	= time.Now().Local().String()
-
-	//parts-13
-	p := strings.Split(args[13], ",")
-	var pr Part
-	var prFound string
-	updateStr += ",Parts: "
-	for i := range p {
-		c := strings.Split(p[i], "-")
-		pr.PartId = c[0]
-		pr.ProductCode = c[1]
-
-		for j := range bch.Parts {
-			if bch.Parts[j].PartId == pr.PartId {
-				prFound = "Y"
-			}
-		}
-
-		if prFound == "Y" {
-			updateStr += "~Updated  Part #"+ pr.PartId			
-		} else{
-			updateStr += "~Added  Part #"+ pr.PartId			
-		}
-		bch.Parts = append(bch.Parts, pr)
-	}
 	
 	bch.VehicleTransactions = append(bch.VehicleTransactions, tx)
 
