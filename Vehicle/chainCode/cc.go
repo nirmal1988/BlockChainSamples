@@ -23,7 +23,7 @@ type Vehicle struct {
 	DateOfManufacture 		string  `json:"dateOfManufacture"`	
 	Owner Owner `json:"owner"`
 	Dealer Dealer `json:"dealer"`
-	LicensePlateNumber 		string  `json:"registrationNumber"`
+	LicensePlateNumber 		string  `json:"licensePlateNumber"`
 	WarrantyStartDate 		string  `json:"warrantyStartDate"`	
 	WarrantyEndDate 		string  `json:"warrantyEndDate"`	
 	DateofDelivery 		string  `json:"dateofDelivery"`
@@ -377,7 +377,7 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 	
 	bch.WarrantyStartDate	= args[10]
 	bch.WarrantyEndDate	= args[11]
-	bch.RegistrationNumber	= args[8]	
+	bch.LicensePlateNumber	= args[8]	
 	
 	var tx VehicleTransaction 
 	tx.TType 	= args[1]
