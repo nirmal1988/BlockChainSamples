@@ -5,8 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"time"		
-	"crypto/rand"
-	"strings"
+	"crypto/rand"	
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
