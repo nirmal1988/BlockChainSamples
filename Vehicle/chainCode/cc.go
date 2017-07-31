@@ -380,22 +380,48 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 		return nil, errors.New("Failed to Unmarshal Vehicle #" + args[0])
 	}	
 	
-	if bch.Owner.Name != args[2] {
-		bch.Owner.Name 	= args[2]		
-	} 	
+	var updateStr string
+	if bch.Owner.Name 	!= args[2] {
+		bch.Owner.Name 	= args[2]
+		updateStr += ",Owner Name to "+ args[2]
+	}
+
+	if bch.Owner.PhoneNumber != args[3] {
+		bch.Owner.PhoneNumber 	= args[3]
+		updateStr += ",Owner Phone to "+ args[3]
+	}
+
+	if bch.Owner.Email != args[4] {
+		bch.Owner.Email 	= args[4]
+		updateStr += ",Owner Email to "+ args[4]
+	}
 	
-	var del Dealer
-	del.Name 	= args[5]
-	del.PhoneNumber 	= args[6]
-	del.Email 	= args[7]	
-	bch.Dealer = del
+	bch.Dealer.Name 	= args[5]
+	bch.Dealer.PhoneNumber 	= args[6]
+	bch.Dealer.Email 	= args[7]
 	
-	bch.WarrantyStartDate	= args[10]
-	bch.WarrantyEndDate	= args[11]
-	bch.LicensePlateNumber	= args[8]	
+	if bch.LicensePlateNumber != args[8] {
+		bch.LicensePlateNumber=  args[8]
+		updateStr += ",License Plate Number"+ args[8]
+	}
+
+	if bch.DateofDelivery != args[9] {
+		bch.DateofDelivery =  args[9]
+		updateStr += ",Date of Delivery"+ args[9]
+	}
+
+	if bch.WarrantyStartDate != args[10] {
+		bch.WarrantyStartDate =  args[10]
+		updateStr += ",Warranty Start Date"+ args[10]
+	}
+
+	if bch.WarrantyEndDate != args[11] {
+		bch.WarrantyEndDate =  args[11]
+		updateStr += ",Warranty End Date"+ args[11]
+	}	
 	
 	var tx VehicleTransaction 
-	tx.TType 	= args[1]
+	tx.TType 	= args[1] +"|"+ updateStr
 	tx.WarrantyStartDate	= args[10]
 	tx.WarrantyEndDate	= args[11]
 		
