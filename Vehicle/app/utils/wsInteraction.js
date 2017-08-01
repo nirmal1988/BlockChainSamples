@@ -51,7 +51,8 @@ module.exports.process_msg = function(ws, data, owner){
 				data.vehicle.warrantyStartDate, 
 				data.vehicle.warrantyEndDate, 
 				owner, 
-				data.vehicle.parts], cb_invoked_updateVehicle);				//update vehicle
+				data.vehicle.parts], cb_invoked_updateVehicle);				
+				//update vehicle
 		}
 	}
 	else if(data.type == "createPart"){

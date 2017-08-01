@@ -227,6 +227,7 @@ $(document).on('ready', function() {
 		return false;
 	});
 
+	
 	$("#update").click(function(){
 		console.log("updating Part");
 		if(user.username){

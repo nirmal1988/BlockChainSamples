@@ -7,4 +7,5 @@
 	{"username":"MMW","password":"passw0rd","role":"SERVICE_CENTER"},
 	{"username":"CUS1","password":"passw0rd","role":"CUSTOMER"},
 	{"username":"CUS2","password":"passw0rd","role":"CUSTOMER"}
+	
 ]

@@ -455,6 +455,7 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 	}
 	
 	tx.TType 	= args[1]
+	// saving update string
 	TValue = updateStr
 	bch.VehicleTransactions = append(bch.VehicleTransactions, tx)
 
