@@ -129,7 +129,7 @@ func (t *SimpleChaincode) Run(stub  shim.ChaincodeStubInterface, function string
 func (t *SimpleChaincode) Invoke(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("Invoke is running " + function)
 
-	// Handle different functions
+	// Handle different function
 	if function == "init" {					//initialize the chaincode state
 		return t.Init(stub, "init", args)
 	} else if function == "createVehicle" {			//create a vehicle

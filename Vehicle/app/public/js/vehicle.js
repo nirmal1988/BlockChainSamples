@@ -589,7 +589,6 @@ function connect_to_server(){
 								}
 							}
 						});
-
 			        	html += '<tr>';
 						html +=	'<td>';
 						html +=	'<div style="font-size: 34px;color:#5596E6;float:right;"><i class="ion-ios-barcode-outline"></i></div>';

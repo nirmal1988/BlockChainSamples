@@ -161,7 +161,7 @@ module.exports.process_msg = function(ws, data, owner){
 	function cb_invoked_updateVehicle(e, a){
 		console.log("response: ", e, a);
 		if(e != null){
-			console.log("Invoked update vehicle error", e);
+			console.log("Invoked update vehicle error ", e);
 		}
 		else{
 			console.log("Vehicle ID #" + data.vehicle.chassisNumber)
