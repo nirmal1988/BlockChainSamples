@@ -11,7 +11,7 @@
 var ws = {};
 var user = {username: bag.session.username};
 var valid_users = ["SKF", "BOSCH", "STAHLGRUBER", "MMW"];
-var valid_customers = ["CUST1", "CUST2"];
+var valid_customers = ["CUST1", "CUST2", "CUST3", "CUST4", "CUST5", "CUST6", "CUST7", "CUST8", "CUST9", "CUST10"];
 var allChassisNumbers = [];
 var panels = [
 	{
@@ -52,13 +52,13 @@ $(document).on('ready', function() {
 			$("#newVehicle").show();
 			$("#updateVehicle").show();
 			$("#newPartLink").show();
-			$("#updatePartLink").show();
+			$("#updatePartLink").hide();
 			$("#dashboardLink").show();
 			
 			
 			$("#dashboardLink").show();
 			$("#dashboardPanel").show();
-			
+			$("#createNewVehicle").show();
 			$("#batchDetailsTable").hide();			
 		 }
 		else if(bag.session.user_role && bag.session.user_role.toUpperCase() === "DEALER") {
@@ -67,7 +67,7 @@ $(document).on('ready', function() {
 			$("#newVehiclePanel").hide();
 			
 			$("#newPartLink").hide();
-			$("#updatePartLink").hide();			
+			$("#updatePartLink").show();			
 			
 			
 			$("#dashboardLink").show();
@@ -76,7 +76,8 @@ $(document).on('ready', function() {
 			$("#batchDetailsTable").hide();	
 		}
 		else if (user.username==="SERVICE_CENTER" || bag.session.user_role.toUpperCase() === "SERVICE_CENTER"){
-			$("#createVehicleTable").show();
+			$("#createVehicleTable").hide();
+			$('#vehicleDashboardPanel').show();
 			$("#newVehiclePanel").show();
 			$("#vehicles").show();
 			$("#newVehicle").show();
@@ -84,15 +85,31 @@ $(document).on('ready', function() {
 			$("#newPartLink").show();
 			$("#updatePartLink").show();
 			$("#dashboardLink").show();
-			
+			$("#newPartLink").hide();
+			$("#updatePartLink").hide();			
 			
 			$("#dashboardLink").show();
 			$("#dashboardPanel").show();
 			
 			$("#batchDetailsTable").hide();			
 		 }
-		
-		
+		 else if(bag.session.user_role && bag.session.user_role.toUpperCase() === "CUSTOMER") {
+			$('#vehicleDashboardPanel').hide();
+			$("#createVehicleTable").hide();
+			$("#newVehiclePanel").hide();
+			
+			$("#newPartLink").hide();
+			$("#updatePartLink").hide();			
+			
+			
+			$("#dashboardLink").hide();
+			$("#dashboardPanel").hide();
+			
+			$("#batchDetailsTable").hide();	
+			$("#vehiclesnav").hide();	
+			$("#partsnav").hide();	
+			$("#customerVehicleLink").show();	
+		}		
 		else if(user.username) {
 			$("#newPartLink").show();
 			$("#newPartPanel").hide();
@@ -106,7 +123,7 @@ $(document).on('ready', function() {
 
 	$("#createNewVehicle").click(function(){
 		$("#vehicleList").show();
-		$("#createNewVehicle").hide();
+		//$("#createNewVehicle").hide();
 		$('#vehicleDashboardPanel').hide();
 		$("#createVehicleTable").show();
 		$("#newVehiclePanel").show();
@@ -131,6 +148,7 @@ $(document).on('ready', function() {
 			$("input[name='upWarrantyEndDate']").attr("disabled","disabled");
 			$("input[name='upDateofDelivery']").attr("disabled","disabled");
 			$("#upParts").hide();
+			$("#createNewVehicle").show();
 		}
 		else if(bag.session.user_role.toUpperCase() === "DEALER"){
 			$("#upParts").hide();
@@ -484,7 +502,7 @@ function connect_to_server(){
 				$("input[name='upLicensePlateNumber']").val(data.vehicle.licensePlateNumber);
 				$("input[name='upWarrantyStartDate']").val(data.vehicle.warrantyStartDate);
 				$("input[name='upWarrantyEndDate']").val(data.vehicle.warrantyEndDate);
-				$("input[name='upDateOfManufacture']").val(data.vehicle.dateOfManufacture);
+				$("input[name='upDateOfManufacture']").val(moment(data.vehicle.dateOfManufacture).format("YYYY-MM-DD"));				
 				$("input[name='upDateofDelivery']").val(data.vehicle.dateofDelivery);
 				$("input[name='upDealer']").val(data.vehicle.dealer.name);
 				

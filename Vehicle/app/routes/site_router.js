@@ -30,14 +30,14 @@ var creds	= require("../user_creds.json");
 // ============================================================================================================================
 router.route("/").get(function(req, res){
 	check_login(res, req);
-	res.render("part2", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
+	res.render("vehicle", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
 });
 
 router.route("/home").get(function(req, res){
 	check_login(res, req);
-	res.redirect("/dashboard");
+	res.render("vehicle", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
 });
-router.route("/newPart").get(function(req, res){
+router.route("/part").get(function(req, res){
 	check_login(res, req);
 	res.render("part2", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
 });
@@ -112,8 +112,13 @@ router.route("/:page").post(function(req, res){
 					console.log("user role not specified, assuming:", "user");
 					req.session.user_role = "user";
 				}
-
-				res.redirect("/newPart");
+				
+				if(req.session.user_role == "CUSTOMER"){
+					res.redirect("/customerVehicle");
+				}
+				else{
+					res.redirect("/vehicle");
+				}
 				
 				return;
 			}

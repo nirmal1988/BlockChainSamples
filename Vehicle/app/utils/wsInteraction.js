@@ -33,7 +33,7 @@ module.exports.process_msg = function(ws, data, owner){
 	}
 	else if(data.type == "customerVehicle"){
 		console.log("Get Customer Vehicle", owner);
-		chaincode.query.getAllVehicles([""], cb_got_customerVehicle);
+		chaincode.query.getAllVehicles([owner], cb_got_customerVehicle);
 	}
 	else if(data.type == "getCustomerVehicleDetails"){
 		console.log("------ Get Customer Vehicle Details", data.vehicleId);
@@ -132,7 +132,8 @@ module.exports.process_msg = function(ws, data, owner){
 			console.log("Get All Vehicles error", e);
 		}
 		else{
-			sendMsg({msg: "allVehicles", vehicles: JSON.parse(allVehicles).vehicles});
+			if(allVehicles)
+				sendMsg({msg: "allVehicles", vehicles: JSON.parse(allVehicles).vehicles});
 		}
 	}
 
@@ -153,8 +154,8 @@ module.exports.process_msg = function(ws, data, owner){
 			console.log("Get Customer Vehicle error", e);
 		}
 		else{
-			console.log(JSON.parse(customerVehicle).vehicles);
-			sendMsg({msg: "customerVehicle", vehicles: JSON.parse(customerVehicle).vehicles});
+			//console.log(JSON.parse(customerVehicle).vehicles);
+			//sendMsg({msg: "customerVehicle", vehicles: JSON.parse(customerVehicle).vehicles});
 		}
 	}
 

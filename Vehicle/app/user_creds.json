@@ -1,11 +1,26 @@
 [
 	{"username":"MFR","password":"passw0rd","role":"MANUFACTURER"},
 	{"username":"DEALER1","password":"passw0rd","role":"DEALER"},
-	{"username":"STAHLGRUBER","password":"passw0rd","role":"DEALER"},
-	{"username":"SKF","password":"passw0rd","role":"SUPPLIER"},
-	{"username":"BOSCH","password":"passw0rd","role":"SUPPLIER"},
+	{"username":"DEALER2","password":"passw0rd","role":"DEALER"},
+	{"username":"DEALER3","password":"passw0rd","role":"DEALER"},
+	{"username":"DEALER4","password":"passw0rd","role":"DEALER"},
+	{"username":"DEALER5","password":"passw0rd","role":"DEALER"},	
+	
 	{"username":"MMW","password":"passw0rd","role":"SERVICE_CENTER"},
 	{"username":"SC1","password":"passw0rd","role":"SERVICE_CENTER"},
-	{"username":"CUS1","password":"passw0rd","role":"CUSTOMER"},
-	{"username":"CUS2","password":"passw0rd","role":"CUSTOMER"}	
+	{"username":"SC2","password":"passw0rd","role":"SERVICE_CENTER"},
+	{"username":"SC3","password":"passw0rd","role":"SERVICE_CENTER"},
+	{"username":"SC4","password":"passw0rd","role":"SERVICE_CENTER"},
+	{"username":"SC5","password":"passw0rd","role":"SERVICE_CENTER"},
+
+	{"username":"CUST1","password":"passw0rd","role":"CUSTOMER"},
+	{"username":"CUST2","password":"passw0rd","role":"CUSTOMER"},
+	{"username":"CUST3","password":"passw0rd","role":"CUSTOMER"},
+	{"username":"CUST4","password":"passw0rd","role":"CUSTOMER"},
+	{"username":"CUST5","password":"passw0rd","role":"CUSTOMER"},
+	{"username":"CUST6","password":"passw0rd","role":"CUSTOMER"},
+	{"username":"CUST7","password":"passw0rd","role":"CUSTOMER"},
+	{"username":"CUST8","password":"passw0rd","role":"CUSTOMER"},
+	{"username":"CUST9","password":"passw0rd","role":"CUSTOMER"},
+	{"username":"CUST10","password":"passw0rd","role":"CUSTOMER"}
 ]
