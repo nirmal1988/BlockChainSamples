@@ -62,14 +62,18 @@ $(document).on('ready', function() {
 			$("#batchDetailsTable").hide();			
 		 }
 		else if(bag.session.user_role && bag.session.user_role.toUpperCase() === "DEALER") {
+			$('#vehicleDashboardPanel').show();
+			$("#createVehicleTable").hide();
+			$("#newVehiclePanel").hide();
+			
+			$("#newPartLink").hide();
+			$("#updatePartLink").hide();			
+			
+			
 			$("#dashboardLink").show();
 			$("#dashboardPanel").show();
-			$("#updatePartLink").show();
-			$("#newPartLink").hide();
-			$("#newPartPanel").hide();
-			$("#batchDetailsTable").hide();
 			
-
+			$("#batchDetailsTable").hide();	
 		}
 		else if (user.username==="SERVICE_CENTER" || bag.session.user_role.toUpperCase() === "SERVICE_CENTER"){
 			$("#createVehicleTable").show();
@@ -115,10 +119,34 @@ $(document).on('ready', function() {
 		$("#newVehiclePanel").hide();
 	});
 
-	function editVehicleDetails(){
+	$("#editVehicleDetails").click(function(){
 		$('#vehicleDetailsTable').show();
 		$('#batchDetailsTable').hide();
-	}
+
+		// show/hide panels as per the role
+		if(bag.session.user_role.toUpperCase() === "MANUFACTURER"){
+			$("#allCustomers").attr("disabled","disabled");
+			$("input[name='upLicensePlateNumber']").attr("disabled","disabled");
+			$("input[name='upWarrantyStartDate']").attr("disabled","disabled");
+			$("input[name='upWarrantyEndDate']").attr("disabled","disabled");
+			$("input[name='upDateofDelivery']").attr("disabled","disabled");
+			$("#upParts").hide();
+		}
+		else if(bag.session.user_role.toUpperCase() === "DEALER"){
+			$("#upParts").hide();
+			$("#createNewVehicle").hide();
+		}
+		else if(bag.session.user_role.toUpperCase() === "SERVICE_CENTER"){
+			$("#upParts").show();
+			$("#createNewVehicle").hide();
+			$("#allCustomers").attr("disabled","disabled");
+			$("input[name='upLicensePlateNumber']").attr("disabled","disabled");
+			$("input[name='upWarrantyStartDate']").attr("disabled","disabled");
+			$("input[name='upWarrantyEndDate']").attr("disabled","disabled");
+			$("input[name='upDateofDelivery']").attr("disabled","disabled");
+		}
+	});
+	
 	// =================================================================================
 	// jQuery UI Events
 	// =================================================================================
@@ -227,7 +255,7 @@ $(document).on('ready', function() {
 		return false;
 	});
 
-	
+
 	$("#update").click(function(){
 		console.log("updating Part");
 		if(user.username){
@@ -472,13 +500,13 @@ function connect_to_server(){
 				console.log(str);
 			}
 			else if(data.msg === 'vehicle'){
-				console.log('onMessage vehicle:'+data.vehicle);
+				console.log(data.vehicle);
 				var txs = data.vehicle.vehicleTransactions;
 				var html = ''
 				$("#batchDetailsTable").show();
 				console.log("Trnsaction "+i+" "+txs[i]);
 				ws.send(JSON.stringify({type: "getAllPartsForUpdateVehicle", v: 2}));
-				$("#bDetHeader").html("Chassis Number #" + data.vehicle.chassisNumber +"<input type='button' onclick='$(\"#vehicleDetailsTable\").show();$(\"#batchDetailsTable\").hide();' style='margin-left:20px;' vehicleId='"+ data.vehicle.vehicleId +"' value='Edit' id='editVehicleDetails'/>");
+				$("#bDetHeader").html("Chassis Number #" + data.vehicle.chassisNumber +"");
 				selectedParts = data.vehicle.parts;
 
 				// show vehicle details
@@ -507,9 +535,8 @@ function connect_to_server(){
 				$("#selectedParts").append('<option id="0">Added Parts</option>');
 				for(var i in data.vehicle.parts){
 					$("#selectedParts").append('<option id="'+ data.vehicle.parts[i].partId +'">'+ data.vehicle.parts[i].partId +'</option>')
-				}
+				}	
 				
-
 				for(var i=0; i<txs.length; i++){
 					
 					if(txs[i].ttype == "CREATE"){
@@ -522,6 +549,56 @@ function connect_to_server(){
 						html +=	'<div style="display: inline-block; vertical-align: middle;">';
 						html += '<p style="font-weight:500;">ADDED BY <span style="color:#5596E6">' + txs[i].updatedBy +'</span></p>';
 						html += '<p style="">on ' + moment(new Date(txs[i].updatedOn)).format('lll') +'</p>';
+						html +=	'</div>';
+						html += '</td>';
+						html += '</tr>';
+					}
+					else if(txs[i].ttype == "DEALER"){
+					  //litem = {avatar:"ion-ios-barcode-outline", date: data.batch.vDate, location: data.batch.location, desc:"PICKED UP BY ", owner:data.batch.owner};
+						var updateStr = "";
+						$(txs[i].tvalue.split(",")).each(function(){
+							if(this != ""){
+								updateStr += "<div style='margin-left:2px;padding: 3px;'>"+ this +"</div>";
+							}
+						});
+			        	html += '<tr>';
+						html +=	'<td>';
+						html +=	'<div style="font-size: 34px;color:#5596E6;float:right;"><i class="ion-ios-shuffle"></i></div>';
+						html += '</td>';
+						html += '<td style="text-align:left;padding-left:20px">';
+						html +=	'<div style="display: inline-block; vertical-align: middle;">';
+						html += '<p style="font-weight:500;">Added/Updated '+ updateStr +'&nbsp;By <span style="color:#5596E6">' + txs[i].updatedBy +'</span></p>';
+						html += '<p style="margin-left:4px;">on ' + moment(new Date(txs[i].updatedOn)).format('lll') +'</p>';
+						html +=	'</div>';
+						html += '</td>';
+						html += '</tr>';
+					}
+					else if(txs[i].ttype == "SERVICE_CENTER"){
+						var updateStr = "";
+						$(txs[i].tvalue.split(",")).each(function(){
+							if(this != ""){
+								if(this.indexOf("Parts:") > -1){
+									$(this.split("~")).each(function(){
+										if(this != ""){
+											updateStr += "<div style='margin-left:2px;padding: 3px;'>"+ this +"</div>";
+										}
+									});									
+								}
+								else{
+									updateStr += "<div style='margin-left:2px;padding: 3px;'>"+ this +"</div>";
+								}
+							}
+						});
+
+			        	html += '<tr>';
+						html +=	'<td>';
+						html +=	'<div style="font-size: 34px;color:#5596E6;float:right;"><i class="ion-ios-barcode-outline"></i></div>';
+						html += '</td>';
+						html += '<td style="text-align:left;padding-left:20px">';
+						html +=	'<div style="display: inline-block; vertical-align: middle;">';
+						html += '<p style="font-weight:500;">INSTALLED BY <span style="color:#5596E6">' + txs[i].updatedBy +'</span></p>';
+						html += '<p style="">' + updateStr +'</p>';
+						html += '<p style="margin-left:4px;">on ' + moment(new Date(txs[i].updatedOn)).format('lll') +'</p>';
 						html +=	'</div>';
 						html += '</td>';
 						html += '</tr>';
@@ -673,7 +750,7 @@ function connect_to_server(){
 		catch(e){
 			console.log('ERROR', e);
 			//ws.close();
-		}
+		}		
 	}
 
 	function onError(evt){

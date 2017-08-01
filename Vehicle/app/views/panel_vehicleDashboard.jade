@@ -30,7 +30,9 @@
 			table#batchDetailsTable.tablesorter(style="width:64%;float:right")
 				thead
 					tr 
-						th#bDetHeader(colspan="2" style="font-size: 12px;")
+						th(colspan="2" style="font-size: 12px;text-align: left;padding-left: 74px;")
+							div#bDetHeader(style="float:left;")
+							button(type="button" style="margin-left:20px;margin-top: -12px;" id="editVehicleDetails") Edit
 				tbody#vehiclesbatchDetailsBody
 			table#vehicleDetailsTable.tablesorter(style="width:64%;float:right;display:none;")
 				thead

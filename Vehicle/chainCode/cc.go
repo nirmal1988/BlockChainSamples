@@ -447,6 +447,7 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 
 			if prFound == "Y" {
 				updateStr += "~Updated  Part #"+ pr.PartId			
+				prFound = "N"
 			} else{
 				updateStr += "~Added  Part #"+ pr.PartId			
 			}
