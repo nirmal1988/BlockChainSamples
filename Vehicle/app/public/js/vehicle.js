@@ -96,11 +96,7 @@ $(document).on('ready', function() {
 			$("#updatePartLink").hide();
 			$("#dashboardPanel").show();
 			$("#updatePartPanel").hide();
-		}
-
-		$("#allCustomers").append('<option id=""></option>')
-		$("#allCustomers").append('<option id="'+ valid_customers[0] +'">'+ valid_customers[0] +'</option>')
-		$("#allCustomers").append('<option id="'+ valid_customers[1] +'">'+ valid_customers[1] +'</option>')
+		}		
 
 	}
 
@@ -178,15 +174,22 @@ $(document).on('ready', function() {
 	$("#updateVehicle").click(function(){
 		console.log("updating Vehicle");
 		if(user.username){
-			var tranType;
+			var tranType = "";
 			if(bag.session.user_role.toUpperCase() === "DEALER") {
-				tranType = "DEALER|UPDATED";
+				tranType = "DEALER";
 			} else if(bag.session.user_role.toUpperCase() === "SERVICE_CENTER") {
-				tranType = "SERVICE_CENTER|UPDATED";
+				tranType = "SERVICE_CENTER";
 			}
 			var _parts = "";
 			$(".part-un-selected").each(function(obj){
-				_parts +=","+ $(obj).attr("id");
+				if(_parts == ""){
+					if($(this).is(':checked'))
+						_parts = $(this).attr("id") +"-";
+				}
+				else{
+					if($(this).is(':checked'))
+						_parts += ","+ $(this).attr("id") +"-";
+				}
 			});
 			
 			var obj = 	{
@@ -199,6 +202,7 @@ $(document).on('ready', function() {
 								licensePlateNumber:  $("input[name='upLicensePlateNumber']").val(),
 								warrantyStartDate: $("input[name='upWarrantyStartDate']").val(),
 								warrantyEndDate: $("input[name='upWarrantyEndDate']").val(),
+								dateofDelivery: $("input[name='upDateofDelivery']").val(),
 								parts: _parts								
 							}
 						};
@@ -459,9 +463,9 @@ function connect_to_server(){
 			else if(data.msg === 'allPartsForUpdateVehicle'){
 				console.log("---- allParts ---- ", data);
 				build_Parts(data.parts, null);
-				var str="<b>Add new Parts:</b></br>";
+				var str="<b style='font-weight:bold;text-decoration:underline;'>Add new Parts:</b></br>";
 				for(var i in data.parts){
-					str += "<span><input type='checkbox' id='"+ data.parts[i] +"' class='part-un-selected' />"+ data.parts[i] +"</span>"
+					str += "<span style='float:left; width: 80px;'><input type='checkbox' id='"+ data.parts[i] +"' class='part-un-selected' />"+ data.parts[i] +"</span>"
 				}
 				$("#upParts").html(str);
 				console.log(str);
@@ -485,12 +489,21 @@ function connect_to_server(){
 				$("input[name='upLicensePlateNumber']").val(data.vehicle.licensePlateNumber);
 				$("input[name='upWarrantyStartDate']").val(data.vehicle.warrantyStartDate);
 				$("input[name='upWarrantyEndDate']").val(data.vehicle.warrantyEndDate);
-				$("input[name='upDateOfManufacture']").val(data.vehicle.dateOfManufacture);
+				$("input[name='upDateOfManufacture']").val(moment(data.vehicle.dateOfManufacture).format("YYYY-MM-DD"));
 				$("input[name='upDateofDelivery']").val(data.vehicle.dateofDelivery);
 				$("input[name='upDealer']").val(data.vehicle.dealer.name);
-				$('#allCustomers option[value="'+ data.vehicle.owner.name +'"]').attr('selected','selected');
+
+				$("#allCustomers").empty().append('<option id=""></option>')
+				for(var i in valid_customers){
+					var _selected = "";
+					if(data.vehicle.owner.name == valid_customers[i])
+						_selected = "selected";
+					$("#allCustomers").append('<option '+ _selected +' id="'+ valid_customers[i] +'">'+ valid_customers[i] +'</option>')
+				}
+				//$('#allCustomers option[value="'+ data.vehicle.owner.name +'"]').attr('selected','selected');
 				// list parts
-				$("#selectedParts").append('<option id="0">Added Parts</option>')
+				$("#selectedParts").empty();
+				$("#selectedParts").append('<option id="0">Added Parts</option>');
 				for(var i in data.vehicle.parts){
 					$("#selectedParts").append('<option id="'+ data.vehicle.parts[i].partId +'">'+ data.vehicle.parts[i].partId +'</option>')
 				}

@@ -42,7 +42,16 @@ module.exports.process_msg = function(ws, data, owner){
 	else if(data.type == "updateVehicle"){
 		console.log("Update Vehicle ", data, owner);
 		if(data.vehicle){			
-			chaincode.invoke.updateVehicle([data.vehicle.vehicleId, data.vehicle.ttype, data.vehicle.owner.name, data.vehicle.owner.phoneNumber, data.vehicle.owner.email, data.vehicle.dealer.name, data.vehicle.dealer.phoneNumber, data.vehicle.dealer.email, data.vehicle.licensePlateNumber, data.vehicle.dateofDelivery, data.vehicle.warrantyStartDate, data.vehicle.warrantyEndDate, owner, data.vehicle.parts], cb_invoked_updateVehicle);				//update vehicle
+			chaincode.invoke.updateVehicle([data.vehicle.vehicleId, 
+				data.vehicle.ttype, 
+				data.vehicle.owner.name, data.vehicle.owner.phoneNumber, data.vehicle.owner.email, 
+				data.vehicle.dealer.name, data.vehicle.dealer.phoneNumber, data.vehicle.dealer.email, 
+				data.vehicle.licensePlateNumber, 
+				data.vehicle.dateofDelivery, 
+				data.vehicle.warrantyStartDate, 
+				data.vehicle.warrantyEndDate, 
+				owner, 
+				data.vehicle.parts], cb_invoked_updateVehicle);				//update vehicle
 		}
 	}
 	else if(data.type == "createPart"){
