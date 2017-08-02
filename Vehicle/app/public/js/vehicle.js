@@ -165,6 +165,17 @@ $(document).on('ready', function() {
 		}
 	});
 	
+	$("#dashboard_Vin").keyup(function(){
+		$("#vehicledashboardBody").find("tr").each(function(r){
+			if($($(this).find("td")[1]).html().indexOf($("#dashboard_Vin").val().toUpperCase()) > -1){
+				$(this).show();
+			}
+			else{
+				$(this).hide();
+			}
+		});
+	});
+
 	// =================================================================================
 	// jQuery UI Events
 	// =================================================================================
@@ -273,6 +284,42 @@ $(document).on('ready', function() {
 		return false;
 	});
 
+	$("#submit").click(function(){
+		console.log("submitting createPart Form");
+		if(user.username){
+			var obj = 	{
+							type: "createPart",
+							part: {
+								partId: $("input[name='PartId']").val(),
+								productCode: $("input[name='ProductCode']").val(),
+								dateOfManufacture: $("input[name='DateOfManufacture']").val()
+							}
+						};
+
+			if(obj.part && obj.part.partId){
+				var exists = $.inArray(obj.part.partId, allParts);
+				if(exists == -1) {
+					console.log('creating part, sending', obj);
+					ws.send(JSON.stringify(obj));
+					$(".panel").hide();
+					$('#batchTag').html('');
+					$('#spinner').show();
+					$('#tagWrapper').hide();
+					//$("#batchTagPanel").show();
+					$("input[name='PartId']").val('');
+					$("input[name='ProductCode']").val(''),
+					$("input[name='DateOfManufacture']").val('')
+					//$("#submit").prop('disabled', true);
+				} else {
+					//alert('Part with id '+obj.part.partId+' already exists.');
+					$("#errorName").html("Error");
+					$("#errorNoticeText").html('Part with id '+obj.part.partId+' already exists.');
+					$("#errorNotificationPanel").fadeIn();
+				}
+			}
+		}
+		return false;
+	});
 
 	$("#update").click(function(){
 		console.log("updating Part");
@@ -432,7 +479,13 @@ function connect_to_server(){
 	connect();
 
 	function connect(){
-		var wsUri = "ws://" + bag.setup.SERVER.EXTURI;
+		var wsUri = "";
+		if(bag.setup.SERVER.EXTURI.indexOf("localhost") > -1){
+			wsUri = "ws://" + bag.setup.SERVER.EXTURI;
+		}
+		else{
+			wsUri = "wss://" + bag.setup.SERVER.EXTURI;
+		}
 		ws = new WebSocket(wsUri);
 		ws.onopen = function(evt) { onOpen(evt); };
 		ws.onclose = function(evt) { onClose(evt); };

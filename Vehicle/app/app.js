@@ -42,6 +42,8 @@ var sessionStore = new session.MemoryStore();
 var host = setup.SERVER.HOST;
 var port = setup.SERVER.PORT;
 
+console.log("app running on "+ host + "----"+ port);
+
 ////////  Pathing and Module Setup  ////////
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
@@ -51,7 +53,7 @@ app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded()); 
 app.use(parseCookie);
-app.use("/cc/summary", serve_static(path.join(__dirname, "cc_summaries")) );												//for chaincode investigator
+app.use("/cc/summary", serve_static(path.join(__dirname, "cc_summaries")) );												//for chaincode_parts investigator
 app.use( serve_static(path.join(__dirname, "public"), {maxAge: "1d", setHeaders: setCustomCC}) );							//1 day cache
 //app.use( serve_static(path.join(__dirname, 'public')) );
 app.use(session({secret:"Somethignsomething1234!test", resave:true, saveUninitialized:true, store: sessionStore}));
@@ -294,3 +296,131 @@ function cb_deployed(e, d){
 		});
 	}
 }
+
+
+/*
+// ==================================
+// configure ibm-blockchain-js sdk for Parts chain(side chain)
+// ==================================
+var ibc_parts = new Ibc1();
+
+var manual_parts = JSON.parse(fs.readFileSync(__dirname + "/data_parts.json", "utf8"));
+
+
+var peers_parts = manual_parts.credentials.peers;
+
+var users_parts = manual_parts.credentials.users;																		//users are only found if security is on
+
+var options_parts = JSON.parse(fs.readFileSync(__dirname + "/options_parts.json", "utf8"));
+options_parts.network.peers = peers_parts;
+options_parts.network.users = users_parts;
+
+ibc_parts.switchPeer(0);
+ibc_parts.load(options_parts, function(err,data){
+
+	if(err){
+		console.log("Error : ", err);
+	}else{
+		data.details.deployed_name = options_parts.chaincode.deployed_name;
+		cb_ready_parts(err,data);
+	}
+});																//parse/load chaincode
+
+var chaincode_parts = {};
+
+function cb_ready_parts(err, cc){																	//response has chaincode functions
+	if(err){
+		console.log("! looks like an error loading the chaincode, app will fail\n", err);
+		if(!process.error) process.error = {type: "load", msg: err.details};				//if it already exist, keep the last error
+	}
+	else{
+		chaincode_parts = cc;
+		console.log(chaincode_parts);
+		wsInteraction.setupParts(ibc_parts, cc);
+		router.setupParts(ibc_parts, cc);
+		
+		console.log("cc.details.deployed_name"+ cc.details.deployed_name);
+
+		if(!cc.details.deployed_name || cc.details.deployed_name === ""){												//decide if i need to deploy
+			cc.deploy("init", [], {save_path: "./cc_summaries", delay_ms: 60000}, cb_deployed_parts);
+		}
+		else{
+			console.log("chaincode_parts summary file indicates chaincode_parts has been previously deployed");
+			cb_deployed_parts();
+		}
+	}
+}
+
+//////app.use("/", router);
+// ============================================================================================================================
+// 												WebSocket Communication Madness
+// ============================================================================================================================
+function cb_deployed_parts(e, d){
+	if(e != null){
+		console.log("! looks like a deploy error, holding off on the starting the socket\n", e);
+		if(!process.error) process.error = {type: "deploy", msg: e.details};
+	}
+	else{
+		console.log("------------------------------------------ Websocket Up ------------------------------------------");
+		//ibc_parts.save(__dirname + "/cc_summaries");															//save it here for chaincode_parts investigator
+		
+		var wss = new ws.Server({server : server});												//start the websocket now
+		
+		//var wss = new ws.Server({ port: 80 });
+						
+		wss.on("connection", function connection(ws) {
+			ws.on("message", function incoming(message) {
+				console.log("received ws msg:", message);
+				var data = JSON.parse(message);
+				//var finInst = null
+				parseCookie(ws.upgradeReq, null, function(err) {
+			        var sessionID = ws.upgradeReq.signedCookies["connect.sid"];
+			        sessionStore.get(sessionID, function(err, sess) {
+				    	if(sess){
+				    		//////wsInteraction.process_msg(ws, data, sess.username);
+				    	}
+				    });
+			    }); 
+			});
+			
+			ws.on("close", function(){});
+		});
+		
+		wss.broadcast = function broadcast(data) {											//send to all connections
+			wss.clients.forEach(function each(client) {
+				console.log("client : ", client);
+				try{
+					data.v = "2";
+					client.send(JSON.stringify(data));
+				}
+				catch(e){
+					console.log("error broadcast ws", e);
+				}
+			});
+		};
+		
+		// ========================================================
+		// Part 2 Code - Monitor the height of the blockchain
+		// =======================================================
+		ibc_parts.monitor_blockheight(function(chain_stats){										//there is a new block, lets refresh everything that has a state
+
+			if(chain_stats && chain_stats.height){
+				console.log("hey new block, lets refresh and broadcast to all");
+				ibc_parts.block_stats(chain_stats.height - 1, cb_blockstats);
+				wss.broadcast({msg: "reset"});
+			}
+			
+			//got the block's stats, lets send the statistics
+			function cb_blockstats(e, stats){
+				if(chain_stats.height) stats.height = chain_stats.height - 1;
+				wss.broadcast({msg: "chainstats", e: e, chainstats: chain_stats, blockstats: stats});
+			}
+			
+
+		});
+
+		
+	}
+}
+
+*/

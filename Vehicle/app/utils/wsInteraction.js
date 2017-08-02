@@ -4,11 +4,19 @@
 // ==================================
 var ibc = {};
 var chaincode = {};
+var ibc_parts = {};
+var chaincode_parts = {};
+
 var async = require("async");
 
 module.exports.setup = function(sdk, cc){
 	ibc = sdk;
 	chaincode = cc;
+};
+
+module.exports.setupParts = function(sdk, cc){
+	ibc_parts = sdk;
+	chaincode_parts = cc;
 };
 
 module.exports.process_msg = function(ws, data, owner){

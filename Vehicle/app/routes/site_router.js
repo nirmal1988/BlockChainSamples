@@ -17,6 +17,9 @@ var setup = require("../setup.js");
 var path = require("path");
 var ibc = {};
 var chaincode = {};
+var ibc_parts = {};
+var chaincode_parts = {};
+
 var async = require("async");
 
 // Load our modules.
@@ -144,3 +147,9 @@ module.exports.setup = function(sdk, cc){
 	ibc = sdk;
 	chaincode = cc;
 };
+
+module.exports.setupParts = function(sdk, cc){
+	ibc_parts = sdk;
+	chaincode_parts = cc;
+};
+
