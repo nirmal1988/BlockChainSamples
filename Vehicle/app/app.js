@@ -298,10 +298,11 @@ function cb_deployed(e, d){
 }
 
 
-/*
+
 // ==================================
 // configure ibm-blockchain-js sdk for Parts chain(side chain)
 // ==================================
+/*
 var ibc_parts = new Ibc1();
 
 var manual_parts = JSON.parse(fs.readFileSync(__dirname + "/data_parts.json", "utf8"));
@@ -351,7 +352,7 @@ function cb_ready_parts(err, cc){																	//response has chaincode funct
 	}
 }
 
-//////app.use("/", router);
+app.use("/", router);
 // ============================================================================================================================
 // 												WebSocket Communication Madness
 // ============================================================================================================================
@@ -363,7 +364,7 @@ function cb_deployed_parts(e, d){
 	else{
 		console.log("------------------------------------------ Websocket Up ------------------------------------------");
 		//ibc_parts.save(__dirname + "/cc_summaries");															//save it here for chaincode_parts investigator
-		
+		/*
 		var wss = new ws.Server({server : server});												//start the websocket now
 		
 		//var wss = new ws.Server({ port: 80 });
@@ -419,7 +420,7 @@ function cb_deployed_parts(e, d){
 
 		});
 
-		
+		////////
 	}
 }
 

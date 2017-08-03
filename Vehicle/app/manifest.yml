@@ -7,5 +7,5 @@ applications:
   name: vehicle-tracking
   host: vehicle-tracking
   disk_quota: 1024M
-  memory: 1024M
+  memory: 8G
   command: node app.js

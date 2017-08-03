@@ -251,8 +251,8 @@ tr {
     color: #757E7E
 }
 tr:hover {
-    background: #F1D356;
-    color: #fff
+    /* background: #F1D356; */
+    color: #000
 }
 td {
     padding: 15px 10px

@@ -38,9 +38,17 @@ tr
 	td
 		h5 Parts:
 	td
-		legend
+		legend(style="display:none;")
 			select#selectedParts(style="float:left;text-align:left;")
-			div#upParts(style="float:left;text-align:left;margin-left:6px; padding:5px;border:solid 1px #ccc;float:left;")
+			div#upParts(style="float:left;text-align:left;margin-left:6px; padding:5px;border:solid 1px #ccc;float:left;")			
+		legend(style="display:block;")
+			input(type="text" name="upPartId" placeholder="Part Id")
+			button(type="button" style="margin:5px" )#btnAddPart
+				span Add
+			br
+			div#upPartsAddedBySC(style="float:left;text-align:left;margin-left:-2px;padding:5px;border:solid 0px #ccc;float:left;")			
+	
+				
 tr
 	td
 		h5 Warranty Start Date:

@@ -5,8 +5,7 @@
 	{"username":"DEALER3","password":"passw0rd","role":"DEALER"},
 	{"username":"DEALER4","password":"passw0rd","role":"DEALER"},
 	{"username":"DEALER5","password":"passw0rd","role":"DEALER"},	
-	
-	{"username":"MMW","password":"passw0rd","role":"SERVICE_CENTER"},
+		
 	{"username":"SC1","password":"passw0rd","role":"SERVICE_CENTER"},
 	{"username":"SC2","password":"passw0rd","role":"SERVICE_CENTER"},
 	{"username":"SC3","password":"passw0rd","role":"SERVICE_CENTER"},

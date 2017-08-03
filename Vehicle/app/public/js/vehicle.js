@@ -176,6 +176,28 @@ $(document).on('ready', function() {
 		});
 	});
 
+	$("#btnAddPart").click(function(){
+		if($("input[name='upPartId']").val() != ""){
+
+			var partFount=false;
+
+			$("#upParts").find("input").each(function(){
+				if($(this).attr("id") === $("input[name='upPartId']").val()){
+					$(this).prop("checked",true);
+					partFount=true;
+				}
+			});
+
+			if(!partFount){
+				alert("Part #"+ $("input[name='upPartId']").val() +" is not a valid part, please enter valid Part Id.");
+				return false;
+			}
+
+			$("#upPartsAddedBySC").append("<div style='margin:3px;float:left;border: solid 1px #ccc;border-radius: 7px;padding: 4px;display: block;' id='"+ $("input[name='upPartId']").val()+"'>"+ $("input[name='upPartId']").val()+"<b class='close-part-remove' onclick='var xBtn=this;$(\"#upParts\").find(\"input\").each(function(){if($(this).attr(\"id\") === $(xBtn).parent().attr(\"id\")){$(this).prop(\"checked\",false);}});$(this).parent().remove();' style='color:red;margin-left:4px;font-weight:bold;border: solid 1px #ccc;height: 14px;display: inline-block;width: 11px;padding: 0px;padding-left: 2px;border-radius: 3px;font-size: 14px;cursor:pointer;'>X</b></div>");
+			$("input[name='upPartId']").val("");
+		}
+	});
+
 	// =================================================================================
 	// jQuery UI Events
 	// =================================================================================
