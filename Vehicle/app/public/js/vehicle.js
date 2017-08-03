@@ -78,7 +78,7 @@ $(document).on('ready', function() {
 		else if (user.username==="SERVICE_CENTER" || bag.session.user_role.toUpperCase() === "SERVICE_CENTER"){
 			$("#createVehicleTable").hide();
 			$('#vehicleDashboardPanel').show();
-			$("#newVehiclePanel").show();
+			$("#newVehiclePanel").hide();
 			$("#vehicles").show();
 			$("#newVehicle").show();
 			$("#updateVehicle").show();
@@ -686,7 +686,7 @@ function connect_to_server(){
 								if(this.indexOf("Parts:") > -1){
 									$(this.split("~")).each(function(){
 										if(this != ""){
-											updateStr += "<div style='margin-left:2px;padding: 3px;'>"+ this +"</div>";
+											updateStr += "<div style='margin-left:2px;padding: 3px;'>"+ this.replace("Updated","Replaced") +"</div>";
 										}
 									});									
 								}

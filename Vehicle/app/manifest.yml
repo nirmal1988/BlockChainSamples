@@ -1,7 +1,6 @@
 ---
 applications:
-- path: .
-  memory: 256M
+- path: .  
   instances: 1
   domain: eu-gb.mybluemix.net
   name: vehicle-tracking
