@@ -90,6 +90,7 @@ $(document).on('ready', function() {
 			
 			$("#dashboardLink").show();
 			$("#dashboardPanel").show();
+			$("#partsPanelTR").show();
 			
 			$("#batchDetailsTable").hide();			
 		 }
@@ -580,6 +581,18 @@ function connect_to_server(){
 				$("input[name='upDateOfManufacture']").val(moment(data.vehicle.dateOfManufacture).format("YYYY-MM-DD"));				
 				$("input[name='upDateofDelivery']").val(data.vehicle.dateofDelivery);
 				$("input[name='upDealer']").val(data.vehicle.dealer.name);
+				// list parts
+				var str = "";
+                for(var i in data.vehicle.parts){
+                    str += "<span style='float:left; margin-left:3px; width: 80px; border:0 0 0 0;'>"+ data.vehicle.parts[i].partId +"</span>"
+                }
+                $("#upParts").html(str); 
+				
+				$(data.vehicle.vehicleTransactions).each(function(){
+					if(this.ttype === "SERVICE_CENTER"){
+						$("input[name='upLastServiceDate']").val(moment(this.updatedOn).format("YYYY-MM-DD"))
+					}
+				});
 				
 			}
 			else if(data.msg === 'allPartsForUpdateVehicle'){

@@ -162,8 +162,8 @@ module.exports.process_msg = function(ws, data, owner){
 			console.log("Get Customer Vehicle error", e);
 		}
 		else{
-			//console.log(JSON.parse(customerVehicle).vehicles);
-			//sendMsg({msg: "customerVehicle", vehicles: JSON.parse(customerVehicle).vehicles});
+			console.log(JSON.parse(customerVehicle).vehicles);
+			sendMsg({msg: "customerVehicle", vehicles: JSON.parse(customerVehicle).vehicles});
 		}
 	}
 
