@@ -91,6 +91,7 @@ $(document).on('ready', function() {
 			$("#dashboardLink").show();
 			$("#dashboardPanel").show();
 			$("#partsPanelTR").show();
+			$("#serviceHistoryPanelTR").show();
 			
 			$("#batchDetailsTable").hide();			
 		 }
@@ -109,7 +110,8 @@ $(document).on('ready', function() {
 			$("#batchDetailsTable").hide();	
 			$("#vehiclesnav").hide();	
 			$("#partsnav").hide();	
-			$("#customerVehicleLink").show();	
+			$("#customerVehicleLink").show();
+			$("#serviceHistoryPanelTR").show();	
 		}		
 		else if(user.username) {
 			$("#newPartLink").show();
@@ -609,9 +611,9 @@ function connect_to_server(){
 				$("input[name='upVin']").val(data.vehicle.vin);
 				$("input[name='upVehicleOwner']").val(data.vehicle.owner.name);
 				$("input[name='upLicensePlateNumber']").val(data.vehicle.licensePlateNumber);
-				$("input[name='upWarrantyStartDate']").val(data.vehicle.warrantyStartDate);
-				$("input[name='upWarrantyEndDate']").val(data.vehicle.warrantyEndDate);
-				$("input[name='upDateOfManufacture']").val(moment(data.vehicle.dateOfManufacture).format("YYYY-MM-DD"));				
+				$("input[name='upWarrantyStartDate']").val(moment(data.vehicle.warrantyStartDate).format("YYYY-MM-DD"));
+				$("input[name='upWarrantyEndDate']").val(moment(data.vehicle.warrantyEndDate).format("YYYY-MM-DD"));
+				$("input[name='upDateOfManufacture']").val(moment(data.vehicle.dateOfManufacture).format("YYYY-MM-DD"));
 				$("input[name='upDateofDelivery']").val(data.vehicle.dateofDelivery);
 				$("input[name='upDealer']").val(data.vehicle.dealer.name);
 				// list parts
@@ -626,7 +628,43 @@ function connect_to_server(){
 						$("input[name='upLastServiceDate']").val(moment(this.updatedOn).format("YYYY-MM-DD"))
 					}
 				});
+
+				//---- Service History Section
+				var serv = data.vehicle.vehicleService;
+				var servHtml="<table>";
+				if (serv !=null){
+					for(var i=0; i<serv.length; i++){
+						var _serviceParts="";
+						if(serv[i].parts!= null){
+							for(var j=0; j<serv[i].parts.length; j++){
+								if(_serviceParts == "")
+									_serviceParts += serv[i].parts[j].partId;
+								else
+									_serviceParts +=", "+ serv[i].parts[j].partId;
+							}
+						}
+						servHtml += '<tr>';
+						servHtml += '<td style="text-align:left;padding-left:20px">';
+						servHtml +=	'<div style="display: inline-block; vertical-align: middle;">';
+						servHtml += '<p style="font-weight:500;">Service done by <span style="color:#5596E6">' + serv[i].serviceDoneBy +'</span>';
+						servHtml += 'on ' + moment(new Date(serv[i].serviceDoneOn)).format('lll') +'</p>';
+						servHtml += '<p style="">Description: ' + serv[i].serviceDescription +'</p>';
+						servHtml += '<p style="">Parts Added: ' + _serviceParts +'</p>';
+						servHtml +=	'</div>';
+						servHtml += '</td>';
+						servHtml += '</tr>';
+					}
+				}
+				else if(serv == null || serv.length == 0){
+					servHtml="<tr><td>No service history found.</td></tr>";
+					$("#upServiceHistory").html(servHtml).css({"height":"43px"});
+				}
+				 servHtml +="</table>";
+				 $("#upServiceHistory").html(servHtml);
 				
+				$("input[name='upDealer'],input[name='upLicensePlateNumber'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upVehicleOwner'],input[name='upDateOfManufacture'],input[name='upLastServiceDate'],input[name='upWarrantyStartDate'],input[name='upWarrantyEndDate'],input[name='upDateofDelivery']")
+				.css({'border': '0px','border-bottom': '1px solid #ccc','border-radius': '0px'});
+
 			}
 			else if(data.msg === 'allPartsForUpdateVehicle'){
 				console.log("---- allParts ---- ", data);
