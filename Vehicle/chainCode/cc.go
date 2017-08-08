@@ -255,6 +255,49 @@ func (t *SimpleChaincode) getVehicle(stub  shim.ChaincodeStubInterface, vehicleI
 }
 
 // ============================================================================================================================
+// Get Vehicle by VIN number
+// ============================================================================================================================
+func (t *SimpleChaincode) getVehicleByVIN(stub  shim.ChaincodeStubInterface, inVIN string)([]byte, error){
+
+	fmt.Println("getAllVehicles:Looking for vehicle by vin number");
+
+	//get the AllVehicles index
+	allBAsBytes, err := stub.GetState("allVehicles")
+	if err != nil {
+		return nil, errors.New("Failed to get all Vehicles")
+	}
+
+	var res AllVehicles
+	err = json.Unmarshal(allBAsBytes, &res)
+	//fmt.Println(allBAsBytes);
+	if err != nil {
+		fmt.Println("Printing Unmarshal error:-");
+		fmt.Println(err);
+		return nil, errors.New("Failed to Unmarshal all Vehicles")
+	}
+
+	var cvehicle Vehicle
+	for i := range res.Vehicles{
+
+		sbAsBytes, err := stub.GetState(res.Vehicles[i])
+		if err != nil {
+			return nil, errors.New("Failed to get Vehicle")
+		}
+		var sb Vehicle
+		json.Unmarshal(sbAsBytes, &sb)
+		
+		if sb.Vin == inVIN {
+			cvehicle = sb
+		}
+	}
+
+	rabAsBytes, _ := json.Marshal(cvehicle)
+
+	return rabAsBytes, nil
+
+}
+
+// ============================================================================================================================
 // Get Vehicle by chassis number
 // ============================================================================================================================
 func (t *SimpleChaincode) getVehicleByChassisNumber(stub  shim.ChaincodeStubInterface, inChassisNumber string)([]byte, error){
@@ -333,6 +376,8 @@ func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user
 		if user != "" {
 			// return only customer vehicles
 			if sb.Owner.Name == user {
+				rab.Vehicles = append(rab.Vehicles, sb.VehicleId +"-"+ sb.ChassisNumber);
+			} else if sb.Dealer.Name == user {
 				rab.Vehicles = append(rab.Vehicles, sb.VehicleId +"-"+ sb.ChassisNumber);
 			}
 		} else if user == "" {
