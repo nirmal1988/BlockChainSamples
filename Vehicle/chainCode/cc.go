@@ -509,6 +509,13 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 		updateStr += ",Date of Delivery to "+ args[9]
 	}
 
+	var tt =time.Now()
+	const shortForm = "2006-Jan-02"
+	tt, _ = time.Parse(shortForm, "2013-Nov-25")
+	fmt.Println(tt)
+	fmt.Println(tt.AddDate(1, 0, 0).Local().String())
+	args[11] = tt.AddDate(1, 0, 0).Local().String()
+	
 	if bch.WarrantyStartDate != args[10] {
 		bch.WarrantyStartDate =  args[10]
 		updateStr += ",Warranty Start Date to "+ args[10]
@@ -522,7 +529,7 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 	var tx VehicleTransaction 
 	
 	tx.WarrantyStartDate	= args[10]
-	tx.WarrantyEndDate	= args[11]		
+	tx.WarrantyEndDate	=  args[11]
 	tx.UpdatedBy   	= args[12]
 	tx.UpdatedOn   	= time.Now().Local().String()
 	
