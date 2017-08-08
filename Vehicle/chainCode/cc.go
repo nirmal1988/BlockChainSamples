@@ -516,6 +516,7 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 	fmt.Println(tt)
 	fmt.Println(tt.AddDate(1, 0, 0).Local().String())
 	args[11] = tt.AddDate(1, 0, 0).Local().String()
+	args[11] = strings.Split(args[11], " ")[0]	
 	
 	if bch.WarrantyStartDate != args[10] {
 		bch.WarrantyStartDate =  args[10]
