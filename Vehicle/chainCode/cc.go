@@ -31,6 +31,15 @@ type Vehicle struct {
 	ServiceRequestRaised	string 	`json:"serviceRequestRaised"`	
 	Parts		[]Part `json:"parts"`
 	VehicleTransactions		[]VehicleTransaction `json:"vehicleTransactions"`
+	VehicleService		[]VehicleService `json:"vehicleService"`
+}
+
+
+type VehicleService struct {	
+	ServiceDescription		string  `json:"serviceDescription"`
+	Parts		[]Part `json:"parts"`
+	ServiceDoneBy  			string  `json:"serviceDoneBy"`
+	ServiceDoneOn  			string  `json:"serviceDoneOn"`
 }
 
 type VehicleTransaction struct {	
@@ -245,6 +254,48 @@ func (t *SimpleChaincode) getVehicle(stub  shim.ChaincodeStubInterface, vehicleI
 
 }
 
+// ============================================================================================================================
+// Get Vehicle by chassis number
+// ============================================================================================================================
+func (t *SimpleChaincode) getVehicleByChassisNumber(stub  shim.ChaincodeStubInterface, inChassisNumber string)([]byte, error){
+
+	fmt.Println("getAllVehicles:Looking for vehicle by chassid number");
+
+	//get the AllVehicles index
+	allBAsBytes, err := stub.GetState("allVehicles")
+	if err != nil {
+		return nil, errors.New("Failed to get all Vehicles")
+	}
+
+	var res AllVehicles
+	err = json.Unmarshal(allBAsBytes, &res)
+	//fmt.Println(allBAsBytes);
+	if err != nil {
+		fmt.Println("Printing Unmarshal error:-");
+		fmt.Println(err);
+		return nil, errors.New("Failed to Unmarshal all Vehicles")
+	}
+
+	var cvehicle Vehicle
+	for i := range res.Vehicles{
+
+		sbAsBytes, err := stub.GetState(res.Vehicles[i])
+		if err != nil {
+			return nil, errors.New("Failed to get Vehicle")
+		}
+		var sb Vehicle
+		json.Unmarshal(sbAsBytes, &sb)
+		
+		if sb.ChassisNumber == inChassisNumber {
+			cvehicle = sb
+		}
+	}
+
+	rabAsBytes, _ := json.Marshal(cvehicle)
+
+	return rabAsBytes, nil
+
+}
 
 // ============================================================================================================================
 // Get All Vehicles
