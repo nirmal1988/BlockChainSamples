@@ -26,8 +26,12 @@ module.exports.process_msg = function(ws, data, owner){
 		ibc.chain_stats(cb_chainstats);
 	}
 	else if(data.type == "getVehicle"){
-		console.log("Get Part", data.vehicleId);
+		console.log("Get vehicle", data.vehicleId);
 		chaincode.query.getVehicle([data.vehicleId], cb_got_vehicle);
+	}
+	else if(data.type == "getVehicleByChassisNumber"){
+		console.log("Get vehicle", data.chassisNumber);
+		chaincode.query.getVehicleByChassisNumber([data.chassisNumber], cb_got_vehicleByChassisNumber);
 	}
 	else if(data.type == "getAllVehicles"){
 		console.log("Get All Vehicles", owner);
@@ -59,7 +63,10 @@ module.exports.process_msg = function(ws, data, owner){
 				data.vehicle.warrantyStartDate, 
 				data.vehicle.warrantyEndDate, 
 				owner, 
-				data.vehicle.parts], cb_invoked_updateVehicle);				
+				data.vehicle.parts,
+				data.vehicle.serviceDone,
+				data.vehicle.serviceDescription
+				], cb_invoked_updateVehicle);				
 				//update vehicle
 		}
 	}
@@ -117,6 +124,15 @@ module.exports.process_msg = function(ws, data, owner){
 	}
 	
 	function cb_got_vehicle(e, vehicle){
+		if(e != null){
+			console.log("Get Vehicle error", e);
+		}
+		else{
+			sendMsg({msg: "vehicle", vehicle: JSON.parse(vehicle)});
+		}
+	}
+
+	function cb_got_vehicleByChassisNumber(e, vehicle){
 		if(e != null){
 			console.log("Get Vehicle error", e);
 		}

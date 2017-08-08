@@ -21,7 +21,7 @@ tr
 		h5 Vehicle Owner:
 	td
 		legend 			
-			select#allCustomers
+			select#allCustomers(name="allCustomers")
 tr
 	td
 		h5 Dealer:
@@ -36,31 +36,49 @@ tr
 			input(type="text" name="upLicensePlateNumber" placeholder="License Plate Number")
 tr#partsPanelTR(style="display:none;")
 	td
-		h5 Parts:
+		h5 Service:
 	td
 		legend(style="display:none;")
 			select#selectedParts(style="float:left;text-align:left;")
 			div#upParts(style="float:left;text-align:left;margin-left:6px; padding:5px;border:solid 1px #ccc;float:left;")			
 		legend(style="display:block;")
-			input(type="text" name="upPartId" placeholder="Part Id")
-			button(type="button" style="margin:5px" )#btnAddPart
-				span Add
-			br
-			div#upPartsAddedBySC(style="float:left;text-align:left;margin-left:-2px;padding:5px;border:solid 0px #ccc;float:left;")			
-	
-				
+			table
+				tr
+					td(style="width: 95px;") Service Done:
+					td(style="text-align:left;")
+						input#upServiceDone(type="checkbox" name="upServiceDone" style="margin-left: 7px;") 
+				tr
+					td(style="width: 95px;") Service Note:
+					td(style="text-align:left;")
+						textarea(id="upServiceDesc" style="margin-left: 7px;")
+				tr
+					td(style="width: 95px;" valign="top") Parts:
+					td(style="text-align:left;")
+						input(type="text" name="upPartId" placeholder="Part Id")
+						button(type="button" style="margin:5px" )#btnAddPart
+							span Add
+						br
+						div#upPartsAddedBySC(style="width:350px;float:left;text-align:left;margin-left:-2px;padding:5px;border:solid 0px #ccc;float:left;")			
+
+tr
+	td
+		h5 Service History
+	td
+		legend 
+			div#upServiceHistory(style="height: 200px;overflow-y: scroll;width: 490px;border: 1px solid #ccc;")
+
 tr
 	td
 		h5 Warranty Start Date:
 	td
 		legend 
 			input(type="date" name="upWarrantyStartDate" placeholder="Warranty Start Date")
-tr
+tr#divWarrantyEndDate
 	td
 		h5 Warranty End Date:
 	td
 		legend 
-			input(type="date" name="upWarrantyEndDate" placeholder="Warranty End Date")
+			input(type="date" disabled name="upWarrantyEndDate" placeholder="Warranty End Date")
 tr
 	td
 		h5 Date of Manufacture:
@@ -73,12 +91,13 @@ tr
 	td
 		legend 
 			input(type="date" name="upDateofDelivery" placeholder="Date of Delivery")
-tr
+tr#trUpdateVehicle
 	td#createPartBut(colspan="2" style="font-size:12px;")
-		legend
-			button(type="button" style="margin:10px 10px 5px 10px" )#updateVehicle
-				span.fa.fa-plus &nbsp;&nbsp;
-				span SUBMIT
+		center
+			legend
+				button(type="button" style="margin:10px 10px 5px 10px" )#updateVehicle
+					span.fa.fa-plus &nbsp;&nbsp;
+					span SUBMIT
 tr
 	td
 		h5 
