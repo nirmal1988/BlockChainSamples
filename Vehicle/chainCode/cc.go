@@ -288,7 +288,7 @@ func (t *SimpleChaincode) getVehicleByVIN(stub  shim.ChaincodeStubInterface, inV
 		var sb Vehicle
 		json.Unmarshal(sbAsBytes, &sb)
 		
-		if sb.Vin == inVIN {
+		if strings.ToLower(sb.Vin) == strings.ToLower(inVIN) {
 			cvehicle = sb
 		}
 	}
@@ -331,7 +331,7 @@ func (t *SimpleChaincode) getVehicleByChassisNumber(stub  shim.ChaincodeStubInte
 		var sb Vehicle
 		json.Unmarshal(sbAsBytes, &sb)
 		
-		if sb.ChassisNumber == inChassisNumber {
+		if strings.ToLower(sb.ChassisNumber) == strings.ToLower(inChassisNumber) {
 			cvehicle = sb
 		}
 	}
@@ -527,6 +527,7 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 	tx.UpdatedOn   	= time.Now().Local().String()
 	
 	//parts-13
+	var serv VehicleService
 	if args[13] != "" {
 		p := strings.Split(args[13], ",")
 		var pr Part
@@ -550,6 +551,7 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 				updateStr += "~Added  Part #"+ pr.PartId			
 			}
 			bch.Parts = append(bch.Parts, pr)
+			serv.Parts = append(serv.Parts, pr)
 		}
 	}
 	
@@ -558,6 +560,14 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 	tx.TValue = updateStr
 	bch.VehicleTransactions = append(bch.VehicleTransactions, tx)
 
+	// service
+	if args[14] == "Y" {		
+		serv.ServiceDescription = args[15]
+		serv.ServiceDoneBy = args[12]
+		serv.ServiceDoneOn = time.Now().Local().String()
+		bch.VehicleService = append(bch.VehicleService, serv)		
+	}
+		
 	//Commit updates part to ledger
 	fmt.Println("updateVehicle Commit Updates To Ledger");
 	btAsBytes, _ := json.Marshal(bch)
