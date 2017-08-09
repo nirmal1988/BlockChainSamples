@@ -1,3 +1,6 @@
+tr#divServiceDue(style="display:none;")
+	td(colspan="2")
+		h5#msgServiceDue(style="color:red;")			
 tr
 	td
 		h5 Make:
@@ -54,7 +57,12 @@ tr
 	td
 		legend 
 			input(type="date" disabled name="upLastServiceDate" placeholder="Last Service Date")
-
+tr
+	td
+		h5 Next Service Date:
+	td
+		legend 
+			input(type="text" disabled name="upServiceDue" placeholder="Service Due")
 tr
 	td
 		h5 Warranty Start Date:

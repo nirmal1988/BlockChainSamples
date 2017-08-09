@@ -146,6 +146,7 @@ $(document).on('ready', function() {
 		// show/hide panels as per the role
 		if(bag.session.user_role.toUpperCase() === "MANUFACTURER"){
 			$("#allCustomers").attr("disabled","disabled");
+			$("#divServiceDue").hide();
 			$("input[name='upLicensePlateNumber']").attr("disabled","disabled");
 			$("input[name='upWarrantyStartDate']").attr("disabled","disabled");
 			$("input[name='upWarrantyEndDate']").attr("disabled","disabled");
@@ -153,12 +154,13 @@ $(document).on('ready', function() {
 			$("#upParts").hide();
 			$("#trUpdateVehicle").hide();
 			$("#createNewVehicle").show();
-			$("input[name='allCustomers'],input[name='upDealer'],input[name='upLicensePlateNumber'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upDateOfManufacture'],input[name='upWarrantyStartDate'],input[name='upWarrantyEndDate'],input[name='upDateofDelivery']")
+			$("input[name='upServiceDue'],input[name='allCustomers'],input[name='upDealer'],input[name='upLicensePlateNumber'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upDateOfManufacture'],input[name='upWarrantyStartDate'],input[name='upWarrantyEndDate'],input[name='upDateofDelivery']")
 				.css({'border': '0px','border-bottom': '1px solid #ccc','border-radius': '0px'});
 			$("#allCustomers").css({'border': '0px','border-bottom': '1px solid #ccc','border-radius': '0px'});
 		}
 		else if(bag.session.user_role.toUpperCase() === "DEALER"){
 			$("#upParts").hide();
+			$("#divServiceDue").hide();
 			$("#createNewVehicle").hide();
 			$("#divWarrantyEndDate").hide();
 			if($("input[name='upWarrantyStartDate']").val() != ""){
@@ -172,18 +174,19 @@ $(document).on('ready', function() {
 				$("input[name='upLicensePlateNumber'],input[name='upWarrantyStartDate'],input[name='upDateofDelivery'],input[name='upDateofDelivery'],input[name='upWarrantyEndDate']")
 				.css({'border': '0px','border-bottom': '1px solid #ccc','border-radius': '0px'});
 			}
-			$("input[name='upDealer'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upDateOfManufacture'],input[name='upWarrantyEndDate'],input[name='upDateofDelivery']")
+			$("input[name='upServiceDue'],input[name='upDealer'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upDateOfManufacture'],input[name='upWarrantyEndDate'],input[name='upDateofDelivery']")
 				.css({'border': '0px','border-bottom': '1px solid #ccc','border-radius': '0px'});
 		}
 		else if(bag.session.user_role.toUpperCase() === "SERVICE_CENTER"){
 			$("#upParts").show();
+			$("#divServiceDue").show();
 			$("#createNewVehicle").hide();
 			$("#allCustomers").attr("disabled","disabled");
 			$("input[name='upLicensePlateNumber']").attr("disabled","disabled");
 			$("input[name='upWarrantyStartDate']").attr("disabled","disabled");
 			$("input[name='upWarrantyEndDate']").attr("disabled","disabled");
 			$("input[name='upDateofDelivery']").attr("disabled","disabled");
-			$("input[name='allCustomers'],input[name='upDealer'],input[name='upLicensePlateNumber'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upDateOfManufacture'],input[name='upWarrantyStartDate'],input[name='upWarrantyEndDate'],input[name='upDateofDelivery']")
+			$("input[name='upServiceDue'],input[name='allCustomers'],input[name='upDealer'],input[name='upLicensePlateNumber'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upDateOfManufacture'],input[name='upWarrantyStartDate'],input[name='upWarrantyEndDate'],input[name='upDateofDelivery']")
 				.css({'border': '0px','border-bottom': '1px solid #ccc','border-radius': '0px'});
 			$("#allCustomers").css({'border': '0px','border-bottom': '1px solid #ccc','border-radius': '0px'});
 		}
@@ -474,6 +477,7 @@ $(document).on('ready', function() {
 			$('#spinner2').show();
 			$('#openTrades').hide();
 			ws.send(JSON.stringify({type: "getAllParts", v: 2}));
+			
 		}
 	});
 
@@ -561,8 +565,20 @@ function connect_to_server(){
 			$('#spinner2').show();
 			$('#openTrades').hide();
 			ws.send(JSON.stringify({type: "getAllVehicles", v: 2}));
-			ws.send(JSON.stringify({type: "getAllParts", v: 2}));
+			//ws.send(JSON.stringify({type: "getAllParts", v: 2}));
 			ws.send(JSON.stringify({type: "customerVehicle", v: 2}));
+			$.ajax({
+				url : 'https://vehicle-tracking.mybluemix.net/getAllParts',
+				type : 'POST',
+				dataType:'json',
+				success : function(data) {              										
+					build_Parts(data.parts, null);
+				},
+				error : function(request,error)
+				{
+					alert("Request: "+JSON.stringify(request));
+				}
+			});
 		}
 
 	}
@@ -632,6 +648,7 @@ function connect_to_server(){
 				//---- Service History Section
 				var serv = data.vehicle.vehicleService;
 				var servHtml="<table>";
+				var _lastServDone ="";
 				if (serv !=null){
 					for(var i=0; i<serv.length; i++){
 						var _serviceParts="";
@@ -653,16 +670,27 @@ function connect_to_server(){
 						servHtml +=	'</div>';
 						servHtml += '</td>';
 						servHtml += '</tr>';
+						_lastServDone = serv[i].serviceDoneOn;
 					}
 				}
 				else if(serv == null || serv.length == 0){
 					servHtml="<tr><td>No service history found.</td></tr>";
 					$("#upServiceHistory").html(servHtml).css({"height":"43px"});
+					_lastServDone = moment(data.vehicle.warrantyStartDate);
 				}
 				 servHtml +="</table>";
 				 $("#upServiceHistory").html(servHtml);
-				
-				$("input[name='upDealer'],input[name='upLicensePlateNumber'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upVehicleOwner'],input[name='upDateOfManufacture'],input[name='upLastServiceDate'],input[name='upWarrantyStartDate'],input[name='upWarrantyEndDate'],input[name='upDateofDelivery']")
+
+				if(moment(moment(_lastServDone).add(1, 'days').format("YYYY-MM-DD")) <= moment()){
+					$("#divServiceDue").show();
+					$("#msgServiceDue").html("Your service is due on "+ moment(_lastServDone).add(1, 'days').format("YYYY-MM-DD"));
+				}
+				else{
+					$("#divServiceDue").hide();
+				}
+				$("input[name='upServiceDue']").val(moment(_lastServDone).add(1, 'days').format("YYYY-MM-DD"));
+
+				$("input[name='upServiceDue'],input[name='upDealer'],input[name='upLicensePlateNumber'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upVehicleOwner'],input[name='upDateOfManufacture'],input[name='upLastServiceDate'],input[name='upWarrantyStartDate'],input[name='upWarrantyEndDate'],input[name='upDateofDelivery']")
 				.css({'border': '0px','border-bottom': '1px solid #ccc','border-radius': '0px'});
 
 			}
@@ -692,7 +720,25 @@ function connect_to_server(){
 				var html = ''
 				$("#batchDetailsTable").show();
 				console.log("Trnsaction "+i+" "+txs[i]);
-				ws.send(JSON.stringify({type: "getAllPartsForUpdateVehicle", v: 2}));
+				////ws.send(JSON.stringify({type: "getAllPartsForUpdateVehicle", v: 2}));
+
+				$.ajax({
+					url : 'https://vehicle-tracking.mybluemix.net/getAllParts',
+					type : 'POST',
+					dataType:'json',
+					success : function(data) {              										
+						var str="<b style='font-weight:bold;text-decoration:underline;'>Add new Parts:</b></br>";
+						for(var i in data.parts){
+							str += "<span style='float:left; width: 80px;'><input type='checkbox' id='"+ data.parts[i] +"' class='part-un-selected' />"+ data.parts[i] +"</span>"
+						}
+						$("#upParts").html(str);
+					},
+					error : function(request,error)
+					{
+						alert("Request: "+JSON.stringify(request));
+					}
+				});
+
 				$("#bDetHeader").html("Chassis Number #" + data.vehicle.chassisNumber +"");
 				selectedParts = data.vehicle.parts;
 
@@ -718,6 +764,7 @@ function connect_to_server(){
 				}
 				//$('#allCustomers option[value="'+ data.vehicle.owner.name +'"]').attr('selected','selected');
 				// list parts
+				
 				$("#selectedParts").empty();
 				$("#selectedParts").append('<option id="0">Added Parts</option>');
 				for(var i in data.vehicle.parts){
@@ -725,6 +772,7 @@ function connect_to_server(){
 				}	
 				
 				var servHtml="<table>";
+				var _lastServDone ="";
 				if (serv !=null){
 					for(var i=0; i<serv.length; i++){
 						var _serviceParts="";
@@ -746,14 +794,27 @@ function connect_to_server(){
 						servHtml +=	'</div>';
 						servHtml += '</td>';
 						servHtml += '</tr>';
+						_lastServDone = serv[i].serviceDoneOn;
 					}
 				}
 				else if(serv == null || serv.length == 0){
 					servHtml="<tr><td>No service history found.</td></tr>";
 					$("#upServiceHistory").html(servHtml).css({"height":"43px"});
+					_lastServDone = moment(data.vehicle.warrantyStartDate);
 				}
 				 servHtml +="</table>";
 				 $("#upServiceHistory").html(servHtml);
+
+				if(moment(moment(_lastServDone).add(1, 'days').format("YYYY-MM-DD")) <= moment()){
+					$("#divServiceDue").show();
+					$("#msgServiceDue").html("Service is due on "+ moment(_lastServDone).add(1, 'days').format("YYYY-MM-DD"));
+				}
+				else{
+					$("#divServiceDue").hide();
+				}
+				$("input[name='upServiceDue']").val(moment(_lastServDone).add(1, 'days').format("YYYY-MM-DD"));
+
+
 				for(var i=0; i<txs.length; i++){
 					
 					if(txs[i].ttype == "CREATE"){

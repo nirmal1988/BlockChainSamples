@@ -1,3 +1,6 @@
+tr#divServiceDue(style="display:none;")
+	td(colspan="2")
+		h5#msgServiceDue(style="color:red;")			
 tr
 	td
 		h5 Make:
@@ -66,6 +69,18 @@ tr#serviceHistoryPanelTR(style="display:none;")
 	td
 		legend 
 			div#upServiceHistory(style="height: 200px;overflow-y: scroll;width: 490px;border: 1px solid #ccc;")
+tr
+	td
+		h5 Last Service Date:
+	td
+		legend 
+			input(type="date" disabled name="upLastServiceDate" placeholder="Last Service Date")
+tr
+	td
+		h5 Next Service Date:
+	td
+		legend 
+			input(type="date" disabled name="upServiceDue" placeholder="Service Due")
 
 tr
 	td
