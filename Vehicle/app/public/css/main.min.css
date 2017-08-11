@@ -302,7 +302,7 @@ input[type=password],
 input[type=number] {
     padding: 9px 14px;
     margin: 5px;
-    color: #5596E6;
+    color: #565454;
     border: 1px solid #D4DCDC;
     border-radius: 30px;
     background: #fff;
@@ -887,6 +887,27 @@ button:disabled:hover {
     color: #757E7E;
     text-align: center
 }
+
+#customerVehicleDetailsTable {
+    border-collapse: separate;
+    border-spacing: 20px 20px;
+}
+
+#vehicleDetailsTable {
+    border-collapse: separate;
+    border-spacing: 20px 20px;
+}
+
+#vehicleDetailsTable td {
+    padding: 5px 15px;
+    text-align: left;
+}
+
+#customerVehicleDetailsTable td {
+    padding: 5px 15px;
+    text-align: left;
+}
+
 @media (max-width: 750px) {
     #innerWrap {
         width: initial

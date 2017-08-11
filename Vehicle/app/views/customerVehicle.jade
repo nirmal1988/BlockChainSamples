@@ -25,10 +25,10 @@ block content
 		#innerButtons(style="text-align:right;color:#333")
 			p#vehicleList(style="cursor:pointer;display:none;") Vehicle List
 		
-		table#customerVehicleDetailsTable.tablesorter(style="width:70%;float:left;")
-				thead
-					tr 
-						th#vehicleDetHeader(colspan="2" style="font-size: 18px;text-align: left;font-weight: bold;") Customer Vehicle Details
+		table#customerVehicleDetailsTable.tablesorter(style="width:100%;float:left;")
+				//- thead
+				//- 	tr 
+				//- 		th#vehicleDetHeader(colspan="2" style="font-size: 18px;text-align: left;font-weight: bold;") Customer Vehicle Details
 				tbody#vehicleDetailsBody
 					// --------------- Dashboard View
 					include ./panel_customerVehicleDetails.jade

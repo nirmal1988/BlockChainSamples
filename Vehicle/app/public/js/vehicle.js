@@ -49,6 +49,10 @@ $(document).on('ready', function() {
 			$("#createVehicleTable").hide();
 			$("#newVehiclePanel").hide();
 			
+			$("#filterBar").show();
+			$("#dashboardTablevehicles").show();
+			$("#searchBar").hide();
+
 			$("#newVehicle").show();
 			$("#updateVehicle").show();
 			$("#newPartLink").show();
@@ -64,8 +68,7 @@ $(document).on('ready', function() {
 		else if(bag.session.user_role && bag.session.user_role.toUpperCase() === "DEALER") {
 			$('#vehicleDashboardPanel').show();
 			$("#createVehicleTable").hide();
-			$("#newVehiclePanel").hide();
-			
+			$("#newVehiclePanel").hide();			
 			$("#newPartLink").hide();
 			$("#updatePartLink").show();			
 			
@@ -146,7 +149,7 @@ $(document).on('ready', function() {
 		// show/hide panels as per the role
 		if(bag.session.user_role.toUpperCase() === "MANUFACTURER"){
 			$("#allCustomers").attr("disabled","disabled");
-			$("#divServiceDue").hide();
+			$("#divServiceDue").hide();			
 			$("input[name='upLicensePlateNumber']").attr("disabled","disabled");
 			$("input[name='upWarrantyStartDate']").attr("disabled","disabled");
 			$("input[name='upWarrantyEndDate']").attr("disabled","disabled");
@@ -154,9 +157,9 @@ $(document).on('ready', function() {
 			$("#upParts").hide();
 			$("#trUpdateVehicle").hide();
 			$("#createNewVehicle").show();
-			$("input[name='upServiceDue'],input[name='allCustomers'],input[name='upDealer'],input[name='upLicensePlateNumber'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upDateOfManufacture'],input[name='upWarrantyStartDate'],input[name='upWarrantyEndDate'],input[name='upDateofDelivery']")
-				.css({'border': '0px','border-bottom': '1px solid #ccc','border-radius': '0px'});
-			$("#allCustomers").css({'border': '0px','border-bottom': '1px solid #ccc','border-radius': '0px'});
+			$("input[name='upLastServiceDate'],input[name='upServiceDue'],input[name='allCustomers'],input[name='upDealer'],input[name='upLicensePlateNumber'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upDateOfManufacture'],input[name='upWarrantyStartDate'],input[name='upWarrantyEndDate'],input[name='upDateofDelivery']")
+				.css({'border': '0px','border-bottom': '0px solid #ccc','border-radius': '0px'});
+			$("#allCustomers").css({'border': '0px','border-bottom': '0px solid #ccc','border-radius': '0px'});
 		}
 		else if(bag.session.user_role.toUpperCase() === "DEALER"){
 			$("#upParts").hide();
@@ -167,15 +170,17 @@ $(document).on('ready', function() {
 				$("#trUpdateVehicle").hide();
 				$("#divWarrantyEndDate").show();
 				$("#allCustomers").attr("disabled","disabled");
+				
 				$("input[name='upLicensePlateNumber']").attr("disabled","disabled");
 				$("input[name='upWarrantyStartDate']").attr("disabled","disabled");
 				$("input[name='upWarrantyEndDate']").attr("disabled","disabled");
 				$("input[name='upDateofDelivery']").attr("disabled","disabled");
-				$("input[name='upLicensePlateNumber'],input[name='upWarrantyStartDate'],input[name='upDateofDelivery'],input[name='upDateofDelivery'],input[name='upWarrantyEndDate']")
-				.css({'border': '0px','border-bottom': '1px solid #ccc','border-radius': '0px'});
+
+				$("input[name='upLicensePlateNumber'],input[name='upWarrantyStartDate'],input[name='upDateofDelivery'],input[name='upWarrantyEndDate']")
+				.css({'border': '0px','border-bottom': '0px solid #ccc','border-radius': '0px'});
 			}
-			$("input[name='upServiceDue'],input[name='upDealer'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upDateOfManufacture'],input[name='upWarrantyEndDate'],input[name='upDateofDelivery']")
-				.css({'border': '0px','border-bottom': '1px solid #ccc','border-radius': '0px'});
+			$("input[name='upLastServiceDate'],input[name='upServiceDue'],input[name='upDealer'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upDateOfManufacture'],input[name='upWarrantyEndDate']")
+				.css({'border': '0px','border-bottom': '0px solid #ccc','border-radius': '0px'});
 		}
 		else if(bag.session.user_role.toUpperCase() === "SERVICE_CENTER"){
 			$("#upParts").show();
@@ -187,7 +192,7 @@ $(document).on('ready', function() {
 			$("input[name='upWarrantyEndDate']").attr("disabled","disabled");
 			$("input[name='upDateofDelivery']").attr("disabled","disabled");
 			$("input[name='upServiceDue'],input[name='allCustomers'],input[name='upDealer'],input[name='upLicensePlateNumber'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upDateOfManufacture'],input[name='upWarrantyStartDate'],input[name='upWarrantyEndDate'],input[name='upDateofDelivery']")
-				.css({'border': '0px','border-bottom': '1px solid #ccc','border-radius': '0px'});
+				.css({'border': '0px','border-bottom': '0px solid #ccc','border-radius': '0px'});
 			$("#allCustomers").css({'border': '0px','border-bottom': '1px solid #ccc','border-radius': '0px'});
 		}
 	});
@@ -253,6 +258,7 @@ $(document).on('ready', function() {
 
 	$("#createVehicle").click(function(){
 		console.log("submitting createVehicle Form");
+		
 		if(user.username){
 			var obj = 	{
 							type: "createVehicle",
@@ -690,8 +696,8 @@ function connect_to_server(){
 				}
 				$("input[name='upServiceDue']").val(moment(_lastServDone).add(1, 'days').format("YYYY-MM-DD"));
 
-				$("input[name='upServiceDue'],input[name='upDealer'],input[name='upLicensePlateNumber'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upVehicleOwner'],input[name='upDateOfManufacture'],input[name='upLastServiceDate'],input[name='upWarrantyStartDate'],input[name='upWarrantyEndDate'],input[name='upDateofDelivery']")
-				.css({'border': '0px','border-bottom': '1px solid #ccc','border-radius': '0px'});
+				$("input[name='upLastServiceDate'],input[name='upServiceDue'],input[name='upDealer'],input[name='upLicensePlateNumber'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upVehicleOwner'],input[name='upDateOfManufacture'],input[name='upLastServiceDate'],input[name='upWarrantyStartDate'],input[name='upWarrantyEndDate'],input[name='upDateofDelivery']")
+				.css({'border': '0px','border-bottom': '0px solid #ccc','border-radius': '0px'});
 
 			}
 			else if(data.msg === 'allPartsForUpdateVehicle'){
@@ -769,7 +775,13 @@ function connect_to_server(){
 				$("#selectedParts").append('<option id="0">Added Parts</option>');
 				for(var i in data.vehicle.parts){
 					$("#selectedParts").append('<option id="'+ data.vehicle.parts[i].partId +'">'+ data.vehicle.parts[i].partId +'</option>')
-				}	
+				}
+
+				$(data.vehicle.vehicleTransactions).each(function(){
+					if(this.ttype === "SERVICE_CENTER"){
+						$("input[name='upLastServiceDate']").val(moment(this.updatedOn).format("YYYY-MM-DD"))
+					}
+				});
 				
 				var servHtml="<table>";
 				var _lastServDone ="";
