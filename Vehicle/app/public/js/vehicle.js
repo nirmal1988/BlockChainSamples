@@ -179,6 +179,10 @@ $(document).on('ready', function() {
 				$("input[name='upLicensePlateNumber'],input[name='upWarrantyStartDate'],input[name='upDateofDelivery'],input[name='upWarrantyEndDate']")
 				.css({'border': '0px','border-bottom': '0px solid #ccc','border-radius': '0px'});
 			}
+			else{
+				$("input[name='upLicensePlateNumber'],input[name='upWarrantyStartDate'],input[name='upDateofDelivery'],input[name='upWarrantyEndDate']")
+				.css({'border': '1px solid #ccc','border-radius': '7px'});
+			}
 			$("input[name='upLastServiceDate'],input[name='upServiceDue'],input[name='upDealer'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upDateOfManufacture'],input[name='upWarrantyEndDate']")
 				.css({'border': '0px','border-bottom': '0px solid #ccc','border-radius': '0px'});
 		}
@@ -1004,8 +1008,13 @@ function connect_to_server(){
 				$("#notificationPanel").show();
 				$('#spinner').hide();
 				$('#tagWrapper').show();	
-				ws.send(JSON.stringify({type: "getAllVehicles", v: 2}));			
+				
 				$("#vehicleList").click();
+				$("#vehicleDashboardPanel").show();
+				setTimeout(function() {
+					ws.send(JSON.stringify({type: "getAllVehicles", v: 2}));				
+				}, 2000);
+				
 			}
 			else if(data.msg === 'vehicleUpdated'){
 				$("#notificationPanel").animate({width:'toggle'});
@@ -1013,6 +1022,13 @@ function connect_to_server(){
 				$("#notificationPanel").show();
 				$('#spinner').hide();
 				$('#tagWrapper').show();
+				$("#vehicleDashboardPanel").show();
+				setTimeout(function() {
+					ws.send(JSON.stringify({type: "getAllVehicles", v: 2}));				
+				}, 2000);	
+				
+				$("#batchDetailsTable, #vehicleDetailsTable").hide();
+				$("#scChassisNumber").val("");
 			}
 			else if(data.msg === 'partCreated'){
 				$("#notificationPanel").animate({width:'toggle'});
