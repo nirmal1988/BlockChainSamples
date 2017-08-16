@@ -275,7 +275,13 @@ function connect_to_server(){
 	connect();
 
 	function connect(){
-		var wsUri = "ws://" + bag.setup.SERVER.EXTURI;
+		var wsUri = "";
+		if(bag.setup.SERVER.EXTURI.indexOf("localhost") > -1){
+			wsUri = "ws://" + bag.setup.SERVER.EXTURI;
+		}
+		else{
+			wsUri = "wss://" + bag.setup.SERVER.EXTURI;
+		}
 		ws = new WebSocket(wsUri);
 		ws.onopen = function(evt) { onOpen(evt); };
 		ws.onclose = function(evt) { onClose(evt); };
