@@ -513,15 +513,16 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 	var tt =time.Now()
 	////const shortForm = "2006-01-02"
 	const shortForm = "2006-Jan-02"
-	var std = time.Now()
+	//var std = time.Now()
 	var startDate string
 	startDate = args[10]
 	if args[10] != "" {	
 		tt, _ = time.Parse(shortForm, args[10])
 		fmt.Println(tt)
 		fmt.Println(tt.AddDate(1, 0, 0).Local().String())
-		std = tt.AddDate(1, 0, 0)
-		startDate = std.Add(-24*time.Hour).Local().String()
+		//std = tt.AddDate(1, 0, 0)
+		//startDate = std.Add(-24*time.Hour).Local().String()
+		startDate = tt.AddDate(0, 0, 0).Local().String()
 		startDate = strings.Split(startDate, " ")[0]	
 		
 		args[11] = tt.AddDate(1, 0, 0).Local().String()
