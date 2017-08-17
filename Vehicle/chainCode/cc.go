@@ -511,12 +511,19 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 
 	// create warranty end date, 1 yr's from warranty start date 2
 	var tt =time.Now()
-	const shortForm = "2006-Jan-02"
-	tt, _ = time.Parse(shortForm, args[10])
-	fmt.Println(tt)
-	fmt.Println(tt.AddDate(1, 0, 0).Local().String())
-	args[11] = tt.AddDate(1, 0, 0).Local().String()
-	args[11] = strings.Split(args[11], " ")[0]	
+	const shortForm = "2006-01-02"
+	////const shortForm = "2006-Jan-02"
+	if args[10] != "" {	
+		tt, _ = time.Parse(shortForm, args[10])
+		fmt.Println(tt)
+		fmt.Println(tt.AddDate(1, 0, 0).Local().String())
+		args[11] = tt.AddDate(1, 0, 0).Local().String()
+		args[11] = strings.Split(args[11], " ")[0]	
+		
+		if err != nil {
+			return nil, errors.New("Failed to parse warranty end date")
+		}
+	}
 	
 	if bch.WarrantyStartDate != args[10] {
 		bch.WarrantyStartDate =  args[10]
