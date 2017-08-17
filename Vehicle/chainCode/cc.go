@@ -522,8 +522,8 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 		fmt.Println(tt.AddDate(1, 0, 0).Local().String())
 		//std = tt.AddDate(1, 0, 0)
 		//startDate = std.Add(-24*time.Hour).Local().String()
-		startDate = tt.AddDate(0, 0, 0).Local().String()
-		startDate = strings.Split(startDate, " ")[0]	
+		//startDate = tt.AddDate(0, 0, 0).Local().String()
+		//startDate = strings.Split(startDate, " ")[0]	
 		
 		args[11] = tt.AddDate(1, 0, 0).Local().String()
 		args[11] = strings.Split(args[11], " ")[0]	
