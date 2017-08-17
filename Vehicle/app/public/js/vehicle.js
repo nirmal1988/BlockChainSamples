@@ -11,7 +11,8 @@
 var ws = {};
 var user = {username: bag.session.username};
 var valid_users = ["SKF", "BOSCH", "STAHLGRUBER", "MMW"];
-var valid_customers = ["CUST1", "CUST2", "CUST3", "CUST4", "CUST5", "CUST6", "CUST7", "CUST8", "CUST9", "CUST10"];
+var valid_customers = ["CHRIS VARGAS", "WILLIAM LOVELL", "GILBERT SMITH", "CHRISTINE DUNNETT", "YUKIO MIFUNE"];
+////var valid_customers = ["CUST1", "CUST2", "CUST3", "CUST4", "CUST5", "CUST6", "CUST7", "CUST8", "CUST9", "CUST10"];
 var allChassisNumbers = [];
 var panels = [
 	{
@@ -77,6 +78,7 @@ $(document).on('ready', function() {
 			$("#dashboardPanel").show();
 			
 			$("#batchDetailsTable").hide();	
+			$("#searchBar").css({"width":"100%","text-align":"center"});
 		}
 		else if (user.username==="SERVICE_CENTER" || bag.session.user_role.toUpperCase() === "SERVICE_CENTER"){
 			$("#createVehicleTable").hide();
@@ -96,7 +98,8 @@ $(document).on('ready', function() {
 			$("#partsPanelTR").show();
 			$("#serviceHistoryPanelTR").show();
 			
-			$("#batchDetailsTable").hide();			
+			$("#batchDetailsTable").hide();		
+			$("#searchBar").css({"width":"100%","text-align":"center"});	
 		 }
 		 else if(bag.session.user_role && bag.session.user_role.toUpperCase() === "CUSTOMER") {
 			$('#vehicleDashboardPanel').hide();
@@ -185,6 +188,9 @@ $(document).on('ready', function() {
 			}
 			$("input[name='upLastServiceDate'],input[name='upServiceDue'],input[name='upDealer'],input[name='upMake'],input[name='upChassisNumber'],input[name='upVin'],input[name='upDateOfManufacture'],input[name='upWarrantyEndDate']")
 				.css({'border': '0px','border-bottom': '0px solid #ccc','border-radius': '0px'});
+			
+			// hide service details section for dealer
+			$("#trServiceDetails").hide();
 		}
 		else if(bag.session.user_role.toUpperCase() === "SERVICE_CENTER"){
 			$("#upParts").show();
@@ -218,6 +224,7 @@ $(document).on('ready', function() {
 			$("#vehicleErrorMessage").hide();
 			$("#batchDetailsTable").hide();
 			$("#vehicleDetailsTable").hide();
+			$("#searchBar").css({"width":"20%","text-align":"left"});
 			ws.send(JSON.stringify({type: "getVehicleByChassisNumber", chassisNumber: $("#scChassisNumber").val()}));
 		}
 	});

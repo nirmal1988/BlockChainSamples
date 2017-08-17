@@ -10,10 +10,10 @@ tr
 					th#customerVehDetHeader(colspan="2" style="font-size: 18px;text-align: left;font-weight: bold;") Customer Vehicle Details
 				tr
 					td
-						h5 Make:
+						h5 Model:
 					td
 						legend 
-							input(type="text" disabled name="upMake" placeholder="Make")
+							input(type="text" disabled name="upMake" placeholder="Model")
 				tr
 					td
 						h5 Chassis Number:
@@ -76,7 +76,7 @@ tr
 							legend 
 								input(type="date" name="upDateofDelivery" placeholder="Date of Delivery")
 
-	tr
+	tr#trServiceDetails
 		td(colspan=2 style="width:100%; height:100%; vertical-align:top; border: 1px solid #5596E6; margin:5px; padding:10px;")
 			div#serviceDetailsDiv(style="width:100%;")
 				table
@@ -127,14 +127,18 @@ tr
 							h5 Service Due Date:
 						td
 							legend 
-								input(type="date" disabled name="upServiceDue" placeholder="Service Due")
+								input(type="date" disabled name="upServiceDue" placeholder="Service Due")					
+			legend 			
+				input(type="hidden" disabled name="upVehicleId" placeholder="upVehicleId")
 
-					tr#trUpdateVehicle
+	tr#trUpdateVehicle
 						td#createPartBut(colspan="2" style="font-size:12px;")
 							center
 								legend
 									button(type="button" style="margin:10px 10px 5px 10px" )#updateVehicle
 										span.fa.fa-plus &nbsp;&nbsp;
 										span SUBMIT
-			legend 			
-				input(type="hidden" disabled name="upVehicleId" placeholder="upVehicleId")
+	tr(style="height:40px;")
+						td(colspan="2" style="font-size:12px;")
+							center
+								legend									

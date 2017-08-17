@@ -1,7 +1,7 @@
 ---
 applications:
 - path: .  
-  instances: 1
+  instances: 2
   domain:  eu-gb.mybluemix.net
   name: vehicle-tracker
   host: vehicle-tracker
