@@ -519,6 +519,7 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 		tt, _ = time.Parse(shortForm, args[10])
 		fmt.Println(tt)
 		fmt.Println(tt.AddDate(1, 0, 0).Local().String())
+		startDate = tt.AddDate(1, 0, 0).Local().String()
 		args[11] = tt.AddDate(1, 0, 0).Local().String()
 		args[11] = strings.Split(args[11], " ")[0]	
 		
