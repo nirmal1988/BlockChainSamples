@@ -511,8 +511,8 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 
 	// create warranty end date, 1 yr's from warranty start date 2
 	var tt =time.Now()
-	const shortForm = "2006-01-02"
-	////const shortForm = "2006-Jan-02"
+	////const shortForm = "2006-01-02"
+	const shortForm = "2006-Jan-02"
 	if args[10] != "" {	
 		tt, _ = time.Parse(shortForm, args[10])
 		fmt.Println(tt)
