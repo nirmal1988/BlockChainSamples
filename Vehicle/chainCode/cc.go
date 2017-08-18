@@ -509,7 +509,7 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 		updateStr += ",Date of Delivery to "+ args[9]
 	}
 
-	// create warranty end date, 1 yr's from warranty start date 2
+	//// create warranty end date, 1 yr's from warranty start date 
 	var tt =time.Now()
 	////const shortForm = "2006-01-02"
 	const shortForm = "2006-Jan-02"
