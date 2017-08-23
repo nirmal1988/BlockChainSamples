@@ -11,7 +11,14 @@
 						h5 Model:
 					td
 						legend 
-							input(type="text" name="Make" placeholder="Model")
+							//- input(type="text" name="Make" placeholder="Model")
+							select#allModels(name="allModels")
+				tr
+					td
+						h5 Variant:
+					td
+						legend 
+							select#allModelVariant(name="allModelVariant")							
 				tr
 					td
 						h5 Chassis Number:

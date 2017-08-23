@@ -11,7 +11,7 @@
 var ws = {};
 var user = {username: bag.session.username};
 var valid_users = ["SKF", "BOSCH", "STAHLGRUBER", "MMW"];
-var valid_customers = ["CHRIS VARGAS", "WILLIAM LOVELL", "GILBERT SMITH", "CHRISTINE DUNNETT", "YUKIO MIFUNE"];
+var valid_customers = ["CHRIS_VARGAS", "WILLIAM_LOVELL", "GILBERT_SMITH", "CHRISTINE_DUNNETT", "YUKIO_MIFUNE"];
 ////var valid_customers = ["CUST1", "CUST2", "CUST3", "CUST4", "CUST5", "CUST6", "CUST7", "CUST8", "CUST9", "CUST10"];
 var allChassisNumbers = [];
 var panels = [
@@ -23,6 +23,13 @@ var panels = [
 	}
 ];
 var lastTx = ''
+var allVehicleModels = ["BMW X1", "BMW X3", "BMW X5", "BMW X6"];
+var allModelVariants = {
+	'BMW X1': ['sDrive20d Expedition', 'sDrive20d xLine', 'sDrive20i xLine', 'xDrive20d M Sport'],
+	'BMW X3': ['xDrive20d Expedition', 'xDrive-20d xLine', 'xDrive 28i xLine'],
+	'BMW X5': ['xDrive 30d Expedition', 'xDrive30d Pure Experience', 'xDrive 30d M Sport'],
+	'BMW X6': ['xDrive40d M Sport', 'M Coupe']
+}
 
 // =================================================================================
 // On Load
@@ -136,7 +143,29 @@ $(document).on('ready', function() {
 		$('#vehicleDashboardPanel').hide();
 		$("#createVehicleTable").show();
 		$("#newVehiclePanel").show();
+
+		console.log("Fill all models in dropdown");
+		$("#allModels").empty().append('<option id=""></option>')
+		for(var i in allVehicleModels){
+			var _selected = "";					
+			//_selected = "selected";
+			$("#allModels").append('<option '+ _selected +' id="'+ allVehicleModels[i] +'">'+ allVehicleModels[i] +'</option>')
+		}
 	});
+
+	$("#allModels").change(function(){
+		console.log('allModels dropdown change');
+
+		var $variantDropdown = $('#allModelVariant');
+		
+		var variant = $(this).val(), variants = allModelVariants[variant] || [];
+        
+        var html = $.map(variants, function(variantValue){
+            return '<option value="' + variantValue + '">' + variantValue + '</option>'
+        }).join('');
+        $variantDropdown.html(html)
+    });
+
 	$("#vehicleList").click(function(){
 		$("#vehicleList").hide();
 		$("#createNewVehicle").show();
