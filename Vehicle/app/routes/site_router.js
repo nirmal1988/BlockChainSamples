@@ -33,32 +33,32 @@ var creds	= require("../user_creds.json");
 // ============================================================================================================================
 router.route("/").get(function(req, res){
 	check_login(res, req);
-	res.render("vehicle", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
+	res.render("vehicle", {title: "Vehicle Manager", bag: {setup: setup, e: process.error, session: req.session}} );
 });
 
 router.route("/home").get(function(req, res){
 	check_login(res, req);
-	res.render("vehicle", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
+	res.render("vehicle", {title: "Vehicle Manager", bag: {setup: setup, e: process.error, session: req.session}} );
 });
 router.route("/part").get(function(req, res){
 	check_login(res, req);
-	res.render("part2", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
+	res.render("part2", {title: "Vehicle Manager", bag: {setup: setup, e: process.error, session: req.session}} );
 });
 router.route("/updatePart").get(function(req, res){
 	check_login(res, req);
-	res.render("part2", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
+	res.render("part2", {title: "Vehicle Manager", bag: {setup: setup, e: process.error, session: req.session}} );
 });
 router.route("/dashboard").get(function(req, res){
 	check_login(res, req);
-	res.render("vehicle", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
+	res.render("vehicle", {title: "Vehicle Manager", bag: {setup: setup, e: process.error, session: req.session}} );
 });
 router.route("/vehicle").get(function(req, res){
 	check_login(res, req);
-	res.render("vehicle", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
+	res.render("vehicle", {title: "Vehicle Manager", bag: {setup: setup, e: process.error, session: req.session}} );
 });
 router.route("/customerVehicle").get(function(req, res){
 	check_login(res, req);
-	res.render("customerVehicle", {title: "AfterSales Management Demo", bag: {setup: setup, e: process.error, session: req.session}} );
+	res.render("customerVehicle", {title: "Vehicle Manager", bag: {setup: setup, e: process.error, session: req.session}} );
 });
 
 router.route("/getPart").post(function(req, res){

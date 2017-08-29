@@ -30,7 +30,28 @@ var allModelVariants = {
 	'BMW X5': ['xDrive 30d Expedition', 'xDrive30d Pure Experience', 'xDrive 30d M Sport'],
 	'BMW X6': ['xDrive40d M Sport', 'M Coupe']
 }
+var allColors = ["Alpine White", "Black Sapphire", "Sparkling Brown", "Space Grey", "Carbon Black", "Long Beach Blue", "Donington Grey", "Silver Stone", "Melbourne Red", "Mineral White"];
 
+var allEngines = {
+	'BMW X1': ['1998 cc, Petrol, 189 bhp @ 5000 RPM power', '1995 cc, Diesel, 188 bhp @ 4000 RPM power'],
+	'BMW X3': ['1997 cc, Petrol, 245 bhp @ 5000 RPM power', '1995 cc, Diesel, 190 bhp @ 4000 RPM power'],
+	'BMW X5': ["2979 cc, Petrol, 306 bhp @ 5800 RPM power", "4395 cc, Petrol, 575 bhp @ 6000 RPM power", "2993 cc, Diesel, 258 bhp @ 4000 RPM power"],
+	'BMW X6': ['4395 cc, Petrol, 575 bhp @ 6000 RPM power', '2993 cc, Diesel, 313 bhp @ 4400 RPM power']
+}
+
+var allGearBoxes = {
+	'BMW X1': ['8-speed, Automatic, 4WD / AWD', '8-speed, Automatic, Front Wheel Drive'],
+	'BMW X3': ['Automatic, 4WD / AWD', '8-speed, Automatic, 4WD'],
+	'BMW X5': ['8-speed, Automatic, 4WD / AWD', '8-speed, Automatic, 4WD'],
+	'BMW X6': ['8-speed, Automatic, AWD', '8-speed, Automatic, 4WD / AWD']
+}
+
+var allSeatingCapacity = {
+	'BMW X1': ['5 seater'],
+	'BMW X3': ['5 seater'],
+	'BMW X5': ['7 seater', '5 seater'],
+	'BMW X6': ['5 seater']
+}
 // =================================================================================
 // On Load
 // =================================================================================
@@ -148,8 +169,12 @@ $(document).on('ready', function() {
 		$("#allModels").empty().append('<option id=""></option>')
 		for(var i in allVehicleModels){
 			var _selected = "";					
-			//_selected = "selected";
 			$("#allModels").append('<option '+ _selected +' id="'+ allVehicleModels[i] +'">'+ allVehicleModels[i] +'</option>')
+		}
+
+		$("#allColors").empty();
+		for(var i in allColors){
+			$("#allColors").append('<option id="'+ allColors[i] +'">'+ allColors[i] +'</option>')
 		}
 	});
 
@@ -163,7 +188,27 @@ $(document).on('ready', function() {
         var html = $.map(variants, function(variantValue){
             return '<option value="' + variantValue + '">' + variantValue + '</option>'
         }).join('');
-        $variantDropdown.html(html)
+		$variantDropdown.html(html);
+		
+		var $allEngines = $('#allEngines');
+		
+		var engine = $(this).val(), engines = allEngines[engine] || [];
+        
+        var html = $.map(engines, function(eval){
+            return '<option value="' + eval + '">' + eval + '</option>'
+        }).join('');
+		$allEngines.html(html);
+		
+		var $allGearBoxes = $('#allGearBoxes');
+		
+		var gb = $(this).val(), gbs = allGearBoxes[gb] || [];
+        
+        var html = $.map(gbs, function(eval){
+            return '<option value="' + eval + '">' + eval + '</option>'
+        }).join('');
+		$allGearBoxes.html(html);
+		
+		$("#carImage").html("<img src='imgs/cars/"+ gb +".jpg'/>")
     });
 
 	$("#vehicleList").click(function(){
@@ -280,25 +325,17 @@ $(document).on('ready', function() {
 		}
 	});
 
-	// =================================================================================
-	// jQuery UI Events
-	// =================================================================================
-	/*$("#generate").click(function(){
-		if(user.username){
-			$("input[name='PartId']").val(randStr(15).toUpperCase());
-
-			$("input[name='Date']").val(formatDate(new Date(), '%d-%M-%Y %I:%m%p'));
-			$("input[name='Quantity']").val(10);
-
-			$("#submit").removeAttr("disabled");
-		}
-
-		return false;
-	});*/
-
 	$("#createVehicle").click(function(){
 		console.log("submitting createVehicle Form");
-		
+		//// validate
+		if($("#allModels").val() === ""){
+			alert("Please select Model/Variant/Engine/GearBox.");
+			return false;
+		}
+		if($("input[name='ChassisNumber']").val() === ""){
+			alert("Please enter VIN.");
+			return false;
+		}
 		if(user.username){
 			var obj = 	{
 							type: "createVehicle",

@@ -8,6 +8,8 @@ import (
 	"crypto/rand"	
 	"strings"	
 	"github.com/hyperledger/fabric/core/chaincode/shim"
+	pb "github.com/hyperledger/fabric/protos/peer"
+	
 )
 
 
@@ -100,7 +102,8 @@ type AllParts struct{
 // Local - *shim.ChaincodeStub
 // Server - shim.ChaincodeStubInterface
 // ============================================================================================================================
-func (t *SimpleChaincode) Init(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+///func (t *SimpleChaincode) Init(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Init(stub  shim.ChaincodeStubInterface) pb.Response {
 
 	var err error
 
@@ -119,9 +122,11 @@ func (t *SimpleChaincode) Init(stub  shim.ChaincodeStubInterface, function strin
 		return nil, err
 	}
 
-	return nil, nil
+	///return nil, nil
+	return shim.Success(nil)
 }
 
+/*
 // ============================================================================================================================
 // Run - Our entry point for Invocations - [LEGACY] obc-peer 4/25/2016
 // ============================================================================================================================
@@ -129,13 +134,16 @@ func (t *SimpleChaincode) Run(stub  shim.ChaincodeStubInterface, function string
 	fmt.Println("run is running " + function)
 	return t.Invoke(stub, function, args)
 }
-
+*/
 
 
 // ============================================================================================================================
 // Run - Our entry point
 // ============================================================================================================================
-func (t *SimpleChaincode) Invoke(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+///func (t *SimpleChaincode) Invoke(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
+	function, args := stub.GetFunctionAndParameters()
+
 	fmt.Println("Invoke is running " + function)
 
 	// Handle different function
@@ -153,17 +161,34 @@ func (t *SimpleChaincode) Invoke(stub  shim.ChaincodeStubInterface, function str
 		return t.createPart(stub, args)
 	} else if function == "updatePart" {			//update a part
 		return t.updatePart(stub, args)
+	} else if function == "getVehicle" { 
+		return t.getVehicle(stub, args[0]) 
+	} else if function == "getVehicleByChassisNumber" { 
+		return t.getVehicleByChassisNumber(stub, args[0]) 
+	} else if function == "getVehicleByVIN" { 
+		return t.getVehicleByVIN(stub, args[0]) 
+	} else if function == "getPart" { 
+		return t.getPart(stub, args[0]) 
+	} else if function == "getAllVehicles" { 
+		return t.getAllVehicles(stub, args[0]) 
+	} else if function == "getAllParts" { 
+		return t.getAllParts(stub, args[0]) 
 	}
+
 	fmt.Println("invoke did not find func: " + function)	//error
 
-	return nil, errors.New("Received unknown function invocation")
+	///return nil, errors.New("Received unknown function invocation")
+	return shim.Error("Received unknown invoke function name - '" + function + "'")
 }
 
 // ============================================================================================================================
 // Query - read a variable from chaincode state - (aka read)
 // ============================================================================================================================
-func (t *SimpleChaincode) Query(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+///func (t *SimpleChaincode) Query(stub  shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface) pb.Response {
 
+	return shim.Error("Unknown supported call - Query()")
+	/*	
 	if len(args) != 1 { return nil, errors.New("Incorrect number of arguments passed") }
 
 	if function == "getVehicle" { return t.getVehicle(stub, args[0]) }
@@ -174,13 +199,15 @@ func (t *SimpleChaincode) Query(stub  shim.ChaincodeStubInterface, function stri
 	if function == "getAllParts" { return t.getAllParts(stub, args[0]) }
 
 	return nil, nil
+	*/
 }
 
 
 // ============================================================================================================================
 // Get Part Details
 // ============================================================================================================================
-func (t *SimpleChaincode) getPart(stub  shim.ChaincodeStubInterface, partId string)([]byte, error){
+///func (t *SimpleChaincode) getPart(stub  shim.ChaincodeStubInterface, partId string)([]byte, error){
+func getPart(stub shim.ChaincodeStubInterface, partId string) pb.Response {
 
 	fmt.Println("Start find Part")
 	fmt.Println("Looking for Part #" + partId);
@@ -191,14 +218,15 @@ func (t *SimpleChaincode) getPart(stub  shim.ChaincodeStubInterface, partId stri
 		return nil, errors.New("Failed to get Part #" + partId)
 	}
 
-	return bAsBytes, nil
-
+	///return bAsBytes, nil
+	return shim.Success(bAsBytes)
 }
 
 // ============================================================================================================================
 // Get All Parts
 // ============================================================================================================================
-func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user string)([]byte, error){
+///func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user string)([]byte, error){
+func getAllParts(stub  shim.ChaincodeStubInterface, user string) pb.Response {
 
 	fmt.Println("getAllParts:Looking for All Parts");
 
@@ -234,15 +262,16 @@ func (t *SimpleChaincode) getAllParts(stub  shim.ChaincodeStubInterface, user st
 
 	rabAsBytes, _ := json.Marshal(rab)
 
-	return rabAsBytes, nil
+	///return rabAsBytes, nil
+	return shim.Success(rabAsBytes)
 
 }
 
 // ============================================================================================================================
 // Get Vehicle Details
 // ============================================================================================================================
-func (t *SimpleChaincode) getVehicle(stub  shim.ChaincodeStubInterface, vehicleId string)([]byte, error){
-
+///func (t *SimpleChaincode) getVehicle(stub  shim.ChaincodeStubInterface, vehicleId string)([]byte, error){
+func getVehicle(stub  shim.ChaincodeStubInterface, vehicleId string) pb.Response {
 	fmt.Println("Start find Vehicle")
 	fmt.Println("Looking for Vehicle #" + vehicleId);
 
@@ -252,15 +281,15 @@ func (t *SimpleChaincode) getVehicle(stub  shim.ChaincodeStubInterface, vehicleI
 		return nil, errors.New("Failed to get Vehicle Id #" + vehicleId)
 	}
 
-	return bAsBytes, nil
-
+	///return bAsBytes, nil
+	return shim.Success(bAsBytes)
 }
 
 // ============================================================================================================================
 // Get Vehicle by VIN number
 // ============================================================================================================================
-func (t *SimpleChaincode) getVehicleByVIN(stub  shim.ChaincodeStubInterface, inVIN string)([]byte, error){
-
+///func (t *SimpleChaincode) getVehicleByVIN(stub  shim.ChaincodeStubInterface, inVIN string)([]byte, error){
+func getVehicleByVIN(stub  shim.ChaincodeStubInterface, inVIN string) pb.Response {
 	fmt.Println("getAllVehicles:Looking for vehicle by vin number");
 
 	//get the AllVehicles index
@@ -295,15 +324,15 @@ func (t *SimpleChaincode) getVehicleByVIN(stub  shim.ChaincodeStubInterface, inV
 
 	rabAsBytes, _ := json.Marshal(cvehicle)
 
-	return rabAsBytes, nil
-
+	///return rabAsBytes, nil
+	return shim.Success(rabAsBytes)
 }
 
 // ============================================================================================================================
 // Get Vehicle by chassis number
 // ============================================================================================================================
-func (t *SimpleChaincode) getVehicleByChassisNumber(stub  shim.ChaincodeStubInterface, inChassisNumber string)([]byte, error){
-
+///func (t *SimpleChaincode) getVehicleByChassisNumber(stub  shim.ChaincodeStubInterface, inChassisNumber string)([]byte, error){
+func getVehicleByChassisNumber(stub  shim.ChaincodeStubInterface, inChassisNumber string) pb.Response {	
 	fmt.Println("getAllVehicles:Looking for vehicle by chassid number");
 
 	//get the AllVehicles index
@@ -338,14 +367,15 @@ func (t *SimpleChaincode) getVehicleByChassisNumber(stub  shim.ChaincodeStubInte
 
 	rabAsBytes, _ := json.Marshal(cvehicle)
 
-	return rabAsBytes, nil
-
+	///return rabAsBytes, nil
+	return shim.Success(rabAsBytes)
 }
 
 // ============================================================================================================================
 // Get All Vehicles
 // ============================================================================================================================
-func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user string)([]byte, error){
+///func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user string)([]byte, error){
+func getAllVehicles(stub  shim.ChaincodeStubInterface, user string) pb.Response {	
 
 	fmt.Println("getAllVehicles:Looking for All Vehicles");
 
@@ -390,12 +420,13 @@ func (t *SimpleChaincode) getAllVehicles(stub  shim.ChaincodeStubInterface, user
 
 	rabAsBytes, _ := json.Marshal(rab)
 
-	return rabAsBytes, nil
-
+	///return rabAsBytes, nil
+	return shim.Success(rabAsBytes)
 }
 
 // creating new vehicle in blockchain
-func (t *SimpleChaincode) createVehicle(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+///func (t *SimpleChaincode) createVehicle(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func createVehicle(stub  shim.ChaincodeStubInterface, args []string) pb.Response {	
 
 	var err error
 	fmt.Println("Running createVehicle")
@@ -457,11 +488,13 @@ func (t *SimpleChaincode) createVehicle(stub  shim.ChaincodeStubInterface, args 
 		return nil, err
 	}
 
-	return nil, nil
+	///return nil, nil
+	return shim.Success(nil)
 }
 
 // Updating existing vehicle in blockchain
-func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+///func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func updateVehicle(stub  shim.ChaincodeStubInterface, args []string) pb.Response {	
 
 	var err error
 	fmt.Println("Running updateVehicle")
@@ -587,11 +620,13 @@ func (t *SimpleChaincode) updateVehicle(stub  shim.ChaincodeStubInterface, args 
 		return nil, err
 	}
 
-	return nil, nil
+	///return nil, nil
+	return shim.Success(nil)
 }
 
 // creating new part in blockchain
-func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+///func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func createPart(stub  shim.ChaincodeStubInterface, args []string) pb.Response {	
 
 	var err error
 	fmt.Println("Running createPart")
@@ -638,11 +673,13 @@ func (t *SimpleChaincode) createPart(stub  shim.ChaincodeStubInterface, args []s
 		return nil, err
 	}
 
-	return nil, nil
+	///return nil, nil
+	return shim.Success(nil)
 }
 
 // Updating existing part in blockchain
-func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+///func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []string) pb.Response {	
 
 	var err error
 	fmt.Println("Running updatePart")
@@ -685,8 +722,8 @@ func (t *SimpleChaincode) updatePart(stub  shim.ChaincodeStubInterface, args []s
 		return nil, err
 	}
 
-	return nil, nil
-
+	///return nil, nil
+	return shim.Success(nil)
 }
 
 func NewUniqueId() string{

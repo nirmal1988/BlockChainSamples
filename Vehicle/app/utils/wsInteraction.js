@@ -27,15 +27,15 @@ module.exports.process_msg = function(ws, data, owner){
 	}
 	else if(data.type == "getVehicle"){
 		console.log("Get vehicle", data.vehicleId);
-		chaincode.query.getVehicle([data.vehicleId], cb_got_vehicle);
+		chaincode.invoke.getVehicle([data.vehicleId], cb_got_vehicle);
 	}
 	else if(data.type == "getVehicleByChassisNumber"){
 		console.log("Get vehicle", data.chassisNumber);
-		chaincode.query.getVehicleByChassisNumber([data.chassisNumber], cb_got_vehicleByChassisNumber);
+		chaincode.invoke.getVehicleByChassisNumber([data.chassisNumber], cb_got_vehicleByChassisNumber);
 	}
 	else if(data.type == "getAllVehicles"){
 		console.log("Get All Vehicles", owner);
-		chaincode.query.getAllVehicles([""], cb_got_allvehicles);
+		chaincode.invoke.getAllVehicles([""], cb_got_allvehicles);
 	}
 	else if(data.type == "createVehicle"){
 		console.log("Create Vehicle ", data, owner);
@@ -45,11 +45,11 @@ module.exports.process_msg = function(ws, data, owner){
 	}
 	else if(data.type == "customerVehicle"){
 		console.log("Get Customer Vehicle", owner);
-		chaincode.query.getAllVehicles([owner], cb_got_customerVehicle);
+		chaincode.invoke.getAllVehicles([owner], cb_got_customerVehicle);
 	}
 	else if(data.type == "getCustomerVehicleDetails"){
 		console.log("------ Get Customer Vehicle Details", data.vehicleId);
-		chaincode.query.getVehicle([data.vehicleId], cb_got_customerVehicleDetails);
+		chaincode.invoke.getVehicle([data.vehicleId], cb_got_customerVehicleDetails);
 	}
 	else if(data.type == "updateVehicle"){
 		console.log("Update Vehicle ", data, owner);
@@ -85,15 +85,15 @@ module.exports.process_msg = function(ws, data, owner){
 	}
 	else if(data.type == "getPart"){
 		console.log("Get Part", data.partId);
-		chaincode.query.getPart([data.partId], cb_got_part);
+		chaincode.invoke.getPart([data.partId], cb_got_part);
 	}
 	else if(data.type == "getAllParts"){
 		console.log("Get All Parts", owner);
-		chaincode.query.getAllParts([""], cb_got_allparts);
+		chaincode.invoke.getAllParts([""], cb_got_allparts);
 	}
 	else if(data.type == "getAllPartsForUpdateVehicle"){
 		console.log("Get All Parts", owner);
-		chaincode.query.getAllParts([""], cb_got_allpartsForUpdateVehicle);
+		chaincode.invoke.getAllParts([""], cb_got_allpartsForUpdateVehicle);
 	}
 	
 	function cb_got_part(e, part){
@@ -215,8 +215,6 @@ module.exports.process_msg = function(ws, data, owner){
 			console.log("part ID #" + data.part.id)
 			sendMsg({msg: "partUpdated", partId: data.part.id});
 		}
-		
-
 	}
 	
 	//call back for getting the blockchain stats, lets get the block height now
@@ -249,7 +247,6 @@ module.exports.process_msg = function(ws, data, owner){
 		if(chain_stats.height) stats.height = chain_stats.height - 1;
 		sendMsg({msg: "chainstats", e: e, chainstats: chain_stats, blockstats: stats});
 	}
-	
 
 	//send a message, socket might be closed...
 	function sendMsg(json){

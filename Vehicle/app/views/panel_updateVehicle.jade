@@ -16,16 +16,34 @@ tr
 							input(type="text" disabled name="upMake" placeholder="Model")
 				tr
 					td
-						h5 Chassis Number:
+						h5 VIN:
 					td
 						legend 
 							input(type="text" disabled name="upChassisNumber" placeholder="Chassis Number")
 				tr
 					td
-						h5 Vin:
+						h5 Variant:
 					td
 						legend 
-							input(type="text" disabled name="upVin" placeholder="")
+							input(type="text" disabled name="upVariant" placeholder="")						
+				tr
+					td
+						h5 Engine:
+					td
+						legend 
+							input(type="text" disabled name="upEngine" placeholder="")						
+				tr
+					td
+						h5 Gear Box:
+					td
+						legend 
+							input(type="text" disabled name="upGearBox" placeholder="")						
+				tr
+					td
+						h5 Color:
+					td
+						legend 
+							input(type="text" disabled name="upColor" placeholder="")						
 				tr
 					td
 						h5 Vehicle Owner:
@@ -47,6 +65,10 @@ tr
 
 	
 		td(style="width:50%; height:100%; vertical-align:top; border: 1px solid #5596E6; margin:5px; padding:10px;")
+			table(style="width:30%;float:left;margin-top:0px; margin-left:10px")
+				tr(style="border-bottom:0px;")
+					td#carImage(style="width:100px;height:auto;border:0px solid #ccc;")					
+
 			div#otherDetailsDiv(style="width:100%;")
 				table#otherDetailsTable
 					tr
